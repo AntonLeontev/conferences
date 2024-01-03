@@ -14,11 +14,23 @@
                         <li class="submenu__item"><a href="" class="submenu__link">fr</a></li>
                     </ul>
                 </div>
-                <button type="button" class="menu__icon icon-menu"><span></span></button>
-                <div class="header__btns" data-da=".menu__body, 991.98">
-                    <a href="" class="header__btn button">Регистрация</a>
-                    <a href="" class="header__btn button button_primary">Подать заявку</a>
-                </div>
+                
+				@auth
+					<div class="header__btns">
+						<a href="" class="header__link"><img src="img/user.svg" alt="Image"></a>
+						<a href="" class="header__link">
+							<span></span>
+							<img src="img/notification.svg" alt="Image">
+						</a>
+					</div>
+					<button type="button" class="menu__icon icon-menu"><span></span></button>
+				@else
+					<button type="button" class="menu__icon icon-menu"><span></span></button>
+					<div class="header__btns" data-da=".menu__body, 991.98">
+						<a href="" class="header__btn button">Регистрация</a>
+						<a href="" class="header__btn button button_primary">Подать заявку</a>
+					</div>
+				@endauth
             </div>
         </div>
     </div>
@@ -27,13 +39,13 @@
             <div class="header__menu menu">
                 <nav class="menu__body">
                     <ul class="menu__list">
-                        <li class="menu__item _active"><a href="#" class="menu__link"><span>Главная</span></a></li>
+                        <li class="menu__item _active"><a href="{{ route('home') }}" class="menu__link"><span>Главная</span></a></li>
                         <li class="menu__item" data-spoilers="991.98">
                             <button class="menu__link" type="button" data-spoiler>
                                 <span class="_icon-arrow">Субъект</span>
                             </button>
                             <ul class="menu__submenu submenu">
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Математика</a>
+                                <li class="submenu__item"><a href="{{ route('subject', 'Математика') }}" class="submenu__link _icon-arrow">Математика</a>
                                 </li>
                                 <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Физика</a></li>
                                 <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Химия</a></li>
@@ -51,9 +63,9 @@
                                 <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Тренинги</a></li>
                             </ul>
                         </li>
-                        <li class="menu__item"><a href="#" class="menu__link"><span>Объявление</span></a></li>
-                        <li class="menu__item"><a href="#" class="menu__link"><span>Поиск по календарю</span></a></li>
-                        <li class="menu__item"><a href="#" class="menu__link"><span>Архив</span></a></li>
+                        <li class="menu__item"><a href="{{ route('announcement') }}" class="menu__link"><span>Объявление</span></a></li>
+                        <li class="menu__item"><a href="{{ route('search') }}" class="menu__link"><span>Поиск по календарю</span></a></li>
+                        <li class="menu__item"><a href="{{ route('archive') }}" class="menu__link"><span>Архив</span></a></li>
                     </ul>
                 </nav>
             </div>
