@@ -10,6 +10,10 @@
 
 	@vite(['resources/css/style.css', 'resources/js/app.js'])
 
+	<style>
+		[x-cloak] {display: none;}
+	</style>
+
 	@yield('head_scripts')
 </head>
 <body>

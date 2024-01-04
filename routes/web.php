@@ -1,21 +1,30 @@
 <?php
 
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
     return view('home');
 })->name('home');
+
+/**
+ * Auth
+ */
+Route::get('register', [RegistrationController::class, 'create'])
+    ->middleware('guest')
+    ->name('register');
+
+Route::post('register/organization', [RegistrationController::class, 'registerOrganization'])
+    ->middleware(['guest', 'precognitive'])
+    ->name('register.organization');
+
+Route::post('register/participant', [RegistrationController::class, 'registerParticipant'])
+    ->middleware(['guest', 'precognitive'])
+    ->name('register.participant');
+
+/**
+ * Pages
+ */
 Route::view('/archive', 'archive')->name('archive');
 Route::view('/search', 'search')->name('search');
 Route::view('/announcement', 'announcement')->name('announcement');

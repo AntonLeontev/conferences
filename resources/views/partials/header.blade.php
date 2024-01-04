@@ -17,18 +17,19 @@
                 
 				@auth
 					<div class="header__btns">
-						<a href="" class="header__link"><img src="img/user.svg" alt="Image"></a>
+						<a href="" class="header__link"><img src="{{ Vite::asset('resources/img/user.svg') }}" alt="Image"></a>
 						<a href="" class="header__link">
 							<span></span>
-							<img src="img/notification.svg" alt="Image">
+							<img src="{{ Vite::asset('resources/img/notification.svg') }}" alt="Image">
 						</a>
+						<form action="{{ route('logout') }}" method="POST">@csrf<button>Выйти</button></form>
 					</div>
 					<button type="button" class="menu__icon icon-menu"><span></span></button>
 				@else
 					<button type="button" class="menu__icon icon-menu"><span></span></button>
 					<div class="header__btns" data-da=".menu__body, 991.98">
-						<a href="" class="header__btn button">Регистрация</a>
-						<a href="" class="header__btn button button_primary">Подать заявку</a>
+						<a href="{{ route('register') }}" class="header__btn button">Регистрация</a>
+						<a href="{{ route('login') }}" class="header__btn button button_primary">Войти</a>
 					</div>
 				@endauth
             </div>
