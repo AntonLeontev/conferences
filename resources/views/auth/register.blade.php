@@ -83,7 +83,7 @@
                     </div>
                     <div class="form__row _three">
                         <div class="form__line">
-                            <label class="form__label" for="u_5">Имя (RU) (*)</label>
+                            <label class="form__label" for="u_5">Имя (RU)</label>
                             <input id="u_5" class="input" autocomplete="off" type="text" name="name_ru"
                                 data-error="Ошибка" placeholder="Имя" 
 								x-model="form.name_ru"
@@ -91,7 +91,7 @@
 							>
                         </div>
                         <div class="form__line">
-                            <label class="form__label" for="u_6">Фамилия (RU) (*)</label>
+                            <label class="form__label" for="u_6">Фамилия (RU)</label>
                             <input id="u_6" class="input" autocomplete="off" type="text" name="surname_ru"
                                 data-error="Ошибка" placeholder="Фамилия"
 								x-model="form.surname_ru"
@@ -118,7 +118,7 @@
 					</template>
                     <div class="form__row _three">
                         <div class="form__line">
-                            <label class="form__label" for="u_8">First name (ENG) (*)</label>
+                            <label class="form__label" for="u_8">First name (ENG)</label>
                             <input id="u_8" class="input" autocomplete="off" type="text" name="name_en"
                                 data-error="Ошибка" placeholder="Name"
 								x-model="form.name_en"
@@ -126,7 +126,7 @@
 							>
                         </div>
                         <div class="form__line">
-                            <label class="form__label" for="u_9">Surname (ENG) (*)</label>
+                            <label class="form__label" for="u_9">Surname (ENG)</label>
                             <input id="u_9" class="input" autocomplete="off" type="text" name="surname_en"
                                 data-error="Ошибка" placeholder="Surname"
 								x-model="form.surname_en"
@@ -387,10 +387,12 @@
 							if (item === 'Другое') {
 								this.other = true
 								this.form.type = ''
+							} else {
+								this.other = false
 							}
 						},
 					}">
-                        <label class="form__label" for="s_1">Тип организации</label>
+                        <label class="form__label" for="s_1">Тип организации (*)</label>
 						<div class="form__line">
 							<select id="s_1" name="type" data-scroll="500" data-class-modif="form" 
 								@select-callback.camel.document="select"
@@ -415,13 +417,6 @@
 								<div x-text="form.errors.type"></div>
 							</template>	
 						</div>
-                        {{-- <div class="checkbox _button">
-                            <input id="c_0" data-error="Ошибка" class="checkbox__input" type="checkbox"
-                                name="type_is_other" x-model="other">
-                            <label for="c_0" class="checkbox__label">
-                                <span class="checkbox__text">Другое</span>
-                            </label>
-                        </div> --}}
                     </div>
 
                     <div class="form__row _one" x-data="{other: false}" id="actions">
