@@ -36,4 +36,22 @@ class OrganizationRegisterRequest extends FormRequest
             'logo' => ['nullable', 'image'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'full_name' => 'Полное наименование',
+            'short_name' => 'Сокращенное наименование',
+            'inn' => 'ИНН',
+            'address' => 'Адрес',
+            'phone' => 'Телефон',
+            'whatsapp' => 'WhatsApp',
+            'telegram' => 'Telegram',
+            'type' => 'Тип организации',
+            'actions' => 'Деятельность',
+            'actions.*' => 'Деятельность',
+            'vk' => 'Вконтакте',
+            'logo' => 'Логотип',
+        ];
+    }
 }

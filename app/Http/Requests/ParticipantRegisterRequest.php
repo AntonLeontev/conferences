@@ -10,11 +10,6 @@ use Src\Domains\Auth\Models\User;
 
 class ParticipantRegisterRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -30,10 +25,23 @@ class ParticipantRegisterRequest extends FormRequest
             'name_ru' => ['nullable', 'max:255', 'string'],
             'surname_ru' => ['nullable', 'max:255', 'string'],
             'middle_name_ru' => ['nullable', 'max:255', 'string'],
-            'name_en' => ['nullable', 'max:255', 'string', 'url'],
-            'surname_en' => ['nullable', 'max:255', 'string'],
+            'name_en' => ['nullable', 'max:255', 'string'],
+            'surname_en' => ['nullable', 'max:255', 'string', 'url'],
             'middle_name_en' => ['nullable', 'max:255', 'string'],
             'phone' => ['nullable', 'max:50', 'string', new Phone],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name_ru' => 'Имя (RU)',
+            'surname_ru' => 'Фамилия (RU)',
+            'middle_name_ru' => 'Отчество (RU)',
+            'name_en' => 'First name (ENG)',
+            'surname_en' => 'Surname (ENG)',
+            'middle_name_en' => 'Middle name (ENG)',
+            'phone' => 'Телефон',
         ];
     }
 }
