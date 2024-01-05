@@ -28,5 +28,17 @@
         <div class="form__row">
             <button class="form__button button button_primary" type="submit">Отправить</button>
         </div>
+
+		<div class="form__row">
+			<a href="{{ route('register') }}">Регистрация</a>
+		</div>
+		<div class="form__row">
+			<a href="{{ route('password.request') }}">Забыли пароль?</a>
+		</div>
     </form>
+	@if (session('status'))
+		<div class="mb-4 font-medium text-sm text-green-600">
+			{{ session('status') }}
+		</div>
+	@endif
 @endsection
