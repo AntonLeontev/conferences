@@ -26,7 +26,7 @@ class ParticipantRegisterRequest extends FormRequest
             'surname_ru' => ['nullable', 'max:255', 'string'],
             'middle_name_ru' => ['nullable', 'max:255', 'string'],
             'name_en' => ['nullable', 'max:255', 'string'],
-            'surname_en' => ['nullable', 'max:255', 'string', 'url'],
+            'surname_en' => ['nullable', 'max:255', 'string'],
             'middle_name_en' => ['nullable', 'max:255', 'string'],
             'phone' => ['nullable', 'max:50', 'string', new Phone],
         ];
