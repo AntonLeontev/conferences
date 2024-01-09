@@ -43,7 +43,7 @@
                         <li class="menu__item _active"><a href="{{ route('home') }}" class="menu__link"><span>Главная</span></a></li>
                         <li class="menu__item" data-spoilers="991.98">
                             <button class="menu__link" type="button" data-spoiler>
-                                <span class="_icon-arrow">Субъект</span>
+                                <span class="_icon-arrow">Предмет</span>
                             </button>
                             <ul class="menu__submenu submenu">
                                 <li class="submenu__item"><a href="{{ route('subject', 'Математика') }}" class="submenu__link _icon-arrow">Математика</a>
