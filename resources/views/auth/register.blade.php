@@ -1,19 +1,19 @@
 @extends('layouts.auth')
 
-@section('title', 'Регистрация')
+@section('title', __('auth.register.title'))
 
-@section('h1', 'Регистрация')
+@section('h1', __('auth.register.auth'))
 
 @section('content')
-    <h2 class="registration__subtitle">Выберите формат регистрации:</h2>
+    <h2 class="registration__subtitle">@lang('auth.register.message')</h2>
     <div class="tabs" data-tabs="">
         <nav data-tabs-titles class="tabs__navigation">
-            <button type="button" class="tabs__title _tab-active">Участник</button>
-            <button type="button" class="tabs__title">Организация</button>
+            <button type="button" class="tabs__title _tab-active">@lang('auth.register.participant')</button>
+            <button type="button" class="tabs__title">@lang('auth.register.organization')</button>
         </nav>
         <div data-tabs-body class="tabs__content">
             <div class="tabs__body">
-                <div class="tabs__body-title">Участник</div>
+                <div class="tabs__body-title">@lang('auth.register.participant')</div>
                 <form action="{{ route('register.participant') }}" method="POST" id="participant_form" class="registration__form form"
 					@submit.prevent="submit"
 					x-data="{
@@ -43,9 +43,9 @@
 				>
 					@csrf
                     <div class="form__row">
-                        <label class="form__label" for="u_1">E-mail (*)</label>
+                        <label class="form__label" for="u_1">@lang('auth.register.email') (*)</label>
                         <input id="u_1" class="form-block__input input" autocomplete="off" type="email"
-                            name="email" data-error="Ошибка" placeholder="E-mail"
+                            name="email" data-error="Ошибка" placeholder="@lang('auth.register.email')"
 							x-model="form.email"
 							@input.debounce.1000ms="form.validate('email')"
 						>
@@ -54,10 +54,10 @@
 						</template>
                     </div>
                     <div class="form__row">
-                        <label class="form__label" for="u_2">Пароль (*)</label>
+                        <label class="form__label" for="u_2">@lang('auth.register.password') (*)</label>
                         <div class="form-block">
                             <input id="u_2" class="form-block__input input" autocomplete="off" type="password"
-                                name="password" data-error="Ошибка" placeholder="***"
+                                name="password" data-error="Ошибка" placeholder="@lang('auth.register.password')"
 								x-model="form.password"
 								@input.debounce.1000ms="form.validate('password')"
 							>
@@ -68,10 +68,10 @@
 						</template>
                     </div>
                     <div class="form__row">
-                        <label class="form__label" for="u_3">Повторить пароль (*)</label>
+                        <label class="form__label" for="u_3">@lang('auth.register.repeat') (*)</label>
                         <div class="form-block">
                             <input id="u_3" class="form-block__input input" autocomplete="off" type="password"
-                                name="password_confirmation" data-error="Ошибка" placeholder="***"
+                                name="password_confirmation" data-error="Ошибка" placeholder="@lang('auth.register.repeat')"
 								x-model="form.password_confirmation"
 								@input.debounce.1000ms="form.validate('password_confirmation')"
 							>
@@ -83,25 +83,25 @@
                     </div>
                     <div class="form__row _three">
                         <div class="form__line">
-                            <label class="form__label" for="u_5">Имя (RU)</label>
+                            <label class="form__label" for="u_5">@lang('auth.register.name_ru')</label>
                             <input id="u_5" class="input" autocomplete="off" type="text" name="name_ru"
-                                data-error="Ошибка" placeholder="Имя" 
+                                data-error="Ошибка" placeholder="@lang('auth.register.name_ru')" 
 								x-model="form.name_ru"
 								@input.debounce.1000ms="form.validate('name_ru')"
 							>
                         </div>
                         <div class="form__line">
-                            <label class="form__label" for="u_6">Фамилия (RU)</label>
+                            <label class="form__label" for="u_6">@lang('auth.register.surname_ru')</label>
                             <input id="u_6" class="input" autocomplete="off" type="text" name="surname_ru"
-                                data-error="Ошибка" placeholder="Фамилия"
+                                data-error="Ошибка" placeholder="@lang('auth.register.surname_ru')"
 								x-model="form.surname_ru"
 								@input.debounce.1000ms="form.validate('surname_ru')"
 							>
                         </div>
                         <div class="form__line">
-                            <label class="form__label" for="u_7">Отчество (RU)</label>
+                            <label class="form__label" for="u_7">@lang('auth.register.middle_name_ru')</label>
                             <input id="u_7" class="input" autocomplete="off" type="text" name="middle_name_ru"
-                                data-error="Ошибка" placeholder="Отчество"
+                                data-error="Ошибка" placeholder="@lang('auth.register.middle_name_ru')"
 								x-model="form.middle_name_ru"
 								@input.debounce.1000ms="form.validate('middle_name_ru')"
 							>
@@ -118,25 +118,25 @@
 					</template>
                     <div class="form__row _three">
                         <div class="form__line">
-                            <label class="form__label" for="u_8">First name (ENG)</label>
+                            <label class="form__label" for="u_8">@lang('auth.register.name_en')</label>
                             <input id="u_8" class="input" autocomplete="off" type="text" name="name_en"
-                                data-error="Ошибка" placeholder="Name"
+                                data-error="Ошибка" placeholder="@lang('auth.register.name_en')"
 								x-model="form.name_en"
 								@input.debounce.1000ms="form.validate('name_en')"
 							>
                         </div>
                         <div class="form__line">
-                            <label class="form__label" for="u_9">Surname (ENG)</label>
+                            <label class="form__label" for="u_9">@lang('auth.register.surname_en')</label>
                             <input id="u_9" class="input" autocomplete="off" type="text" name="surname_en"
-                                data-error="Ошибка" placeholder="Surname"
+                                data-error="Ошибка" placeholder="@lang('auth.register.surname_en')"
 								x-model="form.surname_en"
 								@input.debounce.1000ms="form.validate('surname_en')"
 							>
                         </div>
                         <div class="form__line">
-                            <label class="form__label" for="u_10">Middle name (ENG)</label>
+                            <label class="form__label" for="u_10">@lang('auth.register.middle_name_en')</label>
                             <input id="u_10" class="input" autocomplete="off" type="text" name="middle_name_en"
-                                data-error="Ошибка" placeholder="Name"
+                                data-error="Ошибка" placeholder="@lang('auth.register.middle_name_en')"
 								x-model="form.middle_name_en"
 								@input.debounce.1000ms="form.validate('middle_name_en')"
 							>
@@ -152,7 +152,7 @@
 						<div x-text="form.errors.middle_name_en"></div>
 					</template>
                     <div class="form__row" x-data>
-                        <label class="form__label" for="u_4">Телефон</label>
+                        <label class="form__label" for="u_4">@lang('auth.register.phone')</label>
                         <input id="u_4" class="form-block__input input" autocomplete="off" type="text"
                             name="phone" data-error="Ошибка" placeholder="+7 (999) 999-99-99" x-mask="+7 (999) 999-99-99"
 							x-model="form.phone"
@@ -163,12 +163,12 @@
 						</template>
                     </div>
                     <div class="form__row">
-                        <button class="form__button button button_primary" type="submit">Отправить</button>
+                        <button class="form__button button button_primary" type="submit">@lang('auth.register.send')</button>
                     </div>
                 </form>
             </div>
             <div class="tabs__body">
-                <div class="tabs__body-title">Организация</div>
+                <div class="tabs__body-title">@lang('auth.register.organization')</div>
 
 				@if ($errors->any())
 					@foreach ($errors->all() as $error)
@@ -248,9 +248,9 @@
 				>
 					@csrf
                     <div class="form__row">
-                        <label class="form__label" for="o_1">E-mail (*)</label>
+                        <label class="form__label" for="o_1">@lang('auth.register.email') (*)</label>
                         <input id="o_1" class="form-block__input input" autocomplete="off" type="email"
-                            name="email" data-error="Ошибка" placeholder="E-mail"
+                            name="email" data-error="Ошибка" placeholder="@lang('auth.register.email')"
 							x-model="form.email"	
 							@input.debounce.1000ms="form.validate('email')"
 						>
@@ -260,10 +260,10 @@
                     </div>
 
                     <div class="form__row">
-                        <label class="form__label" for="o_2">Пароль (*)</label>
+                        <label class="form__label" for="o_2">@lang('auth.register.password') (*)</label>
                         <div class="form-block">
                             <input id="o_2" class="form-block__input input" autocomplete="off" type="password"
-                                name="password" data-error="Ошибка" placeholder="***"
+                                name="password" data-error="Ошибка" placeholder="@lang('auth.register.password')"
 								x-model="form.password"	
 								@input.debounce.1000ms="form.validate('password')"	
 							>
@@ -275,10 +275,10 @@
                     </div>
 
                     <div class="form__row">
-                        <label class="form__label" for="o_3">Повторить пароль (*)</label>
+                        <label class="form__label" for="o_3">@lang('auth.register.repeat') (*)</label>
                         <div class="form-block">
                             <input id="o_3" class="form-block__input input" autocomplete="off" type="password"
-                                name="password_confirmation" data-error="Ошибка" placeholder="***"
+                                name="password_confirmation" data-error="Ошибка" placeholder="@lang('auth.register.repeat')"
 								x-model="form.password_confirmation"	
 								@input.debounce.1000ms="form.validate('password_confirmation')"	
 							>
@@ -287,10 +287,10 @@
                     </div>
 
                     <div class="form__row">
-                        <label class="form__label" for="o_4">Название организации (*)</label>
+                        <label class="form__label" for="o_4">@lang('auth.register.org_title') (*)</label>
                         <div class="form__line">
                             <input id="o_4" class="form__input input" autocomplete="off" type="text"
-                                name="full_name" data-error="Ошибка" placeholder="Полное название"
+                                name="full_name" data-error="Ошибка" placeholder="@lang('auth.register.org_title')"
 								x-model="form.full_name"	
 								@input.debounce.1000ms="form.validate('full_name')"	
 							>
@@ -300,7 +300,7 @@
                         </div>
                         <div class="form__line">
                             <input class="form__input input" autocomplete="off" type="text" name="short_name"
-                                data-error="Ошибка" placeholder="Сокращенное название"
+                                data-error="Ошибка" placeholder="@lang('auth.register.short_title')"
 								x-model="form.short_name"	
 								@input.debounce.1000ms="form.validate('short_name')"	
 							>

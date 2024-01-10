@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ app()->getLocale() }}">
 <head>
 	<title>@yield('title') | CRC</title>
 	<meta charset="UTF-8">

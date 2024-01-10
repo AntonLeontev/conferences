@@ -1,20 +1,44 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
-
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
+    // Login page
+    'login' => [
+        'title' => 'Log in',
+        'auth' => 'Log in',
+        'message' => 'To login, enter your email address and password',
+        'email' => 'E-mail',
+        'password' => 'Password',
+        'send' => 'Log in',
+        'register' => 'Registration',
+        'forgot' => 'Forgot password?',
+    ],
+
+    // Register page
+    'register' => [
+        'title' => 'Registration',
+        'auth' => 'Registration',
+        'message' => 'Select registration format:',
+        'email' => 'E-mail',
+        'password' => 'Password',
+        'repeat' => 'Repeat password',
+        'send' => 'Register',
+        'participant' => 'Participant',
+        'name_ru' => 'Name (RU)',
+        'surname_ru' => 'Surname (RU)',
+        'middle_name_ru' => 'Middle name (RU)',
+        'name_en' => 'Name (EN)',
+        'surname_en' => 'Surname (EN)',
+        'middle_name_en' => 'Middle name (EN)',
+        'phone' => 'Phone number',
+        'forgot' => 'Forgot password?',
+
+        'organization' => 'Organization',
+        'org_title' => 'Full name',
+        'short_title' => 'Short name',
+    ],
 
 ];

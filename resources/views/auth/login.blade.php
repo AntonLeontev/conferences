@@ -1,39 +1,39 @@
 @extends('layouts.auth')
 
-@section('title', 'Вход')
+@section('title', __('auth.login.title'))
 
-@section('h1', 'Авторизация')
+@section('h1', __('auth.login.auth'))
 
 @section('content')
-    <form action="{{ route('login') }}" method="POST" class="registration__form form">
+    <form action="{{ localize_route('login') }}" method="POST" class="registration__form form">
 		@csrf
-        <h2 class="form__title">Чтобы войти в систему, введите свой адрес электронной почты и пароль</h2>
+        <h2 class="form__title">@lang('auth.login.message')</h2>
         <div class="form__row">
-            <label class="form__label" for="i_1">E-mail (*)</label>
+            <label class="form__label" for="i_1">@lang('auth.login.email') (*)</label>
             <input id="i_1" class="form-block__input input" autocomplete="off" type="email" name="email"
-                data-error="Ошибка" placeholder="E-mail" value="{{ old('email') }}">
+                data-error="Ошибка" placeholder="@lang('auth.login.email')" value="{{ old('email') }}">
 			@error('email')
 				<div>{{ $message }}</div>
 			@enderror
         </div>
         <div class="form__row">
-            <label class="form__label" for="i_2">Пароль (*)</label>
+            <label class="form__label" for="i_2">@lang('auth.login.password') (*)</label>
             <input id="i_2" class="form-block__input input" autocomplete="off" type="password" name="password"
-                data-error="Ошибка" placeholder="***">
+                data-error="Ошибка" placeholder="@lang('auth.login.password')">
 			@error('password')
 				<div>{{ $message }}</div>
 			@enderror
         </div>
 
         <div class="form__row">
-            <button class="form__button button button_primary" type="submit">Отправить</button>
+            <button class="form__button button button_primary" type="submit">@lang('auth.login.send')</button>
         </div>
 
 		<div class="form__row">
-			<a href="{{ route('register') }}">Регистрация</a>
+			<a href="{{ route('register') }}">@lang('auth.login.register')</a>
 		</div>
 		<div class="form__row">
-			<a href="{{ route('password.request') }}">Забыли пароль?</a>
+			<a href="{{ route('password.request') }}">@lang('auth.login.forgot')</a>
 		</div>
     </form>
 	@if (session('status'))
