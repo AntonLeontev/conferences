@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
     {
         (new AffiliationSeeder)->run();
         (new SubjectSeeder)->run();
+        (new ConferenceTypeSeeder)->run();
     }
 }
