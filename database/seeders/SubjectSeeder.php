@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Subject;
 use Illuminate\Database\Seeder;
+use Src\Domains\Conferences\Models\Subject;
 
 class SubjectSeeder extends Seeder
 {

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Affiliation;
 use Illuminate\Database\Seeder;
+use Src\Domains\Conferences\Models\Affiliation;
 
 class AffiliationSeeder extends Seeder
 {
