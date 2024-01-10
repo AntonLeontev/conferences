@@ -40,28 +40,45 @@
             <div class="header__menu menu">
                 <nav class="menu__body">
                     <ul class="menu__list">
-                        <li class="menu__item _active"><a href="{{ route('home') }}" class="menu__link"><span>Главная</span></a></li>
+						@if (Route::has('home'))
+                        	<li class="menu__item _active"><a href="{{ route('home') }}" class="menu__link"><span>Главная</span></a></li>
+						@endif
                         <li class="menu__item" data-spoilers="991.98">
                             <button class="menu__link" type="button" data-spoiler>
                                 <span class="_icon-arrow">Предмет</span>
                             </button>
                             <ul class="menu__submenu submenu">
-                                <li class="submenu__item"><a href="{{ route('subject', 'Математика') }}" class="submenu__link _icon-arrow">Математика</a>
+                                <li class="submenu__item">
+									<a href="{{ route('subject', 'Математика') }}" class="submenu__link _icon-arrow">Математика</a>
                                 </li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Физика</a></li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Химия</a></li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Информатика</a>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Физика</a>
+								</li>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Химия</a>
+								</li>
+								<li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Науки о Земле</a>
+								</li>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Информатика</a>
                                 </li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Инженерия</a>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Инженерия</a>
                                 </li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Медицина</a></li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Наука о жизни</a>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Медицина</a>
+								</li>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Науки о жизни</a>
                                 </li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Социальная
-                                    наука</a></li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Наука о земле</a>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Социальные науки</a>
+								</li>
                                 </li>
-                                <li class="submenu__item"><a href="" class="submenu__link _icon-arrow">Тренинги</a></li>
+                                <li class="submenu__item">
+									<a href="" class="submenu__link _icon-arrow">Тренинги</a>
+								</li>
                             </ul>
                         </li>
                         <li class="menu__item"><a href="{{ route('announcement') }}" class="menu__link"><span>Объявление</span></a></li>
