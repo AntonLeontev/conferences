@@ -11,6 +11,8 @@ use Src\Domains\Conferences\Enums\AbstractsFormat;
 use Src\Domains\Conferences\Enums\AbstractsLanguage;
 use Src\Domains\Conferences\Enums\ConferenceFormat;
 use Src\Domains\Conferences\Enums\ConferenceLanguage;
+use Src\Domains\Conferences\Enums\ParticipantsNumber;
+use Src\Domains\Conferences\Enums\ReportForm;
 
 class Conference extends Model
 {
@@ -25,6 +27,7 @@ class Conference extends Model
         'with_foreign_participation',
         'logo',
         'website',
+        'need_site',
         'co-organizers',
         'address',
         'phone',
@@ -54,6 +57,8 @@ class Conference extends Model
         'lang' => ConferenceLanguage::class,
         'abstracts_format' => AbstractsFormat::class,
         'abstracts_lang' => AbstractsLanguage::class,
+        'participants_number' => ParticipantsNumber::class,
+        'report_form' => ReportForm::class,
         'start_date' => 'date',
         'end_date' => 'date',
     ];

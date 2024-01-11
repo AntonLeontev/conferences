@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('with_foreign_participation')->default(0);
             $table->string('logo')->nullable();
             $table->string('website')->nullable();
+            $table->boolean('need_site');
             $table->json('co-organizers')->nullable();
             $table->string('address');
             $table->string('phone');

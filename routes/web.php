@@ -20,10 +20,13 @@ Route::group([
         ->middleware('auth')
         ->group(function () {
             // Participant
+
+            // Organizer
             Route::prefix('events')->group(function () {
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');
+                Route::middleware(['precognitive'])->post('create', [ConferenceController::class, 'store'])
+                    ->name('conference.store');
             });
-            // Organizer
         });
 
     /**

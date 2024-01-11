@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConferenceStoreRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -12,12 +13,12 @@ class ConferenceController extends Controller
 {
     public function organizerIndex(): View|Factory
     {
-
+        return view('conferences');
     }
 
     public function participantIndex(): View|Factory
     {
-
+        return view('conferences');
     }
 
     public function subjectIndex(Subject $subject): View|Factory
@@ -42,13 +43,13 @@ class ConferenceController extends Controller
         return view('my.events.create');
     }
 
-    public function store(Request $request)
+    public function store(ConferenceStoreRequest $request)
     {
 
     }
 
     public function show(Request $request): View|Factory
     {
-
+        return view('conference');
     }
 }
