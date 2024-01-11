@@ -54,6 +54,8 @@ class Conference extends Model
         'lang' => ConferenceLanguage::class,
         'abstracts_format' => AbstractsFormat::class,
         'abstracts_lang' => AbstractsLanguage::class,
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     public function type(): BelongsTo

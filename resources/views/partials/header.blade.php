@@ -21,12 +21,124 @@
                 
 				@auth
 					<div class="header__btns">
-						<a href="" class="header__link"><img src="{{ Vite::asset('resources/img/user.svg') }}" alt="Image"></a>
-						<a href="" class="header__link">
+						<div class="header__link header__link_notification">
 							<span></span>
 							<img src="{{ Vite::asset('resources/img/notification.svg') }}" alt="Image">
-						</a>
-						<form action="{{ localize_route('logout') }}" method="POST">@csrf<button>@lang('header.logout')</button></form>
+							{{-- <div class="submenu-user">
+								<div class="submenu-user__header">
+									<strong>Ваши уведомления</strong>
+								</div>
+								<div class="submenu-user__body">
+									<ul class="messages">
+										<li class="message">
+											<a class="stretched-link" href=""></a>
+											<div class="message__inner">
+												<img src="img/user.jpg" alt="Image">
+												<div class="message__body">
+													<div class="message__header">
+														<strong>IEEE</strong>
+														<div class="circle"></div>
+													</div>
+													<div class="message__text">
+														Приглашение на участие в конференции Приглашение на участие в конференции
+													</div>
+												</div>
+											</div>
+										</li>
+										<li class="message">
+											<a class="stretched-link" href=""></a>
+											<div class="message__inner">
+												<img src="img/user.jpg" alt="Image">
+												<div class="message__body">
+													<div class="message__header">
+														<strong>IEEE</strong>
+														<div class="circle"></div>
+													</div>
+													<div class="message__text">
+														Приглашение на участие в конференции
+													</div>
+												</div>
+											</div>
+										</li>
+										<li class="message">
+											<a class="stretched-link" href=""></a>
+											<div class="message__inner">
+												<img src="img/user.jpg" alt="Image">
+												<div class="message__body">
+													<div class="message__header">
+														<strong>IEEE</strong>
+														<div class="circle circle_read"></div>
+													</div>
+													<div class="message__text">
+														Приглашение на участие в конференции
+													</div>
+												</div>
+											</div>
+										</li>
+										<li class="message">
+											<a class="stretched-link" href=""></a>
+											<div class="message__inner">
+												<img src="img/user.jpg" alt="Image">
+												<div class="message__body">
+													<div class="message__header">
+														<strong>IEEE</strong>
+														<div class="circle circle_read"></div>
+													</div>
+													<div class="message__text">
+														Приглашение на участие в конференции
+													</div>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div> --}}
+						</div>
+						<div class="header__link header__link_user">
+							<img class="img-user" src="{{ Vite::asset('resources/img/user.jpg') }}" alt="Image">
+							<span>{{ auth()->user()->email }}</span>
+							<div class="submenu-user">
+								<div class="submenu-user__header">
+									<div class="submenu-user__icon">
+										<img src="{{ Vite::asset('resources/img/user.jpg') }}" alt="Image">
+									</div>
+									<strong>{{ auth()->user()->email }}</strong>
+								</div>
+								<div class="submenu-user__body">
+									<div class="submenu-user__item">
+										@if (auth()->user()->participant()->exists())
+											<ul class="submenu-user__list">
+												<li><a class="submenu-user__link" href="">Мои данные</a></li>
+											</ul>
+										@else
+											<a href="" class="button">Регистрация участника</a>
+										@endif
+									</div>
+									<div class="submenu-user__item">
+										@if (auth()->user()->organization()->exists())
+											<ul class="submenu-user__list">
+												@if (Route::has('conference.create'))
+													<li>
+														<a class="submenu-user__link" href="{{ localize_route('conference.create') }}">
+															Создать мероприятие
+														</a>
+													</li>
+												@endif
+											</ul>
+										@else
+											<a href="" class="button">Регистрация организации</a>
+										@endif
+										
+									</div>
+									<div class="submenu-user__item">
+										<form action="{{ localize_route('logout') }}" method="POST">
+											@csrf
+											<button class="submenu-user__link">@lang('header.logout')</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<button type="button" class="menu__icon icon-menu"><span></span></button>
 				@else
@@ -52,40 +164,16 @@
                                 <span class="_icon-arrow">@lang('header.subject')</span>
                             </button>
                             <ul class="menu__submenu submenu">
-                                <li class="submenu__item">
-									<a href="{{ localize_route('subject', 'Математика') }}" class="submenu__link _icon-arrow">@lang('header.math')</a>
-                                </li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.phis')</a>
-								</li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.chem')</a>
-								</li>
-								<li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.geo')</a>
-								</li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.comp')</a>
-                                </li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.eng')</a>
-                                </li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.med')</a>
-								</li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.life')</a>
-                                </li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.soc')</a>
-								</li>
-                                </li>
-                                <li class="submenu__item">
-									<a href="" class="submenu__link _icon-arrow">@lang('header.train')</a>
-								</li>
+								@foreach (subjects() as $subject)
+									<li class="submenu__item">
+										<a href="{{ localize_route('subject', $subject->slug) }}" class="submenu__link _icon-arrow">
+											{{ $subject->{'title_'.app()->getLocale()} }}
+										</a>
+									</li>
+								@endforeach
                             </ul>
                         </li>
-                        <li class="menu__item"><a href="{{ localize_route('announcement') }}" class="menu__link"><span>@lang('header.login')</span></a></li>
+                        <li class="menu__item"><a href="{{ localize_route('announcement') }}" class="menu__link"><span>@lang('header.announcement')</span></a></li>
                         <li class="menu__item"><a href="{{ localize_route('search') }}" class="menu__link"><span>@lang('header.search')</span></a></li>
                         <li class="menu__item"><a href="{{ route('archive') }}" class="menu__link"><span>@lang('header.archive')</span></a></li>
                     </ul>

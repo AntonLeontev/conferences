@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('conferences', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->string('title_ru');
             $table->string('title_en', 250);
             $table->string('slug')->unique();

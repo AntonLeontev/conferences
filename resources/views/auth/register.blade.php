@@ -42,7 +42,7 @@
 					}"
 				>
 					@csrf
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="u_1">@lang('auth.register.email') (*)</label>
                         <input id="u_1" class="form-block__input input" autocomplete="off" type="email"
                             name="email" data-error="Ошибка" placeholder="@lang('auth.register.email')"
@@ -50,10 +50,10 @@
 							@input.debounce.1000ms="form.validate('email')"
 						>
 						<template x-if="form.invalid('email')">
-							<div x-text="form.errors.email"></div>
+							<div class="form__error" x-text="form.errors.email"></div>
 						</template>
                     </div>
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="u_2">@lang('auth.register.password') (*)</label>
                         <div class="form-block">
                             <input id="u_2" class="form-block__input input" autocomplete="off" type="password"
@@ -64,10 +64,10 @@
                             <button class="form-block__btn btn__viewpass _icon-eye" type="button" tabindex="-1"></button>
                         </div>
 						<template x-if="form.invalid('password')">
-							<div x-text="form.errors.password"></div>
+							<div class="form__error" x-text="form.errors.password"></div>
 						</template>
                     </div>
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="u_3">@lang('auth.register.repeat') (*)</label>
                         <div class="form-block">
                             <input id="u_3" class="form-block__input input" autocomplete="off" type="password"
@@ -78,11 +78,11 @@
                             <button class="form-block__btn btn__viewpass _icon-eye" type="button" tabindex="-1"></button>
                         </div>
 						<template x-if="form.invalid('password_confirmation')">
-							<div x-text="form.errors.password_confirmation"></div>
+							<div class="form__error" x-text="form.errors.password_confirmation"></div>
 						</template>
                     </div>
                     <div class="form__row _three">
-                        <div class="form__line">
+                        <div class="form__line" :class="form.invalid('email') && '_error'">
                             <label class="form__label" for="u_5">@lang('auth.register.name_ru')</label>
                             <input id="u_5" class="input" autocomplete="off" type="text" name="name_ru"
                                 data-error="Ошибка" placeholder="@lang('auth.register.name_ru')" 
@@ -90,7 +90,7 @@
 								@input.debounce.1000ms="form.validate('name_ru')"
 							>
                         </div>
-                        <div class="form__line">
+                        <div class="form__line" :class="form.invalid('email') && '_error'">
                             <label class="form__label" for="u_6">@lang('auth.register.surname_ru')</label>
                             <input id="u_6" class="input" autocomplete="off" type="text" name="surname_ru"
                                 data-error="Ошибка" placeholder="@lang('auth.register.surname_ru')"
@@ -98,7 +98,7 @@
 								@input.debounce.1000ms="form.validate('surname_ru')"
 							>
                         </div>
-                        <div class="form__line">
+                        <div class="form__line" :class="form.invalid('email') && '_error'">
                             <label class="form__label" for="u_7">@lang('auth.register.middle_name_ru')</label>
                             <input id="u_7" class="input" autocomplete="off" type="text" name="middle_name_ru"
                                 data-error="Ошибка" placeholder="@lang('auth.register.middle_name_ru')"
@@ -108,16 +108,16 @@
                         </div>
                     </div>
 					<template x-if="form.invalid('name_ru')">
-						<div x-text="form.errors.name_ru"></div>
+						<div class="form__error" x-text="form.errors.name_ru"></div>
 					</template>
 					<template x-if="form.invalid('surname_ru')">
-						<div x-text="form.errors.surname_ru"></div>
+						<div class="form__error" x-text="form.errors.surname_ru"></div>
 					</template>
 					<template x-if="form.invalid('middle_name_ru')">
-						<div x-text="form.errors.middle_name_ru"></div>
+						<div class="form__error" x-text="form.errors.middle_name_ru"></div>
 					</template>
                     <div class="form__row _three">
-                        <div class="form__line">
+                        <div class="form__line" :class="form.invalid('email') && '_error'">
                             <label class="form__label" for="u_8">@lang('auth.register.name_en')</label>
                             <input id="u_8" class="input" autocomplete="off" type="text" name="name_en"
                                 data-error="Ошибка" placeholder="@lang('auth.register.name_en')"
@@ -125,7 +125,7 @@
 								@input.debounce.1000ms="form.validate('name_en')"
 							>
                         </div>
-                        <div class="form__line">
+                        <div class="form__line" :class="form.invalid('email') && '_error'">
                             <label class="form__label" for="u_9">@lang('auth.register.surname_en')</label>
                             <input id="u_9" class="input" autocomplete="off" type="text" name="surname_en"
                                 data-error="Ошибка" placeholder="@lang('auth.register.surname_en')"
@@ -133,7 +133,7 @@
 								@input.debounce.1000ms="form.validate('surname_en')"
 							>
                         </div>
-                        <div class="form__line">
+                        <div class="form__line" :class="form.invalid('email') && '_error'">
                             <label class="form__label" for="u_10">@lang('auth.register.middle_name_en')</label>
                             <input id="u_10" class="input" autocomplete="off" type="text" name="middle_name_en"
                                 data-error="Ошибка" placeholder="@lang('auth.register.middle_name_en')"
@@ -143,15 +143,15 @@
                         </div>
                     </div>
 					<template x-if="form.invalid('name_en')">
-						<div x-text="form.errors.name_en"></div>
+						<div class="form__error" x-text="form.errors.name_en"></div>
 					</template>
 					<template x-if="form.invalid('surname_en')">
-						<div x-text="form.errors.surname_en"></div>
+						<div class="form__error" x-text="form.errors.surname_en"></div>
 					</template>
 					<template x-if="form.invalid('middle_name_en')">
-						<div x-text="form.errors.middle_name_en"></div>
+						<div class="form__error" x-text="form.errors.middle_name_en"></div>
 					</template>
-                    <div class="form__row" x-data>
+                    <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="u_4">@lang('auth.register.phone')</label>
                         <input id="u_4" class="form-block__input input" autocomplete="off" type="text"
                             name="phone" data-error="Ошибка" placeholder="+7 (999) 999-99-99" x-mask="+7 (999) 999-99-99"
@@ -159,7 +159,7 @@
 							@input.debounce.1000ms="form.validate('phone')"
 						>
 						<template x-if="form.invalid('phone')">
-							<div x-text="form.errors.phone"></div>
+							<div class="form__error" x-text="form.errors.phone"></div>
 						</template>
                     </div>
                     <div class="form__row">
@@ -183,8 +183,10 @@
 							email: '',
 							password: '',
 							password_confirmation: '',
-							full_name: '',
-							short_name: '',
+							full_name_ru: '',
+							short_name_ru: '',
+							full_name_en: '',
+							short_name_en: '',
 							inn: '',
 							address: '',
 							phone: '',
@@ -247,7 +249,7 @@
 					}"
 				>
 					@csrf
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="o_1">@lang('auth.register.email') (*)</label>
                         <input id="o_1" class="form-block__input input" autocomplete="off" type="email"
                             name="email" data-error="Ошибка" placeholder="@lang('auth.register.email')"
@@ -255,11 +257,11 @@
 							@input.debounce.1000ms="form.validate('email')"
 						>
 						    <template x-if="form.invalid('email')">
-								<div x-text="form.errors.email"></div>
+								<div class="form__error" x-text="form.errors.email"></div>
 							</template>
                     </div>
 
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('password') && '_error'">
                         <label class="form__label" for="o_2">@lang('auth.register.password') (*)</label>
                         <div class="form-block">
                             <input id="o_2" class="form-block__input input" autocomplete="off" type="password"
@@ -270,7 +272,7 @@
                             <button class="form-block__btn btn__viewpass _icon-eye" type="button" tabindex="-1"></button>
                         </div>
 						<template x-if="form.invalid('password')">
-							<div x-text="form.errors.password"></div>
+							<div class="form__error" x-text="form.errors.password"></div>
 						</template>
                     </div>
 
@@ -287,30 +289,54 @@
                     </div>
 
                     <div class="form__row">
-                        <label class="form__label" for="o_4">@lang('auth.register.org_title') (*)</label>
-                        <div class="form__line">
+                        <label class="form__label" for="o_4">@lang('auth.register.org_title_ru') (*)</label>
+                        <div class="form__line" :class="form.invalid('full_name_ru') && '_error'">
                             <input id="o_4" class="form__input input" autocomplete="off" type="text"
-                                name="full_name" data-error="Ошибка" placeholder="@lang('auth.register.org_title')"
-								x-model="form.full_name"	
-								@input.debounce.1000ms="form.validate('full_name')"	
+                                name="full_name_ru" data-error="Ошибка" placeholder="@lang('auth.register.org_title_ru')"
+								x-model="form.full_name_ru"	
+								@input.debounce.1000ms="form.validate('full_name_ru')"	
 							>
-							<template x-if="form.invalid('full_name')">
-								<div x-text="form.errors.full_name"></div>
+							<template x-if="form.invalid('full_name_ru')">
+								<div class="form__error" x-text="form.errors.full_name_ru"></div>
 							</template>
                         </div>
-                        <div class="form__line">
-                            <input class="form__input input" autocomplete="off" type="text" name="short_name"
-                                data-error="Ошибка" placeholder="@lang('auth.register.short_title')"
-								x-model="form.short_name"	
-								@input.debounce.1000ms="form.validate('short_name')"	
+                        <div class="form__line" :class="form.invalid('short_name_ru') && '_error'">
+                            <input class="form__input input" autocomplete="off" type="text" name="short_name_ru"
+                                data-error="Ошибка" placeholder="@lang('auth.register.short_title_ru')"
+								x-model="form.short_name_ru"	
+								@input.debounce.1000ms="form.validate('short_name_ru')"	
 							>
-							<template x-if="form.invalid('short_name')">
-								<div x-text="form.errors.short_name"></div>
+							<template x-if="form.invalid('short_name_ru')">
+								<div class="form__error" x-text="form.errors.short_name_ru"></div>
 							</template>
                         </div>
                     </div>
 
                     <div class="form__row">
+                        <label class="form__label" for="o_4">@lang('auth.register.org_title_en') (*)</label>
+                        <div class="form__line" :class="form.invalid('full_name_en') && '_error'">
+                            <input id="o_4" class="form__input input" autocomplete="off" type="text"
+                                name="full_name_en" data-error="Ошибка" placeholder="@lang('auth.register.org_title_en')"
+								x-model="form.full_name_en"	
+								@input.debounce.1000ms="form.validate('full_name_en')"	
+							>
+							<template x-if="form.invalid('full_name_en')">
+								<div class="form__error" x-text="form.errors.full_name_en"></div>
+							</template>
+                        </div>
+                        <div class="form__line" :class="form.invalid('short_name_en') && '_error'">
+                            <input class="form__input input" autocomplete="off" type="text" name="short_name_en"
+                                data-error="Ошибка" placeholder="@lang('auth.register.short_title_en')"
+								x-model="form.short_name_en"	
+								@input.debounce.1000ms="form.validate('short_name_en')"	
+							>
+							<template x-if="form.invalid('short_name_en')">
+								<div class="form__error" x-text="form.errors.short_name_en"></div>
+							</template>
+                        </div>
+                    </div>
+
+                    <div class="form__row" :class="form.invalid('inn') && '_error'">
                         <label class="form__label" for="o_5">Идентификационный номер
                             налогоплательщика</label>
                         <div class="form__line">
@@ -320,12 +346,12 @@
 								@input.debounce.1000ms="form.validate('inn')"	
 							>
 							<template x-if="form.invalid('inn')">
-								<div x-text="form.errors.inn"></div>
+								<div class="form__error" x-text="form.errors.inn"></div>
 							</template>
                         </div>
                     </div>
 
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('address') && '_error'">
                         <label class="form__label" for="o_6">Адрес (*)</label>
                         <textarea id="o_6" autocomplete="off" name="address" placeholder="Адрес" data-error="Ошибка"
                             class="input _smaller"
@@ -333,11 +359,11 @@
 							@input.debounce.1000ms="form.validate('address')"	
 						></textarea>
 						<template x-if="form.invalid('address')">
-							<div x-text="form.errors.address"></div>
+							<div class="form__error" x-text="form.errors.address"></div>
 						</template>
                     </div>
 
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('phone') && '_error'">
                         <label class="form__label" for="o_7">Телефон (*)</label>
                         <div class="form__line" x-data>
                             <input id="o_7" class="input" autocomplete="off" type="text" name="phone"
@@ -346,12 +372,12 @@
 								@input.debounce.1000ms="form.validate('phone')"	
 							>
 							<template x-if="form.invalid('phone')">
-								<div x-text="form.errors.phone"></div>
+								<div class="form__error" x-text="form.errors.phone"></div>
 							</template>
                         </div>
                     </div>
 
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('telegram') && '_error'">
                         <label class="form__label" for="o_8">Ссылка на WhatsApp контактного лица</label>
                         <div class="form__line">
                             <input id="o_8" class="input" autocomplete="off" type="text" name="whatsapp"
@@ -360,12 +386,12 @@
 								@input.debounce.1000ms="form.validate('whatsapp')"
 							>
 							<template x-if="form.invalid('whatsapp')">
-								<div x-text="form.errors.whatsapp"></div>
+								<div class="form__error" x-text="form.errors.whatsapp"></div>
 							</template>
                         </div>
                     </div>
 
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('telegram') && '_error'">
                         <label class="form__label" for="o_8">Ссылка на Telegram контактного лица</label>
                         <div class="form__line">
                             <input id="o_8" class="input" autocomplete="off" type="text" name="telegram"
@@ -374,12 +400,12 @@
 								@input.debounce.1000ms="form.validate('telegram')"
 							>
 							<template x-if="form.invalid('telegram')">
-								<div x-text="form.errors.telegram"></div>
+								<div class="form__error" x-text="form.errors.telegram"></div>
 							</template>
                         </div>
                     </div>
 
-                    <div class="form__row" id="organization_type" x-data="{
+                    <div class="form__row" :class="form.invalid('type') && '_error'" id="organization_type" x-data="{
 						other: false,
 						select() {
 							let item = this.$event.detail.select.parentElement.querySelector('.select__content').innerText
@@ -414,7 +440,7 @@
 								>
 							</template>
 							<template x-if="form.invalid('type')">
-								<div x-text="form.errors.type"></div>
+								<div class="form__error" x-text="form.errors.type"></div>
 							</template>	
 						</div>
                     </div>
@@ -443,7 +469,7 @@
 							<span class="checkbox__text">Другое</span>
 						</label>
 
-						<div class="form__line" x-show="other" x-transition x-cloak>
+						<div class="form__line" :class="form.invalid('actions') && '_error'" x-show="other" x-transition x-cloak>
 							<template x-if="other">
 								<input class="input" autocomplete="off" type="text" name="actions"
 									data-error="Ошибка" placeholder="Введите тип деятельности"
@@ -452,7 +478,7 @@
 							</template>
 						</div>
 						<template x-if="form.invalid('actions')">
-							<div x-text="form.errors.actions"></div>
+							<div class="form__error" x-text="form.errors.actions"></div>
 						</template>
                     </div>
 
@@ -465,14 +491,14 @@
 									@change="logoChange"
 								>
 								<template x-if="form.invalid('logo')">
-									<div x-text="form.errors.logo"></div>
+									<div class="form__error" x-text="form.errors.logo"></div>
 								</template>
                                 <div class="file__button button">Добавить лого</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="form__row">
+                    <div class="form__row" :class="form.invalid('vk') && '_error'">
                         <label class="form__label" for="o_9">Вконтакте</label>
                         <div class="form__line">
                             <input id="o_9" class="input" autocomplete="off" type="text" name="vk"
@@ -481,7 +507,7 @@
 								@input.debounce.1000ms="form.validate('vk')"
 							>
 							<template x-if="form.invalid('vk')">
-								<div x-text="form.errors.vk"></div>
+								<div class="form__error" x-text="form.errors.vk"></div>
 							</template>
                         </div>
                     </div>

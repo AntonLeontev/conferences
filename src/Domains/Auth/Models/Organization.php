@@ -13,8 +13,10 @@ class Organization extends Model
 
     protected $fillable = [
         'user_id',
-        'full_name',
-        'short_name',
+        'full_name_ru',
+        'short_name_ru',
+        'full_name_en',
+        'short_name_en',
         'inn',
         'address',
         'phone',

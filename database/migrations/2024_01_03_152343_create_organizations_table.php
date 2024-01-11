@@ -15,8 +15,10 @@ return new class extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('full_name');
-            $table->string('short_name')->nullable();
+            $table->string('full_name_ru');
+            $table->string('short_name_ru')->nullable();
+            $table->string('full_name_en');
+            $table->string('short_name_en')->nullable();
             $table->string('inn')->nullable();
             $table->string('address')->nullable();
             $table->string('phone', 50)->nullable();

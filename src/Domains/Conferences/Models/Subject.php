@@ -4,6 +4,7 @@ namespace Src\Domains\Conferences\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Subject extends Model
 {
@@ -14,6 +15,11 @@ class Subject extends Model
         'title_en',
         'slug',
     ];
+
+    public function conferences(): BelongsToMany
+    {
+        return $this->belongsToMany(Conference::class);
+    }
 
     protected static function booted(): void
     {

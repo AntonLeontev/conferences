@@ -14,8 +14,10 @@ class CreateOrganization
 
         return Organization::create([
             'user_id' => $user->id,
-            'full_name' => $request->full_name,
-            'short_name' => $request->short_name,
+            'full_name_ru' => $request->full_name_ru,
+            'short_name_ru' => $request->short_name_ru,
+            'full_name_en' => $request->full_name_en,
+            'short_name_en' => $request->short_name_en,
             'inn' => $request->inn,
             'address' => $request->address,
             'phone' => $request->phone,
