@@ -30,6 +30,7 @@ class ConferenceController extends Controller
             ->whereHas('subjects', function ($query) use ($subject) {
                 return $query->where('subjects.id', $subject->id);
             })
+            ->with(['subjects', 'organization'])
             ->get();
 
         return view('conferences', [

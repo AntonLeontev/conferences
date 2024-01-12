@@ -45,7 +45,7 @@
 										<div class="list-result__body body-result">
 											<div class="body-result__item">
 												<strong>Организатор:</strong>
-												<span> Институт Галилео Галилея</span>
+												<span>{{ $conference->organization->{'full_name_'.loc()} }}</span>
 											</div>
 											<div class="body-result__text">
 												<strong>Аннотация:</strong> {{ $conference->{'description_'.loc()} }}
