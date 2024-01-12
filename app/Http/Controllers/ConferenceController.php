@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ConferenceStoreRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Src\Domains\Conferences\Actions\CreateConference;
 use Src\Domains\Conferences\Models\Conference;
@@ -60,11 +59,11 @@ class ConferenceController extends Controller
             ]);
         }
 
-        return response('', Response::HTTP_CREATED);
+        return response()->json($conference, Response::HTTP_CREATED);
     }
 
-    public function show(Request $request): View|Factory
+    public function show(Conference $conference): View|Factory
     {
-        return view('conference');
+        return view('conference', ['conference' => $conference]);
     }
 }

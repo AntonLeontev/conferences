@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Src\Domains\Auth\Models\Organization;
 use Src\Domains\Conferences\Models\Conference;
 use Src\Domains\Conferences\Models\ConferenceType;
 use Src\Domains\Conferences\Models\Subject;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('title_ru');
             $table->string('title_en', 250);
             $table->string('slug')->unique();
+            $table->foreignIdFor(Organization::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(ConferenceType::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('format');
             $table->boolean('with_foreign_participation')->default(0);

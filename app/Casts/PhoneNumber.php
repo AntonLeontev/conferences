@@ -14,6 +14,10 @@ class PhoneNumber implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (empty($value)) {
+            return $value;
+        }
+
         return '+'.$value;
     }
 

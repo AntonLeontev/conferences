@@ -167,7 +167,7 @@
 								@foreach (subjects() as $subject)
 									<li class="submenu__item">
 										<a href="{{ localize_route('subject', $subject->slug) }}" class="submenu__link _icon-arrow">
-											{{ $subject->{'title_'.app()->getLocale()} }}
+											{{ $subject->{'title_'.loc()} }}
 										</a>
 									</li>
 								@endforeach

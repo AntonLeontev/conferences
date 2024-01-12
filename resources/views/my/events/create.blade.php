@@ -35,7 +35,7 @@
 							report_form: '',
 							whatsapp: '',
 							telegram: '',
-							price_participants: 0,
+							price_participants: '',
 							price_visitors: '',
 							discount_students: '',
 							discount_participants: '',
@@ -80,8 +80,7 @@
 						submit() {
 							this.form.submit()
 								.then(response => {
-									{{-- location.replace('/') --}}
-									alert('ok!');
+									location.replace('/events/' + response.data.slug)
 								})
 								.catch(error => {
 									{{-- alert('An error occurred.'); --}}

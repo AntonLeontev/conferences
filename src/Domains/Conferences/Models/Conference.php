@@ -2,11 +2,13 @@
 
 namespace Src\Domains\Conferences\Models;
 
+use App\Casts\PhoneNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Src\Domains\Auth\Models\Organization;
 use Src\Domains\Conferences\Enums\AbstractsFormat;
 use Src\Domains\Conferences\Enums\AbstractsLanguage;
 use Src\Domains\Conferences\Enums\ConferenceFormat;
@@ -23,6 +25,7 @@ class Conference extends Model
         'title_en',
         'slug',
         'conference_type_id',
+        'organization_id',
         'format',
         'with_foreign_participation',
         'logo',
@@ -61,7 +64,13 @@ class Conference extends Model
         'report_form' => ReportForm::class,
         'start_date' => 'date',
         'end_date' => 'date',
+        'phone' => PhoneNumber::class,
     ];
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
+    }
 
     public function type(): BelongsTo
     {

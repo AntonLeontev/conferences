@@ -12,6 +12,7 @@ class CreateConference
         $conference = Conference::create([
             'title_ru' => $request->get('title_ru'),
             'title_en' => $request->get('title_en'),
+            'organization_id' => auth()->user()->organization->id,
             'conference_type_id' => $request->get('conference_type_id'),
             'format' => $request->get('format'),
             'with_foreign_participation' => $request->get('with_foreign_participation'),
