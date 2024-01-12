@@ -6,7 +6,10 @@ use App\Http\Requests\ConferenceStoreRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Src\Domains\Conferences\Actions\CreateConference;
 use Src\Domains\Conferences\Models\Conference;
+use Src\Domains\Conferences\Models\Section;
 use Src\Domains\Conferences\Models\Subject;
 
 class ConferenceController extends Controller
@@ -43,9 +46,21 @@ class ConferenceController extends Controller
         return view('my.events.create');
     }
 
-    public function store(ConferenceStoreRequest $request)
+    public function store(ConferenceStoreRequest $request, CreateConference $createConference)
     {
+        $conference = $createConference->handle($request);
 
+        foreach ($request->get('sections') as $section) {
+            Section::create([
+                'conference_id' => $conference->id,
+                'title_ru' => $section['title_ru'],
+                'short_title_ru' => $section['short_title_ru'],
+                'title_en' => $section['title_en'],
+                'short_title_en' => $section['short_title_en'],
+            ]);
+        }
+
+        return response('', Response::HTTP_CREATED);
     }
 
     public function show(Request $request): View|Factory

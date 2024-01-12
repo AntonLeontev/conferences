@@ -188,7 +188,7 @@
 									title_ru: '', 
 									short_title_ru: '', 
 									title_en: '', 
-									shortTitle_en: '', 
+									short_title_en: '', 
 								}
 								this.ai++
 							},
@@ -440,9 +440,9 @@
                     <div class="form__row" :class="form.invalid('report_form') && '_error'">
                         <label class="form__label">Формы докладов</label>
                         <select name="form[]" data-scroll="500" data-class-modif="form" data-name="report_form">
-                            <option value="1" selected>Устная</option>
-                            <option value="2">Стендовые доклады</option>
-                            <option value="3">Смешанная</option>
+                            <option value="oral" selected>Устная</option>
+                            <option value="stand">Стендовые доклады</option>
+                            <option value="mixed">Смешанная</option>
                         </select>
 						<template x-if="form.invalid('report_form')">
 							<div class="form__error" x-text="form.errors.report_form"></div>
