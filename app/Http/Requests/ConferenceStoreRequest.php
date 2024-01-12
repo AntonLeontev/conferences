@@ -30,7 +30,7 @@ class ConferenceStoreRequest extends FormRequest
             'with_foreign_participation' => ['required', 'boolean'],
             'subjects' => ['required', 'array'],
             'subjects.*' => ['required', 'int', 'in:'.subjects()->pluck('id')->join(',')],
-            'sections' => ['required', 'array', 'max:5'],
+            'sections' => ['nullable', 'array', 'max:8'],
             'sections.*.title_ru' => ['required', 'string', 'max:255'],
             'sections.*.short_title_ru' => ['required', 'string', 'max:255'],
             'sections.*.title_en' => ['required', 'string', 'max:255'],
