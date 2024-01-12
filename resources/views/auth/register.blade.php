@@ -154,7 +154,7 @@
                     <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="u_4">@lang('auth.register.phone')</label>
                         <input id="u_4" class="form-block__input input" autocomplete="off" type="text"
-                            name="phone" data-error="Ошибка" placeholder="+7 (999) 999-99-99" x-mask="+7 (999) 999-99-99"
+                            name="phone" data-error="Ошибка" placeholder="+7 (999) 999-99-99"
 							x-model="form.phone"
 							@input.debounce.1000ms="form.validate('phone')"
 						>
@@ -367,7 +367,7 @@
                         <label class="form__label" for="o_7">Телефон (*)</label>
                         <div class="form__line" x-data>
                             <input id="o_7" class="input" autocomplete="off" type="text" name="phone"
-                                data-error="Ошибка" placeholder="Телефон" x-mask="+7 (999) 999-99-99"
+                                data-error="Ошибка" placeholder="Телефон"
 								x-model="form.phone"	
 								@input.debounce.1000ms="form.validate('phone')"	
 							>

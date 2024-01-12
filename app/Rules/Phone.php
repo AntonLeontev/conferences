@@ -14,8 +14,10 @@ class Phone implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (strlen(preg_replace('~\D~', '', $value)) < 11) {
-            $fail('Введите телефон в международном формате');
+        $clean = strlen(preg_replace('~\D~', '', $value));
+
+        if ($clean < 11 || $clean > 11) {
+            $fail(__('validation.phone.digits'));
         }
     }
 }

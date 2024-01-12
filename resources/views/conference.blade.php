@@ -81,7 +81,7 @@
                                 <div class="event-item__contacts">
 									@unless (empty($conference->phone))
 										<div class="contacts-event">
-											<span>Телефон: </span><a href="tel:{{ $conference->phone }}">{{ $conference->phone }}</a>
+											<span>Телефон: </span><a href="tel:{{ $conference->phone->clean() }}">{{ $conference->phone->raw() }}</a>
 										</div>
 									@endunless
 									@unless (empty($conference->email))

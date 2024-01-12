@@ -178,9 +178,6 @@
 						x-data="{
 							ai: 1,
 
-							init() {
-								this.add()
-							},
 							add() {
 								if (Object.keys(this.form.sections).length >= 5) return
 								this.form.sections[this.ai] = {
@@ -340,7 +337,6 @@
                         <label class="form__label" for="c_8">Контактный телефон службы поддержки мероприятия </label>
                         <input id="c_8" class="input" autocomplete="off" type="text" name="form[]"
                             data-error="Ошибка" placeholder="Телефон"
-							x-mask="+7 (999) 999-99-99"
 							x-model="form.phone"
 							@input.debounce.1000ms="form.validate('phone')"	
 						>
@@ -528,6 +524,34 @@
 						</template>
                     </div>
 
+					<div class="form__row" :class="form.invalid('abstracts_price') && '_error'" x-data="{
+						show: false,
+						change() {
+							if (this.show === false) {
+								this.form.abstracts_price = ''
+							}
+						},
+					}">
+                        <label class="form__label">Оплата тезисов от участников</label>
+                        <div class="checkbox">
+                            <input id="chx_13" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                                value="1" name="abstracts_price_check" @change="change" x-model="show">
+                            <label for="chx_13" class="checkbox__label">
+                                <span class="checkbox__text">Есть</span>
+                            </label>
+                        </div>
+                         <input class="input" autocomplete="off" type="text"
+                            placeholder="Сумма оплаты" 
+							x-show="show"
+							x-transition
+							x-model="form.abstracts_price"
+							@change="form.validate('abstracts_price')"
+						>
+						<template x-if="form.invalid('abstracts_price') && show">
+							<div class="form__error" x-text="form.errors.abstracts_price"></div>
+						</template>
+                    </div>
+
                     <div class="form__row">
                         <label class="form__label">Предоставление скидок</label>
 
@@ -538,15 +562,29 @@
                                 <span class="checkbox__text">Студенты</span>
                             </label>
                         </div>
-                        <div class="checkbox">
-                            <input id="chx_4" data-error="Ошибка" checked class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_4" class="checkbox__label">
-                                <span class="checkbox__text">Докладчик</span>
-                            </label>
-                        </div>
-
                     </div>
+
+					<div class="form__row _two">
+                        <div class="form__line">
+
+                            <input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка"
+                                placeholder="Размер скидки">
+                        </div>
+                        <div class="form__line">
+                            <select name="form[]" data-class-modif="form">
+                                <option value="1" selected>В рублях</option>
+                                <option value="2">В %</option>
+                            </select>
+                        </div>
+                    </div>
+					
+					<div class="checkbox">
+						<input id="chx_4" data-error="Ошибка" checked class="checkbox__input" type="checkbox"
+							value="1" name="form[]">
+						<label for="chx_4" class="checkbox__label">
+							<span class="checkbox__text">Докладчик</span>
+						</label>
+					</div>
 
                     <div class="form__row _two">
                         <div class="form__line">
@@ -614,34 +652,6 @@
                         </div>
 
                     </div> --}}
-
-					<div class="form__row" :class="form.invalid('abstracts_price') && '_error'" x-data="{
-						show: false,
-						change() {
-							if (this.show === false) {
-								this.form.abstracts_price = ''
-							}
-						},
-					}">
-                        <label class="form__label">Оплата тезисов от участников</label>
-                        <div class="checkbox">
-                            <input id="chx_13" data-error="Ошибка" class="checkbox__input" type="checkbox"
-                                value="1" name="abstracts_price_check" @change="change" x-model="show">
-                            <label for="chx_13" class="checkbox__label">
-                                <span class="checkbox__text">Есть</span>
-                            </label>
-                        </div>
-                         <input class="input" autocomplete="off" type="text"
-                            placeholder="Сумма оплаты" 
-							x-show="show"
-							x-transition
-							x-model="form.abstracts_price"
-							@change="form.validate('abstracts_price')"
-						>
-						<template x-if="form.invalid('abstracts_price') && show">
-							<div class="form__error" x-text="form.errors.abstracts_price"></div>
-						</template>
-                    </div>
 
                     {{-- <div class="form__row">
                         <label class="form__label">Что необходимо для конференции</label>

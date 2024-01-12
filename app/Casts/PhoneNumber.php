@@ -4,6 +4,7 @@ namespace App\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
+use Src\Domains\Conferences\ValueObjects\Phone;
 
 class PhoneNumber implements CastsAttributes
 {
@@ -18,7 +19,7 @@ class PhoneNumber implements CastsAttributes
             return $value;
         }
 
-        return '+'.$value;
+        return new Phone($value);
     }
 
     /**
@@ -28,10 +29,8 @@ class PhoneNumber implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        $value = preg_replace('~\D~', '', $value);
-
-        if (str_starts_with($value, '8')) {
-            $value[0] = '7';
+        if ($value instanceof Phone) {
+            return $value->raw();
         }
 
         return $value;

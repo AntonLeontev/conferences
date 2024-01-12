@@ -65,6 +65,11 @@ class Conference extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'phone' => PhoneNumber::class,
+        'co-organizers' => 'array',
+        'discount_students' => 'array',
+        'discount_participants' => 'array',
+        'discount_special_guest' => 'array',
+        'discount_young_scientist' => 'array',
     ];
 
     public function organization(): BelongsTo
