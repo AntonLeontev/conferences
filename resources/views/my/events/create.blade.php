@@ -46,6 +46,7 @@
 							abstracts_lang: '',
 						}),
 						formatCheckShow: true,
+						formDisabled: false,
 
 						init() {
 							document.querySelectorAll('select')
@@ -61,7 +62,6 @@
 							} else if (select.dataset.name == 'conference_type_id') {
 								this.form.conference_type_id = select.value
 							} else if (select.dataset.name == 'format') {
-								console.log(select.value)
 								this.form.format = select.value
 								if (select.value == 'national') this.formatCheckShow = true
 								else this.formatCheckShow = false
@@ -78,13 +78,16 @@
 							}
 						},
 						submit() {
+							this.formDisabled = true
+
 							this.form.submit()
 								.then(response => {
 									location.replace('/events/' + response.data.slug)
+									this.formDisabled = false
 								})
 								.catch(error => {
-									{{-- alert('An error occurred.'); --}}
-								});
+									this.formDisabled = false
+								})
 						},
 					}"
 				>
@@ -740,7 +743,7 @@
 
                     <div class="form__row">
                         <button class="form__button button button_primary" type="submit"
-							:disabled="form.processing"
+							:disabled="form.processing || formDisabled"
 						>
 							Создать мероприятие
 						</button>

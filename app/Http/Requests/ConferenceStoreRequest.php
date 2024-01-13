@@ -4,6 +4,13 @@ namespace App\Http\Requests;
 
 use App\Rules\Phone;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Src\Domains\Conferences\Enums\AbstractsFormat;
+use Src\Domains\Conferences\Enums\AbstractsLanguage;
+use Src\Domains\Conferences\Enums\ConferenceFormat;
+use Src\Domains\Conferences\Enums\ConferenceLanguage;
+use Src\Domains\Conferences\Enums\ParticipantsNumber;
+use Src\Domains\Conferences\Enums\ReportForm;
 
 class ConferenceStoreRequest extends FormRequest
 {
@@ -26,7 +33,7 @@ class ConferenceStoreRequest extends FormRequest
             'title_ru' => ['required', 'string', 'max:250'],
             'title_en' => ['required', 'string', 'max:250'],
             'conference_type_id' => ['required', 'in:'.conference_types()->pluck('id')->join(',')],
-            'format' => ['required', 'string', 'max:255'],
+            'format' => ['required',  Rule::enum(ConferenceFormat::class)],
             'with_foreign_participation' => ['required', 'boolean'],
             'subjects' => ['required', 'array'],
             'subjects.*' => ['required', 'int', 'in:'.subjects()->pluck('id')->join(',')],
@@ -41,14 +48,14 @@ class ConferenceStoreRequest extends FormRequest
             'co-organizers.*' => ['nullable', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', new Phone()],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email:rfc,dns', 'max:255'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date'],
             'description_ru' => ['required', 'string', 'max:1000'],
             'description_en' => ['required', 'string', 'max:1000'],
-            'lang' => ['required', 'string', 'max:255'],
-            'participants_number' => ['required', 'string', 'max:255'],
-            'report_form' => ['required', 'string', 'max:255'],
+            'lang' => ['required', Rule::enum(ConferenceLanguage::class)],
+            'participants_number' => ['required', Rule::enum(ParticipantsNumber::class)],
+            'report_form' => ['required',  Rule::enum(ReportForm::class)],
             'whatsapp' => ['nullable', 'url', 'max:255'],
             'telegram' => ['nullable', 'url', 'max:255'],
             'price_participants' => ['nullable', 'integer', 'min:0', 'max:999999999'],
@@ -58,8 +65,8 @@ class ConferenceStoreRequest extends FormRequest
             'discount_special_guest' => ['sometimes'],
             'discount_young_scientist' => ['sometimes'],
             'abstracts_price' => ['nullable', 'integer', 'min:0', 'max:999999999'],
-            'abstracts_format' => ['required', 'string', 'max:255'],
-            'abstracts_lang' => ['required', 'string', 'max:255'],
+            'abstracts_format' => ['required',  Rule::enum(AbstractsFormat::class)],
+            'abstracts_lang' => ['required',  Rule::enum(AbstractsLanguage::class)],
         ];
     }
 }
