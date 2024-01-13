@@ -5,10 +5,12 @@
 @section('h1', 'Подтверждение электронной почты')
 
 @section('content')
-	Для полного доступа к функционалу, нужно подтвердить электронную почту, перейдя по ссылке в письме.
+	<div class="form__row">
+		Для полного доступа к функционалу, нужно подтвердить электронную почту, перейдя по ссылке в письме.
+	</div>
 	<form method="POST" action="/email/verification-notification">
 		@csrf
-		<button>Выслать письмо повторно</button>
+		<button class="button">Выслать письмо повторно</button>
 	</form>
 
 	@if (session('status') == 'verification-link-sent')

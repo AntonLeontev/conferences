@@ -102,34 +102,44 @@
 									<div class="submenu-user__icon">
 										<img src="{{ Vite::asset('resources/img/user.jpg') }}" alt="Image">
 									</div>
-									<strong>{{ auth()->user()->email }}</strong>
+									<strong @unless(auth()->user()->email_verified_at) class="red" @endunless>{{ auth()->user()->email }}</strong>
 								</div>
 								<div class="submenu-user__body">
-									<div class="submenu-user__item">
-										@if (auth()->user()->participant()->exists())
-											<ul class="submenu-user__list">
-												<li><a class="submenu-user__link" href="">Мои данные</a></li>
-											</ul>
-										@else
-											<a href="" class="button">Регистрация участника</a>
-										@endif
-									</div>
-									<div class="submenu-user__item">
-										@if (auth()->user()->organization()->exists())
-											<ul class="submenu-user__list">
-												@if (Route::has('conference.create'))
-													<li>
-														<a class="submenu-user__link" href="{{ localize_route('conference.create') }}">
-															Создать мероприятие
-														</a>
-													</li>
-												@endif
-											</ul>
-										@else
-											<a href="" class="button">Регистрация организации</a>
-										@endif
-										
-									</div>
+									@if (auth()->user()->email_verified_at)
+										<div class="submenu-user__item">
+											@if (auth()->user()->participant()->exists())
+												<ul class="submenu-user__list">
+													<li><a class="submenu-user__link" href="">Мои данные</a></li>
+												</ul>
+											@else
+												<a href="" class="button">Регистрация участника</a>
+											@endif
+										</div>
+										<div class="submenu-user__item">
+											@if (auth()->user()->organization()->exists())
+												<ul class="submenu-user__list">
+													@if (Route::has('conference.create'))
+														<li>
+															<a class="submenu-user__link" href="{{ localize_route('conference.create') }}">
+																Создать мероприятие
+															</a>
+														</li>
+													@endif
+												</ul>
+											@else
+												<a href="" class="button">Регистрация организации</a>
+											@endif
+										</div>
+									@else
+										<div class="submenu-user__item text-center">
+											<div class="text-accent">Для доступа ко всем функциям личного кабинета подтвердите вашу
+												почту, перейдя по ссылке в письме</div>
+											<form method="POST" action="/email/verification-notification">
+												@csrf
+												<button class="button button_primary">Выслать письмо повторно</button>
+											</form>
+										</div>
+									@endif
 									<div class="submenu-user__item">
 										<form action="{{ localize_route('logout') }}" method="POST">
 											@csrf

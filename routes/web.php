@@ -17,7 +17,7 @@ Route::group([
      * Personal cabinet
      */
     Route::prefix('my')
-        ->middleware('auth')
+        ->middleware(['auth', 'verified'])
         ->group(function () {
             // Participant
 
