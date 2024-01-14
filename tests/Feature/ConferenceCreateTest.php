@@ -70,7 +70,7 @@ class ConferenceCreateTest extends TestCase
                     'short_title_ru' => 'Секция 2',
                     'title_ru' => 'Секция 2',
                     'short_title_en' => 'Секция 2',
-                    'title_en' => 'Секция 2',
+                    'title_en' => 'Секция 1',
                 ],
             ],
         ]);
@@ -78,6 +78,7 @@ class ConferenceCreateTest extends TestCase
         $this->assertDatabaseCount('conferences', 1);
         $this->assertDatabaseHas('conferences', [
             'organization_id' => $organization->id,
+			'slug' => 'company',
             'title_ru' => 'Компания',
             'title_en' => 'Company',
             'with_foreign_participation' => true,
@@ -105,12 +106,14 @@ class ConferenceCreateTest extends TestCase
             'title_ru' => 'Секция 1',
             'short_title_en' => 'Секция 1',
             'title_en' => 'Секция 1',
+			'slug' => 'sekciia-1',
         ]);
         $this->assertDatabaseHas('sections', [
             'short_title_ru' => 'Секция 2',
             'title_ru' => 'Секция 2',
             'short_title_en' => 'Секция 2',
-            'title_en' => 'Секция 2',
+            'title_en' => 'Секция 1',
+			'slug' => 'sekciia-12',
         ]);
 
         $this->assertDatabaseCount('conference_subject', 1);

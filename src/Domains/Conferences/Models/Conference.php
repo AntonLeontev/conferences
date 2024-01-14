@@ -99,7 +99,7 @@ class Conference extends Model
 
             $conferencesWithSlug = Conference::where('slug', 'like', $slug.'%')->count();
 
-            if ($conferencesWithSlug > 1) {
+            if ($conferencesWithSlug >= 1) {
                 $slug .= $conferencesWithSlug + 1;
             }
 

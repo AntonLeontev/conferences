@@ -34,7 +34,7 @@ class Section extends Model
                 ->where('conference_id', $section->conference_id)
                 ->count();
 
-            if ($sectionsWithSlug > 1) {
+            if ($sectionsWithSlug >= 1) {
                 $slug .= $sectionsWithSlug + 1;
             }
 
