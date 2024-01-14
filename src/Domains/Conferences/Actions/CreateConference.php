@@ -19,7 +19,7 @@ class CreateConference
             'logo' => $request->get('logo'),
             'website' => $request->get('website'),
             'need_site' => $request->get('need_site'),
-            'co-organizers' => json_encode($request->get('co-organizers')),
+            'co-organizers' => $request->get('co-organizers'),
             'address' => $request->get('address'),
             'phone' => $request->get('phone'),
             'email' => $request->get('email'),

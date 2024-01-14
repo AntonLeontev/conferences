@@ -3,6 +3,11 @@
 use App\Http\Controllers\ConferenceController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Src\Domains\Conferences\Enums\ConferenceLanguage;
+
+Route::any('test', function () {
+    dd(ConferenceLanguage::values());
+});
 
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
@@ -39,8 +44,4 @@ Route::group([
     Route::view('/archive', 'archive')->name('archive');
     Route::view('/search', 'search')->name('search');
     Route::view('/announcement', 'announcement')->name('announcement');
-
-    Route::view('/subject/{subject}/{single}', 'single')->name('single');
-    Route::view('/subject/{subject}/{single}/{country}', 'country')->name('country');
-
 });
