@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ConferenceDiscount;
 use App\Rules\Phone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -60,10 +61,10 @@ class ConferenceStoreRequest extends FormRequest
             'telegram' => ['nullable', 'url', 'max:255'],
             'price_participants' => ['nullable', 'integer', 'min:0', 'max:999999999'],
             'price_visitors' => ['nullable', 'integer', 'min:0', 'max:999999999'],
-            'discount_students' => ['sometimes'],
-            'discount_participants' => ['sometimes'],
-            'discount_special_guest' => ['sometimes'],
-            'discount_young_scientist' => ['sometimes'],
+            'discount_students' => ['required', 'array', new ConferenceDiscount()],
+            'discount_participants' => ['required', 'array', new ConferenceDiscount()],
+            'discount_special_guest' => ['required', 'array', new ConferenceDiscount()],
+            'discount_young_scientist' => ['required', 'array', new ConferenceDiscount()],
             'abstracts_price' => ['nullable', 'integer', 'min:0', 'max:999999999'],
             'abstracts_format' => ['required',  Rule::enum(AbstractsFormat::class)],
             'abstracts_lang' => ['required',  Rule::enum(AbstractsLanguage::class)],

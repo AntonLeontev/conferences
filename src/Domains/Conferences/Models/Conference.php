@@ -2,6 +2,7 @@
 
 namespace Src\Domains\Conferences\Models;
 
+use App\Casts\DiscountCast;
 use App\Casts\PhoneNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -66,10 +67,10 @@ class Conference extends Model
         'end_date' => 'date',
         'phone' => PhoneNumber::class,
         'co-organizers' => 'array',
-        'discount_students' => 'array',
-        'discount_participants' => 'array',
-        'discount_special_guest' => 'array',
-        'discount_young_scientist' => 'array',
+        'discount_students' => DiscountCast::class,
+        'discount_participants' => DiscountCast::class,
+        'discount_special_guest' => DiscountCast::class,
+        'discount_young_scientist' => DiscountCast::class,
     ];
 
     public function organization(): BelongsTo

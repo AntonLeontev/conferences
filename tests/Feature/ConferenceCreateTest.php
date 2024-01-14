@@ -38,7 +38,7 @@ class ConferenceCreateTest extends TestCase
             'format' => fake()->randomElement(ConferenceFormat::values()),
             'with_foreign_participation' => true,
             'need_site' => true,
-            'co-organizers' => ['test1'],
+            'co-organizers' => ['test1', 'test2'],
             'address' => 'Москва',
             'phone' => '+7-912-000-56-23',
             'email' => 'aner-ant@ya.ru',
@@ -51,10 +51,10 @@ class ConferenceCreateTest extends TestCase
             'report_form' => fake()->randomElement(ReportForm::values()),
             'price_participants' => 250,
             'price_visitors' => '',
-            'discount_students' => '',
-            'discount_participants' => '',
-            'discount_special_guest' => '',
-            'discount_young_scientist' => '',
+            'discount_students' => ['amount' => 250, 'unit' => 'RUB'],
+            'discount_participants' => ['amount' => 50, 'unit' => 'RUB'],
+            'discount_special_guest' => ['amount' => 50, 'unit' => 'percent'],
+            'discount_young_scientist' => ['amount' => 0, 'unit' => 'RUB'],
             'abstracts_price' => 500,
             'abstracts_format' => fake()->randomElement(AbstractsFormat::values()),
             'abstracts_lang' => fake()->randomElement(AbstractsLanguage::values()),
@@ -78,12 +78,12 @@ class ConferenceCreateTest extends TestCase
         $this->assertDatabaseCount('conferences', 1);
         $this->assertDatabaseHas('conferences', [
             'organization_id' => $organization->id,
-			'slug' => 'company',
+            'slug' => 'company',
             'title_ru' => 'Компания',
             'title_en' => 'Company',
             'with_foreign_participation' => true,
             'need_site' => true,
-            // 'co-organizers' => json_encode(['test1'], JSON_UNESCAPED_UNICODE),
+            'co-organizers' => $this->castAsJson(['test1', 'test2']),
             'address' => 'Москва',
             'phone' => '+7-912-000-56-23',
             'email' => 'aner-ant@ya.ru',
@@ -93,10 +93,10 @@ class ConferenceCreateTest extends TestCase
             'description_en' => 'Description',
             'price_participants' => 250,
             'price_visitors' => null,
-            'discount_students' => null,
-            'discount_participants' => null,
-            'discount_special_guest' => null,
-            'discount_young_scientist' => null,
+            'discount_students' => $this->castAsJson(['amount' => 250, 'unit' => 'RUB']),
+            'discount_participants' => $this->castAsJson(['amount' => 50, 'unit' => 'RUB']),
+            'discount_special_guest' => $this->castAsJson(['amount' => 50, 'unit' => 'percent']),
+            'discount_young_scientist' => $this->castAsJson(['amount' => 0, 'unit' => 'RUB']),
             'abstracts_price' => 500,
         ]);
 
@@ -106,14 +106,14 @@ class ConferenceCreateTest extends TestCase
             'title_ru' => 'Секция 1',
             'short_title_en' => 'Секция 1',
             'title_en' => 'Секция 1',
-			'slug' => 'sekciia-1',
+            'slug' => 'sekciia-1',
         ]);
         $this->assertDatabaseHas('sections', [
             'short_title_ru' => 'Секция 2',
             'title_ru' => 'Секция 2',
             'short_title_en' => 'Секция 2',
             'title_en' => 'Секция 1',
-			'slug' => 'sekciia-12',
+            'slug' => 'sekciia-12',
         ]);
 
         $this->assertDatabaseCount('conference_subject', 1);

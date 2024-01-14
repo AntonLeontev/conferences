@@ -37,10 +37,10 @@
 							telegram: '',
 							price_participants: '',
 							price_visitors: '',
-							discount_students: '',
-							discount_participants: '',
-							discount_special_guest: '',
-							discount_young_scientist: '',
+							discount_students: {amount: 0, unit: 'RUB'},
+							discount_participants: {amount: 0, unit: 'RUB'},
+							discount_special_guest: {amount: 0, unit: 'RUB'},
+							discount_young_scientist: {amount: 0, unit: 'RUB'},
 							abstracts_price: '',
 							abstracts_format: '',
 							abstracts_lang: '',
@@ -75,6 +75,18 @@
 								this.form.abstracts_format = select.value
 							} else if (select.dataset.name == 'abstracts_lang') {
 								this.form.abstracts_lang = select.value
+							} else if (select.dataset.name == 'discount_students_unit') {
+								this.form.discount_students.unit = select.value
+								this.form.validate('discount_students')
+							} else if (select.dataset.name == 'discount_participants_unit') {
+								this.form.discount_participants.unit = select.value
+								this.form.validate('discount_participants')
+							} else if (select.dataset.name == 'discount_special_guest_unit') {
+								this.form.discount_special_guest.unit = select.value
+								this.form.validate('discount_special_guest')
+							} else if (select.dataset.name == 'discount_young_scientist_unit') {
+								this.form.discount_young_scientist.unit = select.value
+								this.form.validate('discount_young_scientist')
 							}
 						},
 						submit() {
@@ -556,70 +568,148 @@
                     </div>
 
                     <div class="form__row">
-                        <label class="form__label">Предоставление скидок</label>
+						<label class="form__label">Предоставление скидок</label>
+						<div class="checkbox-block" 
+							:class="form.invalid('discount_students') && '_error'"
+							x-data="{
+								show: false,
 
-                        <div class="checkbox">
-                            <input id="chx_3" data-error="Ошибка" class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_3" class="checkbox__label">
-                                <span class="checkbox__text">Студенты</span>
-                            </label>
-                        </div>
-                    </div>
+								change() {
+									if (this.$el.checked) return
+									this.form.discount_students.amount = ''
+								}
+							}"
+						>
+							<div class="checkbox">
+								<input id="chx_3" data-error="Ошибка" class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<label for="chx_3" class="checkbox__label">
+									<span class="checkbox__text">Студенты</span>
+								</label>
+							</div>
+							<div class="checkbox-block__input" x-show="show" x-transition>
+								<div class="form__line">
+									<input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка" placeholder="Размер скидки"
+										x-model="form.discount_students.amount"
+										@change="form.validate('discount_students')"
+									>
+								</div>
+								<div class="form__line">
+									<select data-class-modif="form" data-name="discount_students_unit">
+										<option value="RUB" selected>В рублях</option>
+										<option value="percent">В %</option>
+									</select>
+								</div>
+							</div>
+							<template x-if="form.invalid('discount_students') && show">
+								<div class="form__error" x-text="form.errors.discount_students"></div>
+							</template>
+						</div>
+						<div class="checkbox-block"
+							:class="form.invalid('discount_participants') && '_error'"
+							x-data="{
+								show: false,
 
-					<div class="form__row _two">
-                        <div class="form__line">
+								change() {
+									if (this.$el.checked) return
+									this.form.discount_participants.amount = ''
+								}
+							}"
+						>
+							<div class="checkbox">
+								<input id="chx_4" data-error="Ошибка" checked class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<label for="chx_4" class="checkbox__label">
+									<span class="checkbox__text">Докладчик</span>
+								</label>
+							</div>
+							<div class="checkbox-block__input" x-show="show" x-transition>
+								<div class="form__line">
+									<input class="input" autocomplete="off" type="text" data-error="Ошибка" placeholder="Размер скидки"
+										x-model="form.discount_participants.amount"
+										@change="form.validate('discount_participants')"
+									>
+								</div>
+								<div class="form__line">
+									<select data-name="discount_participants_unit" data-class-modif="form">
+										<option value="RUB" selected>В рублях</option>
+										<option value="percent">В %</option>
+									</select>
+								</div>
+							</div>
+							<template x-if="form.invalid('discount_participants') && show">
+								<div class="form__error" x-text="form.errors.discount_participants"></div>
+							</template>
+						</div>
+						<div class="checkbox-block"
+							:class="form.invalid('discount_special_guest') && '_error'"
+							x-data="{
+								show: false,
 
-                            <input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка"
-                                placeholder="Размер скидки">
-                        </div>
-                        <div class="form__line">
-                            <select name="form[]" data-class-modif="form">
-                                <option value="1" selected>В рублях</option>
-                                <option value="2">В %</option>
-                            </select>
-                        </div>
-                    </div>
-					
-					<div class="checkbox">
-						<input id="chx_4" data-error="Ошибка" checked class="checkbox__input" type="checkbox"
-							value="1" name="form[]">
-						<label for="chx_4" class="checkbox__label">
-							<span class="checkbox__text">Докладчик</span>
-						</label>
+								change() {
+									if (this.$el.checked) return
+									this.form.discount_special_guest.amount = ''
+								}
+							}"
+						>
+							<div class="checkbox">
+								<input id="chx_5" data-error="Ошибка" class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<label for="chx_5" class="checkbox__label">
+									<span class="checkbox__text">Специальный гость</span>
+								</label>
+							</div>
+							<div class="checkbox-block__input" x-show="show" x-transition>
+								<div class="form__line">
+									<input class="input" autocomplete="off" type="text" data-error="Ошибка" placeholder="Размер скидки"
+										x-model="form.discount_special_guest.amount"
+										@change="form.validate('discount_special_guest')"
+									>
+								</div>
+								<div class="form__line">
+									<select data-name="discount_special_guest_unit" data-class-modif="form">
+										<option value="RUB" selected>В рублях</option>
+										<option value="percent">В %</option>
+									</select>
+								</div>
+							</div>
+							<template x-if="form.invalid('discount_special_guest') && show">
+								<div class="form__error" x-text="form.errors.discount_special_guest"></div>
+							</template>
+						</div>
+						<div class="checkbox-block"
+							:class="form.invalid('discount_young_scientist') && '_error'"
+							x-data="{
+								show: false,
+
+								change() {
+									if (this.$el.checked) return
+									this.form.discount_young_scientist.amount = ''
+								}
+							}"
+						>
+							<div class="checkbox">
+								<input id="chx_6" data-error="Ошибка" checked class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<label for="chx_6" class="checkbox__label">
+									<span class="checkbox__text">Молодой ученый до 35 лет</span>
+								</label>
+							</div>
+							<div class="checkbox-block__input" x-show="show" x-transition>
+								<div class="form__line">
+									<input class="input" autocomplete="off" type="text" data-error="Ошибка" placeholder="Размер скидки"
+										x-model="form.discount_young_scientist.amount"
+										@change="form.validate('discount_young_scientist')"
+									>
+								</div>
+								<div class="form__line">
+									<select data-name="discount_young_scientist_unit" data-class-modif="form">
+										<option value="RUB" selected>В рублях</option>
+										<option value="percent">В %</option>
+									</select>
+								</div>
+							</div>
+							<template x-if="form.invalid('discount_young_scientist') && show">
+								<div class="form__error" x-text="form.errors.discount_young_scientist"></div>
+							</template>
+						</div>
 					</div>
-
-                    <div class="form__row _two">
-                        <div class="form__line">
-
-                            <input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка"
-                                placeholder="Размер скидки">
-                        </div>
-                        <div class="form__line">
-                            <select name="form[]" data-class-modif="form">
-                                <option value="1" selected>В рублях</option>
-                                <option value="2">В %</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form__row">
-                        <div class="checkbox">
-                            <input id="chx_5" data-error="Ошибка" class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_5" class="checkbox__label">
-                                <span class="checkbox__text">Специальный гость</span>
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="chx_6" data-error="Ошибка" checked class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_6" class="checkbox__label">
-                                <span class="checkbox__text">Молодой ученый до 35 лет</span>
-                            </label>
-                        </div>
-
-                    </div>
 
                     {{-- <div class="form__row">
                         <label class="form__label">Бесплатное участие</label>
