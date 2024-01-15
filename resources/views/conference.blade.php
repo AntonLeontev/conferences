@@ -9,7 +9,7 @@
                 <div class="event-item">
                     <div class="event-item__header header-item-event">
                         <div class="header-item-event__icon">
-                            <img src="{{ Vite::asset('resources/img/logo-event.png') }}" alt="Image">
+                            <img src="" alt="Image">
                         </div>
                         <div class="header-item-event__info">
                             <h3 class="header-item-event__title">

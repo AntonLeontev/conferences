@@ -51,7 +51,7 @@ class ConferenceStoreRequest extends FormRequest
             'phone' => ['nullable', new Phone()],
             'email' => ['required', 'email:rfc,dns', 'max:255'],
             'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'description_ru' => ['required', 'string', 'max:1000'],
             'description_en' => ['required', 'string', 'max:1000'],
             'lang' => ['required', Rule::enum(ConferenceLanguage::class)],
