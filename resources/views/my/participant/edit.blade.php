@@ -159,14 +159,10 @@
                     <div class="form__row">
                         <div class="form__btns">
                             <button class="form__button button button_primary" type="submit">Сохранить</button>
-                            <button class="form__button button" type="button">Изменить пароль</button>
+                            <a href="{{ route('my.password.edit') }}" class="form__button button">Изменить пароль</a>
                         </div>
                     </div>
                 </form>
-
-				<form class="form">
-
-				</form>
             </div>
         </section>
     </main>
