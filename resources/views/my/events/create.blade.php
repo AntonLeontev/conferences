@@ -783,7 +783,7 @@
 
                     <div class="form__row" :class="form.invalid('abstracts_format') && '_error'">
                         <label class="form__label">Формат сборника тезисов</label>
-                        <select name="form[]" data-scroll="500" data-class-modif="form" data-name="abstracts_format">
+                        <select name="abstracts_format" data-scroll="500" data-class-modif="form" data-name="abstracts_format">
                             <option value="A4" selected>А4</option>
                             <option value="A5">А5</option>
                         </select>
@@ -802,9 +802,9 @@
 
                     <div class="form__row" :class="form.invalid('abstracts_lang') && '_error'">
                         <label class="form__label">Язык сборника тезисов</label>
-                        <select name="form[]" data-scroll="500" data-class-modif="form" data-name="abstracts_lang">
+                        <select name="abstracts_lang" data-scroll="500" data-class-modif="form" data-name="abstracts_lang">
                             <option value="ru" selected>Русский</option>
-                            <option value="ru">Английский</option>
+                            <option value="en">Английский</option>
                         </select>
 						<template x-if="form.invalid('abstracts_lang')">
 							<div class="form__error" x-text="form.errors.abstracts_lang"></div>
