@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('surname_en')->nullable();
             $table->string('middle_name_en')->nullable();
             $table->string('phone', 50)->nullable();
+            $table->string('photo')->nullable();
+            $table->string('orcid_id')->nullable();
+            $table->string('website')->nullable();
+            $table->json('affiliations')->nullable();
             $table->timestamps();
         });
     }

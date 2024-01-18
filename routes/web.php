@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ConferenceController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\ParticipantController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -27,8 +29,21 @@ Route::group([
         ->middleware(['auth', 'verified'])
         ->group(function () {
             // Participant
+            Route::get('participant/create', [ParticipantController::class, 'create'])->name('participant.create');
+            Route::middleware(['precognitive'])
+                ->post('participant/store', [ParticipantController::class, 'store'])
+                ->name('participant.store');
+            Route::get('participant/edit', [ParticipantController::class, 'edit'])->name('participant.edit');
+            Route::middleware(['precognitive'])
+                ->post('participant/update', [ParticipantController::class, 'update'])
+                ->name('participant.update');
 
             // Organizer
+            Route::get('organization/create', [OrganizationController::class, 'create'])->name('organization.create');
+            Route::middleware(['precognitive'])
+                ->post('organization/store', [OrganizationController::class, 'store'])
+                ->name('organization.store');
+
             Route::prefix('events')->group(function () {
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');
                 Route::middleware(['precognitive'])->post('create', [ConferenceController::class, 'store'])

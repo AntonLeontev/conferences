@@ -109,10 +109,12 @@
 										<div class="submenu-user__item">
 											@if (auth()->user()->participant()->exists())
 												<ul class="submenu-user__list">
-													<li><a class="submenu-user__link" href="">Мои данные</a></li>
+													@if (Route::has('participant.edit'))
+														<li><a class="submenu-user__link" href="{{ route('participant.edit') }}">Мои данные</a></li>
+													@endif
 												</ul>
 											@else
-												<a href="" class="button">Регистрация участника</a>
+												<a href="{{ route('participant.create') }}" class="button">Регистрация участника</a>
 											@endif
 										</div>
 										<div class="submenu-user__item">
@@ -127,7 +129,7 @@
 													@endif
 												</ul>
 											@else
-												<a href="" class="button">Регистрация организации</a>
+												<a href="{{ route('organization.create') }}" class="button">Регистрация организации</a>
 											@endif
 										</div>
 									@else

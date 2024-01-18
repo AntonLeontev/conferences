@@ -17,7 +17,11 @@
                             </h3>
                             <div class="header-item-event__time">
                                 <time>{{ $conference->start_date->translatedFormat('d M Y') }} - {{ $conference->end_date->translatedFormat('d M Y') }}</time>
-                                <span>{{ $conference->organization->{'short_name_'.loc()} }}</span>
+								@if ($conference->organization->{'short_name_'.loc()})
+                                	<span>{{ $conference->organization->{'short_name_'.loc()} }}</span>
+								@else
+                                	<span>{{ $conference->organization->{'full_name_'.loc()} }}</span>
+								@endif
                             </div>
                             <div class="header-item-event__descr">
                                 <div class="descr-item">
@@ -74,6 +78,9 @@
 											{{ $subject->{'title_'.loc()} }}
 										</a>
 									</span>
+									@unless ($loop->last)
+										<span>|</span>
+									@endunless
 								@endforeach
 							</li>
                             <li class="d-flex">
@@ -92,7 +99,8 @@
 									@endunless
 									@unless (empty($conference->address))
 										<div class="contacts-event">
-											<span>Адрес: </span><a href="">{{ $conference->address }}</a>
+											<span>Адрес: </span>
+											<a target="_blank" rel="nofollow" href="https://yandex.ru/maps/?text={{ $conference->address }}">{{ $conference->address }}</a>
 										</div>
 									@endunless
                                 </div>
@@ -106,7 +114,14 @@
                         </ul>
                     </div>
                     <div class="event-item__footer">
-                        <a href="" class="button button_primary" type="submit">Принять участие</a>
+						@auth
+							@if (auth()->user()->participant)
+                        		<a href="" class="button button_primary" type="submit">Принять участие</a>
+							@endif
+							@if (auth()->user()->organization?->id === $conference->organization_id)
+                        		<a href="" class="button button_primary" type="submit">Редактировать</a>
+							@endif
+						@endauth
                     </div>
                 </div>
             </div>

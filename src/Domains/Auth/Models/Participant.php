@@ -20,6 +20,8 @@ class Participant extends Model
         'surname_en',
         'middle_name_en',
         'phone',
+        'orcid_id',
+        'website',
     ];
 
     protected $casts = [

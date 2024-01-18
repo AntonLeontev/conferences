@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('affiliations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title_ru');
+            $table->string('abbreviation_ru')->nullable();
+            $table->string('title_en')->nullable();
+            $table->string('abbreviation_en')->nullable();
             $table->timestamps();
         });
     }
