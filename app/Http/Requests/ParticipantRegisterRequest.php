@@ -22,12 +22,12 @@ class ParticipantRegisterRequest extends FormRequest
             ],
             'password' => ['confirmed', Password::default()],
 
-            'name_ru' => ['nullable', 'max:255', 'string'],
-            'surname_ru' => ['nullable', 'max:255', 'string'],
-            'middle_name_ru' => ['nullable', 'max:255', 'string'],
-            'name_en' => ['nullable', 'max:255', 'string'],
-            'surname_en' => ['nullable', 'max:255', 'string'],
-            'middle_name_en' => ['nullable', 'max:255', 'string'],
+            'name_ru' => ['nullable', 'max:255', 'string', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
+            'surname_ru' => ['nullable', 'max:255', 'string', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
+            'middle_name_ru' => ['nullable', 'max:255', 'string', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
+            'name_en' => ['nullable', 'max:255', 'string', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
+            'surname_en' => ['nullable', 'max:255', 'string', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
+            'middle_name_en' => ['nullable', 'max:255', 'string', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
             'phone' => ['nullable', 'max:50', 'string', new Phone],
         ];
     }

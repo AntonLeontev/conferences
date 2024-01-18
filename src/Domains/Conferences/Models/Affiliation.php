@@ -10,6 +10,9 @@ class Affiliation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
+        'title_ru',
+        'abbreviation_ru',
+        'title_en',
+        'abbreviation_en',
     ];
 }

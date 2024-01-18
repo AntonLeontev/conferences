@@ -131,7 +131,7 @@
                         <label class="form__label">Тип мероприятия (*)</label>
                         <select name="type" data-scroll="500" data-class-modif="form" data-name="conference_type_id">
 							@foreach (conference_types() as $type)
-                            	<option	value="{{ $type->id }}" selected>{{ $type->{'title_'.loc()} }}</option>
+                            	<option	value="{{ $type->id }}">{{ $type->{'title_'.loc()} }}</option>
 							@endforeach
                         </select>
 						<template x-if="form.invalid('conference_type_id')">
@@ -156,26 +156,6 @@
                             </label>
                         </div>
                     </div>
-
-                    {{-- <div class="form__row">
-							<label class="form__label" for="c_3">Название организации RU (*)</label>
-							<div class="form__line">
-								<input class="input" id="c_3" autocomplete="off" type="text" name="form[]" data-error="Ошибка" placeholder="Полное название">
-							</div>
-							<div class="form__line">
-								<input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка" placeholder="Аббревиатура">
-							</div>
-						</div>
-
-						<div class="form__row">
-							<label class="form__label" for="c_4">Название организации ENG (*)</label>
-							<div class="form__line">
-								<input class="input" id="c_4" autocomplete="off" type="text" name="form[]" data-error="Ошибка" placeholder="Full name">
-							</div>
-							<div class="form__line">
-								<input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка" placeholder="Abbreviation">
-							</div>
-						</div> --}}
 
                     <div class="form__row" :class="form.invalid('subjects') && '_error'">
                         <label class="form__label">Тематика мероприятия (*)</label>

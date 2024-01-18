@@ -24,44 +24,40 @@ class SubjectSeeder extends Seeder
     {
         return [
             [
-                'ru' => 'Математика',
-                'en' => 'Mathematics',
+                'ru' => 'Математика, информатика и науки о системах',
+                'en' => 'Mathematics, computer science and systems sciences',
             ],
             [
-                'ru' => 'Физика',
-                'en' => 'Physics',
+                'ru' => 'Физика и науки о космосе',
+                'en' => 'Physics and Space Sciences',
             ],
             [
-                'ru' => 'Химия',
-                'en' => 'Chemistry',
+                'ru' => 'Химия и науки о материалах',
+                'en' => 'Chemistry and Materials Sciences',
+            ],
+            [
+                'ru' => 'Биология и науки о жизни',
+                'en' => 'Biology and Life Sciences',
+            ],
+            [
+                'ru' => 'Фундаментальные исследования для медицины',
+                'en' => 'Basic research for medicine',
+            ],
+            [
+                'ru' => 'Сельскохозяйственные науки',
+                'en' => 'Agricultural Sciences',
             ],
             [
                 'ru' => 'Науки о Земле',
                 'en' => 'Geosciences',
             ],
             [
-                'ru' => 'Информатика',
-                'en' => 'Computer science',
+                'ru' => 'Гуманитарные и социальные науки',
+                'en' => 'Humanities and social sciences',
             ],
             [
-                'ru' => 'Инженерия',
-                'en' => 'Engineering',
-            ],
-            [
-                'ru' => 'Медицина',
-                'en' => 'Medicine',
-            ],
-            [
-                'ru' => 'Науки о жизни',
-                'en' => 'Life Sciences',
-            ],
-            [
-                'ru' => 'Социальные науки',
-                'en' => 'Social sciencies',
-            ],
-            [
-                'ru' => 'Тренинги',
-                'en' => 'Trainings',
+                'ru' => 'Инженерные науки',
+                'en' => 'Engineering Sciences',
             ],
         ];
     }

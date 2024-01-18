@@ -40,12 +40,12 @@ class ConferenceTypeSeeder extends Seeder
                 'en' => 'Presentation',
             ],
             [
-                'ru' => 'Мастер-класс',
-                'en' => 'Master-class',
-            ],
-            [
                 'ru' => 'Выставка',
                 'en' => 'Exhibition',
+            ],
+            [
+                'ru' => 'Мастер-класс',
+                'en' => 'Master-class',
             ],
         ];
     }
