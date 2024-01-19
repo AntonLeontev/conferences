@@ -92,19 +92,4 @@ class Conference extends Model
     {
         return $this->belongsToMany(Subject::class);
     }
-
-    protected static function booted(): void
-    {
-        static::creating(function (Conference $conference) {
-            $slug = str($conference->title_en)->slug()->value();
-
-            $conferencesWithSlug = Conference::where('slug', 'like', $slug.'%')->count();
-
-            if ($conferencesWithSlug >= 1) {
-                $slug .= $conferencesWithSlug + 1;
-            }
-
-            $conference->slug = $slug;
-        });
-    }
 }

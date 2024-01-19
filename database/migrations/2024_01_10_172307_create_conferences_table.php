@@ -29,7 +29,7 @@ return new class extends Migration
             $table->boolean('need_site');
             $table->json('co-organizers')->nullable();
             $table->string('address');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->string('email');
             $table->date('start_date');
             $table->date('end_date');

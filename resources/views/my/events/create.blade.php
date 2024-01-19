@@ -14,6 +14,7 @@
 						form: $form('post', '{{ route('conference.store') }}', {
 							title_ru: '',
 							title_en: '',
+							slug: '',
 							conference_type_id: '',
 							format: '',
 							with_foreign_participation: false,
@@ -106,7 +107,7 @@
                     <div class="form__row" :class="form.invalid('title_ru') && '_error'">
                         <label class="form__label" for="c_1">Название мероприятия RU (*)</label>
                         <input id="c_1" class="input" autocomplete="off" type="text" name="title_ru"
-                            data-error="Ошибка" placeholder="Название мероприятия"
+                            placeholder="Название мероприятия"
 							x-model="form.title_ru"	
 							@input.debounce.1000ms="form.validate('title_ru')"
 						>
@@ -118,7 +119,7 @@
                     <div class="form__row" :class="form.invalid('title_en') && '_error'">
                         <label class="form__label" for="c_2">Название мероприятия ENG (*)</label>
                         <input id="c_2" class="input" autocomplete="off" type="text" name="title_en"
-                            data-error="Ошибка" placeholder="Event name"
+                            placeholder="Event name"
 							x-model="form.title_en"	
 							@input.debounce.1000ms="form.validate('title_en')"
 						>
@@ -126,6 +127,19 @@
 							<div class="form__error" x-text="form.errors.title_en"></div>
 						</template>
                     </div>
+
+					<div class="form__row" :class="form.invalid('slug') && '_error'">
+						<label class="form__label" for="a_1">Укажите акроним меропрития (*)</label>
+						<input class="input" id="a_1" autocomplete="off" type="text" name="slug" 
+							placeholder="Текст для генерации ссылки мероприятия. Например: geocosmos-{{ now()->format('Y') }}"
+							x-model="form.slug"	
+							@input.debounce.1000ms="form.validate('slug')"
+						>
+						<template x-if="form.invalid('slug')">
+							<div class="form__error" x-text="form.errors.slug"></div>
+						</template>
+						<div class="form__link" x-text="location.origin + '/events/' + form.slug"></div>
+					</div>
 
                     <div class="form__row" :class="form.invalid('conference_type_id') && '_error'">
                         <label class="form__label">Тип мероприятия (*)</label>
@@ -149,7 +163,7 @@
 							<div class="form__error" x-text="form.errors.format"></div>
 						</template>
                         <div class="checkbox" x-show="formatCheckShow" x-transition>
-                            <input id="chx_1" data-error="Ошибка" class="checkbox__input" type="checkbox" value="1"
+                            <input id="chx_1" class="checkbox__input" type="checkbox" value="1"
                                 name="with_foreign_participation" x-model="form.with_foreign_participation">
                             <label for="chx_1" class="checkbox__label">
                                 <span class="checkbox__text">С международным участием</span>
@@ -257,12 +271,12 @@
                         <label class="form__label" for="c_5">Сайт мероприятия</label>
                         <div class="d-grid">
                             <input id="c_5" class="input" autocomplete="off" type="text" name="website"
-                                data-error="Ошибка" placeholder="http://website.com" 
+                                placeholder="http://website.com" 
 								x-model="form.website"
 								@input.debounce.1000ms="form.validate('website')"
 							>
                             <div class="checkbox">
-                                <input id="chx_2" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                                <input id="chx_2" class="checkbox__input" type="checkbox"
                                     value="1" name="need_site" x-model="form.need_site">
                                 <label for="chx_2" class="checkbox__label">
                                     <span class="checkbox__text">Мне нужен сайт для мероприятия</span>
@@ -314,7 +328,7 @@
 					}">
                         <label class="form__label" for="c_7">Адрес проведения мероприятия (*) </label>
                         <input id="c_7" class="input" autocomplete="off" type="text" name="form[]"
-                            data-error="Ошибка" placeholder="Полный адрес"
+                            placeholder="Полный адрес"
 							x-model="form.address"
 							@input.debounce.1000ms="form.validate('address')"	
 						>
@@ -331,7 +345,7 @@
                     <div class="form__row" :class="form.invalid('phone') && '_error'">
                         <label class="form__label" for="c_8">Контактный телефон службы поддержки мероприятия </label>
                         <input id="c_8" class="input" autocomplete="off" type="text" name="form[]"
-                            data-error="Ошибка" placeholder="Телефон"
+                            placeholder="Телефон"
 							x-model="form.phone"
 							@input.debounce.1000ms="form.validate('phone')"	
 						>
@@ -343,7 +357,7 @@
                     <div class="form__row" :class="form.invalid('email') && '_error'">
                         <label class="form__label" for="c_9">Электронная почта службы поддержки мероприятия (*)</label>
                         <input id="c_9" class="input" autocomplete="off" type="text" name="form[]"
-                            data-error="Ошибка" placeholder="mail@mail.ru"
+                            placeholder="mail@mail.ru"
 							x-model="form.email"
 							@input.debounce.1000ms="form.validate('email')"
 						>
@@ -356,7 +370,7 @@
                         <div class="form__line" :class="form.invalid('start_date') && '_error'">
                             <label class="form__label" for="date-start">Дата начала мероприятия (*)</label>
                             <input id="date-start" class="input" autocomplete="off" type="date" name="form[]"
-                                data-error="Ошибка" placeholder="__.__.____"
+                                placeholder="__.__.____"
 								x-model="form.start_date"
 								@change="form.validate('start_date')"
 							>
@@ -367,7 +381,7 @@
                         <div class="form__line" :class="form.invalid('end_date') && '_error'">
                             <label class="form__label" for="date-start">Дата окончания мероприятия (*)</label>
                             <input id="date-end" class="input" autocomplete="off" type="date"
-                                data-error="Ошибка" placeholder="__.__.____"
+                                placeholder="__.__.____"
 								x-model="form.end_date"
 								@change="form.validate('end_date')"
 							>
@@ -379,7 +393,7 @@
 
                     <div class="form__row" :class="form.invalid('description_ru') && '_error'">
                         <label class="form__label" for="t_1">Описание мероприятия RU (*)</label>
-                        <textarea id="t_1" autocomplete="off" name="description_ru" placeholder="Описание" data-error="Ошибка"
+                        <textarea id="t_1" autocomplete="off" name="description_ru" placeholder="Описание"
                             class="input _small"
 							x-model="form.description_ru"
 							@change="form.validate('description_ru')"
@@ -391,7 +405,7 @@
 
                     <div class="form__row" :class="form.invalid('description_en') && '_error'">
                         <label class="form__label" for="t_1">Описание мероприятия ENG (*)</label>
-                        <textarea id="t_1" autocomplete="off" name="description_en" placeholder="Описание" data-error="Ошибка"
+                        <textarea id="t_1" autocomplete="off" name="description_en" placeholder="Описание"
                             class="input _small"
 							x-model="form.description_en"
 							@change="form.validate('description_en')"
@@ -442,7 +456,7 @@
                     <div class="form__row" :class="form.invalid('whatsapp') && '_error'">
                         <label class="form__label" for="c_10">Ссылка на Whatsapp мероприятия</label>
                         <input id="c_10" class="input" autocomplete="off" type="text" name="form[]"
-                            data-error="Ошибка" placeholder="//////"
+                            placeholder="//////"
 							x-model="form.whatsapp"
 							@change="form.validate('whatsapp')"
 						>
@@ -454,7 +468,7 @@
                     <div class="form__row" :class="form.invalid('telegram') && '_error'">
                         <label class="form__label" for="c_11">Ссылка на Telegram мероприятия</label>
                         <input id="c_11" class="input" autocomplete="off" type="text" name="form[]"
-                            data-error="Ошибка" placeholder="//////"
+                            placeholder="//////"
 							x-model="form.telegram"
 							@change="form.validate('telegram')"
 						>
@@ -473,13 +487,13 @@
 					}">
                         <label class="form__label">Оплата для участников (оргвзнос)</label>
                         <div class="checkbox">
-                            <input id="chx_11" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                            <input id="chx_11" class="checkbox__input" type="checkbox"
                                 value="1" name="price_participants_check" @change="change" x-model="show">
                             <label for="chx_11" class="checkbox__label">
                                 <span class="checkbox__text">Есть</span>
                             </label>
                         </div>
-                        <input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка"
+                        <input class="input" autocomplete="off" type="text" name="form[]"
                             placeholder="Сумма оплаты" 
 							x-show="show"
 							x-transition
@@ -501,13 +515,13 @@
 					}">
                         <label class="form__label">Оплата для посетителей</label>
                         <div class="checkbox">
-                            <input id="chx_12" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                            <input id="chx_12" class="checkbox__input" type="checkbox"
                                 value="1" name="price_visitors_check" @change="change" x-model="show">
                             <label for="chx_12" class="checkbox__label">
                                 <span class="checkbox__text">Есть</span>
                             </label>
                         </div>
-                         <input class="input" autocomplete="off" type="text" name="price_visitors" data-error="Ошибка"
+                         <input class="input" autocomplete="off" type="text" name="price_visitors"
                             placeholder="Сумма оплаты" 
 							x-show="show"
 							x-transition
@@ -529,7 +543,7 @@
 					}">
                         <label class="form__label">Оплата тезисов от участников</label>
                         <div class="checkbox">
-                            <input id="chx_13" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                            <input id="chx_13" class="checkbox__input" type="checkbox"
                                 value="1" name="abstracts_price_check" @change="change" x-model="show">
                             <label for="chx_13" class="checkbox__label">
                                 <span class="checkbox__text">Есть</span>
@@ -561,14 +575,14 @@
 							}"
 						>
 							<div class="checkbox">
-								<input id="chx_3" data-error="Ошибка" class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<input id="chx_3" class="checkbox__input" type="checkbox" x-model="show" @change="change">
 								<label for="chx_3" class="checkbox__label">
 									<span class="checkbox__text">Студенты</span>
 								</label>
 							</div>
 							<div class="checkbox-block__input" x-show="show" x-transition>
 								<div class="form__line">
-									<input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка" placeholder="Размер скидки"
+									<input class="input" autocomplete="off" type="text" name="form[]" placeholder="Размер скидки"
 										x-model="form.discount_students.amount"
 										@change="form.validate('discount_students')"
 									>
@@ -596,14 +610,14 @@
 							}"
 						>
 							<div class="checkbox">
-								<input id="chx_4" data-error="Ошибка" checked class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<input id="chx_4" checked class="checkbox__input" type="checkbox" x-model="show" @change="change">
 								<label for="chx_4" class="checkbox__label">
 									<span class="checkbox__text">Докладчик</span>
 								</label>
 							</div>
 							<div class="checkbox-block__input" x-show="show" x-transition>
 								<div class="form__line">
-									<input class="input" autocomplete="off" type="text" data-error="Ошибка" placeholder="Размер скидки"
+									<input class="input" autocomplete="off" type="text" placeholder="Размер скидки"
 										x-model="form.discount_participants.amount"
 										@change="form.validate('discount_participants')"
 									>
@@ -631,14 +645,14 @@
 							}"
 						>
 							<div class="checkbox">
-								<input id="chx_5" data-error="Ошибка" class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<input id="chx_5" class="checkbox__input" type="checkbox" x-model="show" @change="change">
 								<label for="chx_5" class="checkbox__label">
 									<span class="checkbox__text">Специальный гость</span>
 								</label>
 							</div>
 							<div class="checkbox-block__input" x-show="show" x-transition>
 								<div class="form__line">
-									<input class="input" autocomplete="off" type="text" data-error="Ошибка" placeholder="Размер скидки"
+									<input class="input" autocomplete="off" type="text" placeholder="Размер скидки"
 										x-model="form.discount_special_guest.amount"
 										@change="form.validate('discount_special_guest')"
 									>
@@ -666,14 +680,14 @@
 							}"
 						>
 							<div class="checkbox">
-								<input id="chx_6" data-error="Ошибка" checked class="checkbox__input" type="checkbox" x-model="show" @change="change">
+								<input id="chx_6" checked class="checkbox__input" type="checkbox" x-model="show" @change="change">
 								<label for="chx_6" class="checkbox__label">
 									<span class="checkbox__text">Молодой ученый до 35 лет</span>
 								</label>
 							</div>
 							<div class="checkbox-block__input" x-show="show" x-transition>
 								<div class="form__line">
-									<input class="input" autocomplete="off" type="text" data-error="Ошибка" placeholder="Размер скидки"
+									<input class="input" autocomplete="off" type="text" placeholder="Размер скидки"
 										x-model="form.discount_young_scientist.amount"
 										@change="form.validate('discount_young_scientist')"
 									>
@@ -695,14 +709,14 @@
                         <label class="form__label">Бесплатное участие</label>
 
                         <div class="checkbox">
-                            <input id="chx_7" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                            <input id="chx_7" class="checkbox__input" type="checkbox"
                                 value="1" name="form[]">
                             <label for="chx_7" class="checkbox__label">
                                 <span class="checkbox__text">Студенты</span>
                             </label>
                         </div>
                         <div class="checkbox">
-                            <input id="chx_8" data-error="Ошибка" checked class="checkbox__input" type="checkbox"
+                            <input id="chx_8" checked class="checkbox__input" type="checkbox"
                                 value="1" name="form[]">
                             <label for="chx_8" class="checkbox__label">
                                 <span class="checkbox__text">Докладчик</span>
@@ -710,14 +724,14 @@
                         </div>
 
                         <div class="checkbox">
-                            <input id="chx_9" data-error="Ошибка" class="checkbox__input" type="checkbox"
+                            <input id="chx_9" class="checkbox__input" type="checkbox"
                                 value="1" name="form[]">
                             <label for="chx_9" class="checkbox__label">
                                 <span class="checkbox__text">Специальный гость</span>
                             </label>
                         </div>
                         <div class="checkbox">
-                            <input id="chx_10" data-error="Ошибка" checked class="checkbox__input" type="checkbox"
+                            <input id="chx_10" checked class="checkbox__input" type="checkbox"
                                 value="1" name="form[]">
                             <label for="chx_10" class="checkbox__label">
                                 <span class="checkbox__text">Молодой ученый до 35 лет</span>
@@ -730,49 +744,49 @@
                         <label class="form__label">Что необходимо для конференции</label>
                         <div class="checkbox-items">
                             <div class="checkbox">
-                                <input id="chx_12" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_12" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_12" class="checkbox__label">
                                     <span class="checkbox__text">Программа мероприятия</span>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <input id="chx_13" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_13" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_13" class="checkbox__label">
                                     <span class="checkbox__text">Сайт конференции с хостингом</span>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <input id="chx_14" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_14" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_14" class="checkbox__label">
                                     <span class="checkbox__text">Форма приема тезисов</span>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <input id="chx_15" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_15" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_15" class="checkbox__label">
                                     <span class="checkbox__text">Сервис для оплаты тезисов</span>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <input id="chx_16" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_16" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_16" class="checkbox__label">
                                     <span class="checkbox__text">Генерация бейджей для участников</span>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <input id="chx_17" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_17" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_17" class="checkbox__label">
                                     <span class="checkbox__text">Сервис для оплаты оргвзносов</span>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <input id="chx_18" data-error="Ошибка" class="checkbox__input" checked
+                                <input id="chx_18" class="checkbox__input" checked
                                     type="checkbox" value="1" name="form[]">
                                 <label for="chx_18" class="checkbox__label">
                                     <span class="checkbox__text">Генерация сборника тезисов</span>

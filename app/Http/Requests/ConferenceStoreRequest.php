@@ -33,6 +33,7 @@ class ConferenceStoreRequest extends FormRequest
         return [
             'title_ru' => ['required', 'string', 'max:250'],
             'title_en' => ['required', 'string', 'max:250'],
+            'slug' => ['required', 'bail', 'string', 'max:20', 'regex:/^[a-zA-Z0-9\-_]+$/u', 'unique:conferences,slug'],
             'conference_type_id' => ['required', 'in:'.conference_types()->pluck('id')->join(',')],
             'format' => ['required',  Rule::enum(ConferenceFormat::class)],
             'with_foreign_participation' => ['required', 'boolean'],
@@ -68,6 +69,13 @@ class ConferenceStoreRequest extends FormRequest
             'abstracts_price' => ['nullable', 'integer', 'min:0', 'max:999999999'],
             'abstracts_format' => ['required',  Rule::enum(AbstractsFormat::class)],
             'abstracts_lang' => ['required',  Rule::enum(AbstractsLanguage::class)],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'slug.regex' => __('validation.slug.regex'),
         ];
     }
 }

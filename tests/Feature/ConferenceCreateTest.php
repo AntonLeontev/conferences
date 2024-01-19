@@ -32,8 +32,9 @@ class ConferenceCreateTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post(action([ConferenceController::class, 'store']), [
-            'title_ru' => 'Компания',
-            'title_en' => 'Company',
+            'title_ru' => 'Конференция',
+            'title_en' => 'Conference',
+            'slug' => 'conferense-2024',
             'conference_type_id' => ConferenceType::inRandomOrder()->first()->id,
             'format' => fake()->randomElement(ConferenceFormat::values()),
             'with_foreign_participation' => true,
@@ -78,9 +79,9 @@ class ConferenceCreateTest extends TestCase
         $this->assertDatabaseCount('conferences', 1);
         $this->assertDatabaseHas('conferences', [
             'organization_id' => $organization->id,
-            'slug' => 'company',
-            'title_ru' => 'Компания',
-            'title_en' => 'Company',
+            'slug' => 'conferense-2024',
+            'title_ru' => 'Конференция',
+            'title_en' => 'Conference',
             'with_foreign_participation' => true,
             'need_site' => true,
             'co-organizers' => $this->castAsJson(['test1', 'test2']),
