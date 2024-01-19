@@ -12,10 +12,16 @@ class ApiController extends Controller
     {
         $affiliations = Affiliation::query()
             ->when($request->has('search'), function (Builder $query) use ($request) {
-                $query->where('title', 'like', '%'.$request->get('search').'%');
+                $query->where(function ($builder) use ($request) {
+                    $builder->where('title_ru', 'like', '%'.$request->get('search').'%')
+                        ->orWhere('title_en', 'like', '%'.$request->get('search').'%');
+                });
+            })
+            ->when($request->has('except'), function (Builder $query) use ($request) {
+                $query->whereNotIn('id', $request->get('except'));
             })
             ->take($request->get('limit') ?? 10)
-            ->get(['id', 'title']);
+            ->get(['id', 'title_ru', 'title_en']);
 
         return response()->json($affiliations);
     }

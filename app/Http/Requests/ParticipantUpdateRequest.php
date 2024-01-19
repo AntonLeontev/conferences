@@ -22,6 +22,10 @@ class ParticipantUpdateRequest extends FormRequest
             'surname_en' => ['nullable', 'max:255', 'string', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
             'middle_name_en' => ['nullable', 'max:255', 'string', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
             'phone' => ['nullable', 'max:50', 'string', new Phone],
+            'affiliations' => ['nullable', 'array'],
+            'affiliations.*.id' => ['nullable'],
+            'affiliations.*.title_ru' => ['required', 'string', 'max:255', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
+            'affiliations.*.title_en' => ['required', 'string', 'max:255', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
             'orcid_id' => ['nullable', 'max:50', 'regex:~\d{4}-\d{4}-\d{4}-\d{4}~u'],
             'website' => ['nullable', 'url', 'max:255'],
         ];

@@ -50,6 +50,7 @@ class ParticipantController extends Controller
                 'surname_en' => $request->get('surname_en'),
                 'middle_name_en' => $request->get('middle_name_en'),
                 'phone' => $request->get('phone'),
+                'affiliations' => $request->get('affiliations'),
                 'orcid_id' => $request->get('orcid_id'),
                 'website' => $request->get('website'),
             ]);

@@ -9,7 +9,7 @@
             <div class="event__container">
                 <h1 class="event__title">Мои данные</h1>
                 <form class="event__form form" @submit.prevent="submit" x-data="{
-                    form: $form('post', '{{ route('participant.store') }}', {
+                    form: $form('post', '{{ route('participation.store') }}', {
                         name_ru: '',
                         surname_ru: '',
                         middle_name_ru: '',

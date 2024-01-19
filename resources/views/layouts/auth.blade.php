@@ -22,7 +22,7 @@
         <main class="page page_registration">
             <section class="registration page-divider">
                 <div class="registration__header _auth">
-                    <a href="{{ route('home') }}" class="registration__btn">
+                    <a href="@yield('back_link', route('home'))" class="registration__btn">
                         <img src="{{ Vite::asset('resources/img/arrow-l.svg') }}" alt="Image">
                     </a>
                     <h1 class="registration__title title">@yield('h1')</h1>

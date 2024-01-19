@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Src\Domains\Auth\Models\Organization;
+use Src\Domains\Auth\Models\Participant;
 use Src\Domains\Conferences\Enums\AbstractsFormat;
 use Src\Domains\Conferences\Enums\AbstractsLanguage;
 use Src\Domains\Conferences\Enums\ConferenceFormat;
@@ -91,5 +93,10 @@ class Conference extends Model
     public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(Subject::class);
+    }
+
+    public function participants(): HasManyThrough
+    {
+        return $this->hasManyThrough(Participant::class, Participation::class);
     }
 }

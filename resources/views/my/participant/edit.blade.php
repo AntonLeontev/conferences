@@ -3,6 +3,10 @@
 @section('title', 'Мои данные')
 
 @section('content')
+	<script>
+		let affiliations = @json(auth()->user()->participant->affiliations);
+		if (affiliations.length === 0) affiliations = {} 
+	</script>
     <main class="page">
         <section class="event">
             <div class="event__container">
@@ -16,6 +20,7 @@
                         surname_en: '{{ auth()->user()->participant->surname_en }}',
                         middle_name_en: '{{ auth()->user()->participant->middle_name_en }}',
                         phone: '{{ auth()->user()->participant->phone?->raw() }}',
+						affiliations: affiliations,
                         orcid_id: '{{ auth()->user()->participant->orcid_id }}',
                         website: '{{ auth()->user()->participant->website }}',
                     }),
@@ -27,6 +32,15 @@
                             })
                             .catch(error => {});
                     },
+					affiliationsIds() {
+						let result = []
+						Object.values(this.form.affiliations)
+							.forEach(el => {
+								if (el.id == '') return
+								result.push(el.id)
+							})
+						return result
+					},
                 }">
                     @csrf
 
@@ -98,48 +112,144 @@
                         </template>
                     </div>
 
-                    {{-- <div class="form__row">
-                        <label class="form__label" for="formImage">
-                            Добавить фотографию
-                        </label>
-                        <div class="file" data-file>
-                            <div class="file__item">
-                                <div id="formPreview" class="file__preview"></div>
-                                <input id="formImage" accept=".jpg, .png, .gif" type="file" name="image"
-                                    class="file__input">
-                                <div class="file__btns">
-                                    <div class="file__button button">Загрузить фото</div>
-                                    <button class="button button_outline" type="button">Убрать логотип</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
+                    <div class="form__row" id="affiliations" x-data="{
+						ai: +Object.keys(affiliations).pop() + 1,
 
-                    {{-- <div class="form__row">
-                        <label class="form__label" for="c_3">Аффилиации (*)</label>
-                        <div class="form-block">
-                            <input id="c_3" class="form-block__input input" autocomplete="off" type="text"
-                                name="form[]" data-error="Ошибка" placeholder="Аффилиации">
-                            <button class="form-block__btn _icon-plus" type="button"></button>
-                        </div>
-                        <div class="form__line">
-                            <input class="form-block__input input" autocomplete="off" type="text" name="form[]"
-                                data-error="Ошибка" placeholder="Аффилиации2">
-                        </div>
-                        <div class="form__line">
-                            <input class="form-block__input input" autocomplete="off" type="text" name="form[]"
-                                data-error="Ошибка" placeholder="Аффилиации3">
-                        </div>
-                    </div> --}}
+						add() {
+							if (Object.keys(this.form.affiliations).length >= 5) return
+							this.form.affiliations[this.ai] = {
+								id: '',
+								title_ru: '', 
+								title_en: '', 
+								has_mistake: false,
+								no_affiliation: false,
+							}
+							this.ai++
+						},
+						remove(id) {
+							delete this.form.affiliations[id]
+						},
+					}">
+                        <label class="form__label" for="f_1">Аффилиации</label>
+						<template x-for="affiliation, id in form.affiliations" x-key="id">
+							<div class="affiliation form__line" x-data="{
+								suggestions: [],
+								show: false,
+								hasMistake: false,
+								noAffiliation: false,
+	
+								getSuggestions() {
+									if (this.$el.value.trim() === '') return
+	
+									axios
+										.get('{{ route('affiliations.index') }}', {
+											params: {
+												search: this.$el.value,
+												except: this.affiliationsIds()
+											}
+										})
+										.then(resp => {
+											this.suggestions = resp.data
+											this.show = true
+										})
+								},
+								select(suggestion, id) {
+									this.form.affiliations[id].id = suggestion.id
+									this.form.affiliations[id].title_ru = suggestion.title_ru
+									this.form.affiliations[id].title_en = suggestion.title_en
+									this.show = false
+								},
+								changeMistake() {
+									if (this.$el.checked) {
+										this.noAffiliation = false
+									} else {
+										this.form.affiliations[id].id = ''
+										this.form.affiliations[id].title_ru = ''
+										this.form.affiliations[id].title_en = ''
+									}
+									this.form.affiliations[id].has_mistake = this.$el.checked
+								},
+								changeNoAffiliation() {
+									if (this.$el.checked) {
+										this.hasMistake = false
+									}
+									this.form.affiliations[id].id = ''
+									this.form.affiliations[id].title_ru = ''
+									this.form.affiliations[id].title_en = ''
+									this.form.affiliations[id].no_affiliation = this.$el.checked
+								},
+							}">
+								<div class="form__line" @click.outside="show = false">
+									<textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input"
+										:class="form.invalid(`affiliations.${id}.title_ru`) && '_error'"
+										x-model="form.affiliations[id].title_ru" 
+										@input.debounce.500ms="getSuggestions"	
+									></textarea>
+									<template x-if="form.invalid(`affiliations.${id}.title_ru`)">
+										<div class="form__error" x-text="form.errors[`affiliations.${id}.title_ru`]"></div>
+									</template>
+									<div class="input-tips" x-show="show" x-transition.opacity>
+										<ul>
+											<template x-for="suggestion in suggestions">
+												<li x-text="suggestion.title_ru" @click="select(suggestion, id)"></li>
+											</template>
+											<template x-if="suggestions.length === 0">
+												<li>Ничего не найдено</li>
+											</template>
+										</ul>
+									</div>
+	
+								</div>
+								<div class="form__line">
+									<textarea autocomplete="off" name="form[]" placeholder="Full name" class="input"
+										:class="form.invalid(`affiliations.${id}.title_en`) && '_error'"
+										:disabled="!hasMistake && !noAffiliation"
+										x-model="form.affiliations[id].title_en" 
+									></textarea>
+									<template x-if="form.invalid(`affiliations.${id}.title_en`)">
+										<div class="form__error" x-text="form.errors[`affiliations.${id}.title_en`]"></div>
+									</template>
+								</div>
+
+								<div class="form__line">
+									<div class="checkbox-items">
+										<div class="checkbox">
+											<input :id="'a_1' + id" class="checkbox__input" type="checkbox" :name="'handle' + id"
+												x-model="hasMistake" @change="changeMistake">
+											<label :for="'a_1' + id" class="checkbox__label">
+												<span class="checkbox__text">Аффилиация имеет ошибку в написании</span>
+											</label>
+										</div>
+										<div class="checkbox">
+											<input :id="'a_2' + id" class="checkbox__input" type="checkbox" :name="'handle' + id"
+												x-model="noAffiliation" @change="changeNoAffiliation">
+											<label :for="'a_2' + id" class="checkbox__label">
+												<span class="checkbox__text">Аффилиации нет в списке</span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form__line">
+									<button class="form__button button button_outline" type="button" @click="remove(id)">
+										Убрать аффилиацию
+									</button>
+								</div>
+							</div>
+						</template>
+
+						<div class="form__line">
+							<button class="form__button button" type="button" @click="add">Добавить аффилиацию</button>
+						</div>
+                    </div>
 
                     <div class="form__row" :class="form.invalid('orcid_id') && '_error'">
                         <label class="form__label" for="c_4">ORCID ID</label>
                         <div class="form__line">
                             <input id="c_4" class="input" autocomplete="off" type="text" name="orcid_id"
-                                data-error="Ошибка" placeholder="ID" x-mask="9999-9999-9999-9999" x-model="form.orcid_id"
-                            @input.debounce.1000ms="form.validate('orcid_id')">
+                                data-error="Ошибка" placeholder="ID" x-mask="9999-9999-9999-9999"
+                                x-model="form.orcid_id" @input.debounce.1000ms="form.validate('orcid_id')">
                         </div>
-						<template x-if="form.invalid('orcid_id')">
+                        <template x-if="form.invalid('orcid_id')">
                             <div class="form__error" x-text="form.errors.orcid_id"></div>
                         </template>
                     </div>
@@ -149,9 +259,9 @@
                         <div class="form__line">
                             <input id="c_5" class="input" autocomplete="off" type="text" name="website"
                                 data-error="Ошибка" placeholder="http://example.ru" x-model="form.website"
-                            @input.debounce.1000ms="form.validate('website')">
+                                @input.debounce.1000ms="form.validate('website')">
                         </div>
-						<template x-if="form.invalid('website')">
+                        <template x-if="form.invalid('website')">
                             <div class="form__error" x-text="form.errors.website"></div>
                         </template>
                     </div>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordChangeController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -33,7 +34,7 @@ Route::group([
         ->group(function () {
             Route::get('password/edit', [PasswordChangeController::class, 'edit'])->name('my.password.edit');
             Route::middleware(['precognitive'])
-                ->post('password/update', [PasswordChangeController::class, 'update'])
+                ->post('password/edit', [PasswordChangeController::class, 'update'])
                 ->name('my.password.update');
 
             // Participant
@@ -43,8 +44,15 @@ Route::group([
                 ->name('participant.store');
             Route::get('participant/edit', [ParticipantController::class, 'edit'])->name('participant.edit');
             Route::middleware(['precognitive'])
-                ->post('participant/update', [ParticipantController::class, 'update'])
+                ->post('participant/edit', [ParticipantController::class, 'update'])
                 ->name('participant.update');
+
+            Route::prefix('events')->group(function () {
+                Route::get('{conference:slug}/participate', [ParticipationController::class, 'create'])->name('participation.create');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/participate', [ParticipationController::class, 'store'])
+                    ->name('participation.store');
+            });
 
             // Organizer
             Route::get('organization/create', [OrganizationController::class, 'create'])->name('organization.create');
