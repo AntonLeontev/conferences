@@ -116,8 +116,17 @@
                     <div class="event-item__footer">
 						@auth
 							@if (auth()->user()->participant)
-                        		<a href="{{ route('participation.create', $conference->slug) }}" class="button button_primary" type="submit">Принять участие</a>
+								@if (user_has_participation($conference))
+									<a href="" class="button button_primary" type="submit">
+										Отправить тезисы
+									</a>
+								@else
+									<a href="{{ route('participation.create', $conference->slug) }}" class="button button_primary" type="submit">
+										Учавствовать
+									</a>
+								@endif
 							@endif
+							{{-- //TODO редактирование мероприятия --}}
 							@if (auth()->user()->organization?->id === $conference->organization_id)
                         		<a href="" class="button button_primary" type="submit">Редактировать</a>
 							@endif
