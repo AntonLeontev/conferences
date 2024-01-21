@@ -99,4 +99,14 @@ class Conference extends Model
     {
         return $this->hasManyThrough(Participant::class, Participation::class);
     }
+
+    public function participations(): HasMany
+    {
+        return $this->hasMany(Participation::class);
+    }
+
+    public function participationByUser(): ?Participation
+    {
+        return $this->participations()->where('participant_id', auth()->user()->participant->id)->first();
+    }
 }

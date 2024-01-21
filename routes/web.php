@@ -5,6 +5,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordChangeController;
+use App\Http\Controllers\ThesisController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -47,13 +48,6 @@ Route::group([
                 ->post('participant/edit', [ParticipantController::class, 'update'])
                 ->name('participant.update');
 
-            Route::prefix('events')->group(function () {
-                Route::get('{conference:slug}/participate', [ParticipationController::class, 'create'])->name('participation.create');
-                Route::middleware(['precognitive'])
-                    ->post('{conference:slug}/participate', [ParticipationController::class, 'store'])
-                    ->name('participation.store');
-            });
-
             // Organizer
             Route::get('organization/create', [OrganizationController::class, 'create'])->name('organization.create');
             Route::middleware(['precognitive'])
@@ -64,6 +58,16 @@ Route::group([
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');
                 Route::middleware(['precognitive'])->post('create', [ConferenceController::class, 'store'])
                     ->name('conference.store');
+
+                Route::get('{conference:slug}/participate', [ParticipationController::class, 'create'])->name('participation.create');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/participate', [ParticipationController::class, 'store'])
+                    ->name('participation.store');
+
+                Route::get('{conference:slug}/abstracts', [ThesisController::class, 'create'])->name('theses.create');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/abstracts', [ThesisController::class, 'store'])
+                    ->name('theses.store');
             });
         });
 

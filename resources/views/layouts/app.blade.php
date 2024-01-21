@@ -15,6 +15,7 @@
 	</style>
 
 	@yield('head_scripts')
+	<script src="/js/scripts.js" defer></script>
 </head>
 <body>
 	<div class="wrapper">

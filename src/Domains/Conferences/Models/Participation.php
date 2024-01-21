@@ -6,6 +6,7 @@ use App\Casts\PhoneNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Src\Domains\Auth\Models\Participant;
 use Src\Domains\Conferences\Enums\ParticipationType;
 
@@ -46,5 +47,10 @@ class Participation extends Model
     public function conference(): BelongsTo
     {
         return $this->belongsTo(Conference::class);
+    }
+
+    public function thesis(): HasOne
+    {
+        return $this->hasOne(Thesis::class);
     }
 }

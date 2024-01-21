@@ -54,3 +54,22 @@ if (! function_exists('user_has_participation')) {
             ->exists();
     }
 }
+
+if (! function_exists('user_sent_thesis')) {
+    function user_sent_thesis(Conference $conference): bool
+    {
+        if (! auth()->check()) {
+            return false;
+        }
+
+        $participation = Participation::where('participant_id', auth()->user()->participant->id)
+            ->where('conference_id', $conference->id)
+            ->first();
+
+        if (is_null($participation)) {
+            return false;
+        }
+
+        return $participation->thesis()->exists();
+    }
+}

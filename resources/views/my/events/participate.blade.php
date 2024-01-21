@@ -131,6 +131,15 @@
             remove(id) {
                 delete this.form.affiliations[id]
             },
+			affiliationsIds() {
+				let result = []
+				Object.values(this.form.affiliations)
+					.forEach(el => {
+						if (el.id == '') return
+						result.push(el.id)
+					})
+				return result
+			},
         }">
             <label class="form__label" for="f_1">Аффилиации</label>
             <template x-for="affiliation, id in form.affiliations" x-key="id">
@@ -314,10 +323,10 @@
         </div>
 
         <div class="form__row">
-            <p>Вы можете заполнить форму тезисов позже самостоятельно через карточку мероприятия</p>
+            {{-- <p>Вы можете заполнить форму тезисов позже самостоятельно через карточку мероприятия</p> --}}
             <div class="form__btns">
                 <button class="form__button button button_primary" type="submit">Зарегистрироваться</button>
-                <button class="form__button button" type="submit">Заполнить форму</button>
+                {{-- <button class="form__button button" type="submit">Заполнить форму</button> --}}
             </div>
         </div>
     </form>

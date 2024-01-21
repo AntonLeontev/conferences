@@ -15,6 +15,7 @@
 	<style>
 		[x-cloak] {display: none;}
 	</style>
+	<script src="/js/scripts.js" defer></script>
 </head>
 
 <body>

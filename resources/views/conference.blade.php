@@ -117,9 +117,15 @@
 						@auth
 							@if (auth()->user()->participant)
 								@if (user_has_participation($conference))
-									<a href="" class="button button_primary" type="submit">
-										Отправить тезисы
-									</a>
+									@if (user_sent_thesis($conference))
+										<a href="" class="button button_primary" type="submit">
+											Редактировать тезисы
+										</a>
+									@else
+										<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button button_primary" type="submit">
+											Отправить тезисы
+										</a>
+									@endif
 								@else
 									<a href="{{ route('participation.create', $conference->slug) }}" class="button button_primary" type="submit">
 										Учавствовать
