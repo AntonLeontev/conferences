@@ -4,7 +4,7 @@
 
 @section('content')
 	<script>
-		let affiliations = @json(auth()->user()->participant->affiliations);
+		let affiliations = @json(auth()->user()->participant->affiliations ?? []);
 		if (affiliations.length === 0) affiliations = {} 
 	</script>
     <main class="page">
