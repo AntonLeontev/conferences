@@ -7,7 +7,7 @@
 @section('back_link', route('conference.show', $conference->slug))
 
 @section('head_scripts')
-	@vite(['resources/js/wysiwyg.js', 'node_modules/quill/dist/quill.snow.css'])
+	{{-- @vite(['resources/js/wysiwyg.js', 'node_modules/quill/dist/quill.snow.css']) --}}
 	<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
 @endsection
 
