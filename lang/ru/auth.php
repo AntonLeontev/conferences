@@ -17,6 +17,7 @@ return [
         'send' => 'Войти',
         'register' => 'Регистрация',
         'forgot' => 'Забыли пароль?',
+        'remember' => 'Запомнить меня',
     ],
 
     // Register page

@@ -26,6 +26,15 @@
         </div>
 
         <div class="form__row">
+            <div class="checkbox">
+				<input id="c_1" class="checkbox__input" type="checkbox" name="remember" checked>
+				<label for="c_1" class="checkbox__label">
+					<span class="checkbox__text">@lang('auth.login.remember')</span>
+				</label>
+			</div>
+        </div>
+
+        <div class="form__row">
             <button class="form__button button button_primary" type="submit">@lang('auth.login.send')</button>
         </div>
 

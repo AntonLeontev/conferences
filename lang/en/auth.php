@@ -15,6 +15,7 @@ return [
         'send' => 'Log in',
         'register' => 'Registration',
         'forgot' => 'Forgot password?',
+        'remember' => 'Remember me',
     ],
 
     // Register page

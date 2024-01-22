@@ -20,7 +20,7 @@ class ApiController extends Controller
             ->when($request->has('except'), function (Builder $query) use ($request) {
                 $query->whereNotIn('id', $request->get('except'));
             })
-            ->take($request->get('limit') ?? 10)
+            ->take($request->get('limit') ?? 50)
             ->get(['id', 'title_ru', 'title_en']);
 
         return response()->json($affiliations);
