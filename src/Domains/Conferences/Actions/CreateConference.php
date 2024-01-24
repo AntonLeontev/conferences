@@ -42,6 +42,7 @@ class CreateConference
             'abstracts_price' => $request->get('abstracts_price'),
             'abstracts_format' => $request->get('abstracts_format'),
             'abstracts_lang' => $request->get('abstracts_lang'),
+            'max_thesis_characters' => $request->get('max_thesis_characters'),
         ]);
 
         $conference->subjects()->sync($request->get('subjects'));

@@ -74,7 +74,10 @@ class ConferenceCreateTest extends TestCase
                     'title_en' => 'Секция 1',
                 ],
             ],
+            'max_thesis_characters' => 3200,
         ]);
+
+        $response->assertCreated();
 
         $this->assertDatabaseCount('conferences', 1);
         $this->assertDatabaseHas('conferences', [
@@ -82,8 +85,8 @@ class ConferenceCreateTest extends TestCase
             'slug' => 'conferense-2024',
             'title_ru' => 'Конференция',
             'title_en' => 'Conference',
-            'with_foreign_participation' => true,
-            'need_site' => true,
+            'with_foreign_participation' => 1,
+            'need_site' => 1,
             'co-organizers' => $this->castAsJson(['test1', 'test2']),
             'address' => 'Москва',
             'phone' => '+7-912-000-56-23',
@@ -99,6 +102,7 @@ class ConferenceCreateTest extends TestCase
             'discount_special_guest' => $this->castAsJson(['amount' => 50, 'unit' => 'percent']),
             'discount_young_scientist' => $this->castAsJson(['amount' => 0, 'unit' => 'RUB']),
             'abstracts_price' => 500,
+            'max_thesis_characters' => 3200,
         ]);
 
         $this->assertDatabaseCount('sections', 2);
@@ -118,7 +122,5 @@ class ConferenceCreateTest extends TestCase
         ]);
 
         $this->assertDatabaseCount('conference_subject', 1);
-
-        $response->assertCreated();
     }
 }
