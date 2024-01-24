@@ -2,6 +2,7 @@
 
 namespace Src\Domains\Conferences\Models;
 
+use App\Casts\ThesisTitleCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ class Thesis extends Model
     ];
 
     protected $casts = [
+        'title' => ThesisTitleCast::class,
         'report_form' => ReportForm::class,
         'authors' => 'array',
         'reporter' => 'array',

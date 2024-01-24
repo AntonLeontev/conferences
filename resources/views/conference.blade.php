@@ -132,9 +132,8 @@
 									</a>
 								@endif
 							@endif
-							{{-- //TODO редактирование мероприятия --}}
 							@if (auth()->user()->organization?->id === $conference->organization_id)
-                        		<a href="" class="button button_primary" type="submit">Редактировать</a>
+                        		<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary" type="submit">Редактировать</a>
 							@endif
 						@endauth
                     </div>

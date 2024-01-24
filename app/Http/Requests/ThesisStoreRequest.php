@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MaxStripTagsCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class ThesisStoreRequest extends FormRequest
             'participation_id' => ['required', 'exists:participations,id'],
             'section_id' => ['nullable', 'int'],
             'report_form' => ['required', Rule::enum(ReportForm::class)],
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', new MaxStripTagsCharacters(230)],
             'authors' => ['required', 'array', 'min:1'],
             'authors.*.name_ru' => ['required', 'string', 'max:255', 'regex:/^[а-яА-Я \-_]+$/u'],
             'authors.*.surname_ru' => ['required', 'string', 'max:255', 'regex:/^[а-яА-Я \-_]+$/u'],
@@ -43,7 +44,7 @@ class ThesisStoreRequest extends FormRequest
             'contact' => ['required', 'array'],
             'contact.id' => ['required', 'int'],
             'contact.email' => ['required', 'email'],
-            'text' => ['required', 'string', 'max:2500'],
+            'text' => ['required', 'string', new MaxStripTagsCharacters($this->route('conference')->max_thesis_characters)],
         ];
     }
 

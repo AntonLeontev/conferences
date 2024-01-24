@@ -6,47 +6,55 @@
     <main class="page">
         <section class="event">
             <div class="event__container">
-                <h1 class="event__title">Создать мероприятие</h1>
+                <h1 class="event__title">Редактирование мероприятия</h1>
+				<script>
+					let sections = @json($conference->sections->keyBy('id'));
+					if (sections.length === 0) sections = {}
+					let coOrginizers = @json($conference->{'co-organizers'});
+					let discount_students = @json($conference->discount_students);
+					let discount_participants = @json($conference->discount_participants);
+					let discount_special_guest = @json($conference->discount_special_guest);
+					let discount_young_scientist = @json($conference->discount_young_scientist);
+				</script>
                 <form action="#" class="event__form form" 
 					@select-callback.camel.document="select"
 					@submit.prevent="submit"
 					x-data="{
-						form: $form('post', '{{ route('conference.store') }}', {
-							title_ru: '',
-							title_en: '',
-							slug: '',
+						form: $form('post', '{{ route('conference.update', $conference->slug) }}', {
+							title_ru: '{{ $conference->title_ru }}',
+							title_en: '{{ $conference->title_en }}',
 							conference_type_id: '',
 							format: '',
-							with_foreign_participation: false,
+							with_foreign_participation: {{ $conference->with_foreign_participation }},
 							subjects: [],
-							sections: {},
+							sections: sections,
 							logo: '',
-							website: '',
-							need_site: false,
-							'co-organizers': {},
-							address: '',
-							phone: '',
-							email: '',
-							start_date: '',
-							end_date: '',
-							description_ru: '',
-							description_en: '',
+							website: '{{ $conference->website }}',
+							need_site: {{ $conference->need_site }},
+							'co-organizers': coOrginizers,
+							address: '{{ $conference->address }}',
+							phone: '{{ $conference->phone->raw() }}',
+							email: '{{ $conference->email }}',
+							start_date: '{{ $conference->start_date->format('Y-m-d') }}',
+							end_date: '{{ $conference->end_date->format('Y-m-d') }}',
+							description_ru: '{{ $conference->description_ru }}',
+							description_en: '{{ $conference->description_en }}',
 							lang: '',
 							participants_number: '',
 							report_form: '',
-							whatsapp: '',
-							telegram: '',
-							price_participants: '',
-							price_visitors: '',
-							discount_students: {amount: 0, unit: 'RUB'},
-							discount_participants: {amount: 0, unit: 'RUB'},
-							discount_special_guest: {amount: 0, unit: 'RUB'},
-							discount_young_scientist: {amount: 0, unit: 'RUB'},
-							abstracts_price: '',
+							whatsapp: '{{ $conference->whatsapp }}',
+							telegram: '{{ $conference->telegram }}',
+							price_participants: '{{ $conference->price_participants }}',
+							price_visitors: '{{ $conference->price_visitors }}',
+							discount_students: discount_students,
+							discount_participants: discount_participants,
+							discount_special_guest: discount_special_guest,
+							discount_young_scientist: discount_young_scientist,
+							abstracts_price: '{{ $conference->abstracts_price }}',
 							abstracts_format: '',
 							abstracts_lang: '',
-							max_thesis_characters: 2500,
-							thesis_instruction: '',
+							max_thesis_characters: {{ $conference->max_thesis_characters }},
+							thesis_instruction: '{{ $conference->thesis_instruction }}',
 						}),
 						formatCheckShow: true,
 						formDisabled: false,
@@ -97,7 +105,7 @@
 
 							this.form.submit()
 								.then(response => {
-									location.replace('/events/' + response.data.slug)
+									location.replace(response.data.redirect)
 									this.formDisabled = false
 								})
 								.catch(error => {
@@ -131,23 +139,22 @@
                     </div>
 
 					<div class="form__row" :class="form.invalid('slug') && '_error'">
-						<label class="form__label" for="a_1">Укажите акроним меропрития (*)</label>
-						<input class="input" id="a_1" autocomplete="off" type="text" name="slug" 
+						<label class="form__label" for="a_1">Акроним меропрития (*)</label>
+						<input class="input" id="a_1" autocomplete="off" type="text"
 							placeholder="Текст для генерации ссылки мероприятия. Например: geocosmos-{{ now()->format('Y') }}"
-							x-model="form.slug"	
-							@input.debounce.1000ms="form.validate('slug')"
+							value="{{ $conference->slug }}" disabled
 						>
 						<template x-if="form.invalid('slug')">
 							<div class="form__error" x-text="form.errors.slug"></div>
 						</template>
-						<div class="form__link" x-text="location.origin + '/events/' + form.slug"></div>
+						<div class="form__link" x-text="location.origin + '/events/' + '{{ $conference->slug }}'"></div>
 					</div>
 
                     <div class="form__row" :class="form.invalid('conference_type_id') && '_error'">
                         <label class="form__label">Тип мероприятия (*)</label>
                         <select name="type" data-scroll="500" data-class-modif="form" data-name="conference_type_id">
 							@foreach (conference_types() as $type)
-                            	<option	value="{{ $type->id }}">{{ $type->{'title_'.loc()} }}</option>
+                            	<option	value="{{ $type->id }}" @if($type->id === $conference->conference_type_id) selected @endif>{{ $type->{'title_'.loc()} }}</option>
 							@endforeach
                         </select>
 						<template x-if="form.invalid('conference_type_id')">
@@ -158,8 +165,8 @@
                     <div class="form__row" :class="form.invalid('format') && '_error'">
                         <label class="form__label">Формат мероприятия (*)</label>
                         <select name="format" data-scroll="500" data-class-modif="format" data-name="format">
-                            <option value="national" selected>Российское / национальное</option>
-                            <option value="international">Международное</option>
+                            <option value="national" @if('national' === $conference->format) selected @endif>Российское / национальное</option>
+                            <option value="international" @if('international' === $conference->format) selected @endif>Международное</option>
                         </select>
 						<template x-if="form.invalid('format')">
 							<div class="form__error" x-text="form.errors.format"></div>
@@ -177,7 +184,12 @@
                         <label class="form__label">Тематика мероприятия (*)</label>
                         <select name="form[]" data-scroll="500" multiple data-class-modif="format" data-name="subjects">
                             @foreach (subjects() as $subject)
-                                <option value="{{ $subject->id }}">{{ $subject->{'title_' . app()->getLocale()} }}</option>
+                                <option 
+									value="{{ $subject->id }}" 
+									@if($conference->subjects->contains(fn($value) => $value->id === $subject->id)) selected @endif
+								>
+									{{ $subject->{'title_' . app()->getLocale()} }}
+								</option>
                             @endforeach
                         </select>
 						<template x-if="form.invalid('subjects')">
@@ -187,11 +199,12 @@
 
                     <div class="form__row" :class="form.invalid('sections') && '_error'" id="sections" 
 						x-data="{
-							ai: 1,
+							ai: 6,
 
 							add() {
 								if (Object.keys(this.form.sections).length >= 5) return
 								this.form.sections[this.ai] = {
+									id: null,
 									title_ru: '', 
 									short_title_ru: '', 
 									title_en: '', 
@@ -420,10 +433,10 @@
                     <div class="form__row" :class="form.invalid('lang') && '_error'">
                         <label class="form__label">Язык проведения мероприятия (*)</label>
                         <select name="form[]" data-scroll="500" data-class-modif="form" data-name="lang">
-                            <option value="ru" selected>Русский</option>
-                            <option value="en">Английский</option>
-                            <option value="mixed">Русский / Английский</option>
-                            <option value="other">Другой</option>
+                            <option value="ru" @if('ru' === $conference->lang) selected @endif>Русский</option>
+                            <option value="en" @if('en' === $conference->lang) selected @endif>Английский</option>
+                            <option value="mixed" @if('mixed' === $conference->lang) selected @endif>Русский / Английский</option>
+                            <option value="other" @if('other' === $conference->lang) selected @endif>Другой</option>
                         </select>
 						<template x-if="form.invalid('lang')">
 							<div class="form__error" x-text="form.errors.lang"></div>
@@ -433,10 +446,10 @@
                     <div class="form__row" :class="form.invalid('participants_number') && '_error'">
                         <label class="form__label">Количество участников</label>
                         <select name="form[]" data-scroll="500" data-class-modif="form" data-name="participants_number">
-                            <option value="50-" selected>До 50 человек</option>
-                            <option value="50-100">50-100</option>
-                            <option value="100-200">100-200</option>
-                            <option value="200+">200 +</option>
+                            <option value="50-" @if('50-' === $conference->participants_number) selected @endif>До 50 человек</option>
+                            <option value="50-100" @if('50-100' === $conference->participants_number) selected @endif>50-100</option>
+                            <option value="100-200" @if('100-200' === $conference->participants_number) selected @endif>100-200</option>
+                            <option value="200+" @if('200+' === $conference->participants_number) selected @endif>200 +</option>
                         </select>
 						<template x-if="form.invalid('participants_number')">
 							<div class="form__error" x-text="form.errors.participants_number"></div>
@@ -446,9 +459,9 @@
                     <div class="form__row" :class="form.invalid('report_form') && '_error'">
                         <label class="form__label">Формы докладов</label>
                         <select name="form[]" data-scroll="500" data-class-modif="form" data-name="report_form">
-                            <option value="oral" selected>Устная</option>
-                            <option value="stand">Стендовые доклады</option>
-                            <option value="mixed">Смешанная</option>
+                            <option value="oral" @if('oral' === $conference->report_form) selected @endif>Устная</option>
+                            <option value="stand" @if('stand' === $conference->report_form) selected @endif>Стендовые доклады</option>
+                            <option value="mixed" @if('mixed' === $conference->report_form) selected @endif>Смешанная</option>
                         </select>
 						<template x-if="form.invalid('report_form')">
 							<div class="form__error" x-text="form.errors.report_form"></div>
@@ -800,8 +813,8 @@
                     <div class="form__row" :class="form.invalid('abstracts_format') && '_error'">
                         <label class="form__label">Формат сборника тезисов</label>
                         <select name="abstracts_format" data-scroll="500" data-class-modif="form" data-name="abstracts_format">
-                            <option value="A4" selected>А4</option>
-                            <option value="A5">А5</option>
+                            <option value="A4" @if('A4' === $conference->abstracts_format) selected @endif>А4</option>
+							<option value="A5" @if('A5' === $conference->abstracts_format) selected @endif>А5</option>
                         </select>
 						<template x-if="form.invalid('abstracts_format')">
 							<div class="form__error" x-text="form.errors.abstracts_format"></div>
@@ -819,8 +832,8 @@
                     <div class="form__row" :class="form.invalid('abstracts_lang') && '_error'">
                         <label class="form__label">Язык сборника тезисов</label>
                         <select name="abstracts_lang" data-scroll="500" data-class-modif="form" data-name="abstracts_lang">
-                            <option value="ru" selected>Русский</option>
-                            <option value="en">Английский</option>
+                            <option value="ru" @if('ru' === $conference->abstracts_lang) selected @endif>Русский</option>
+                            <option value="en" @if('en' === $conference->abstracts_lang) selected @endif>Английский</option>
                         </select>
 						<template x-if="form.invalid('abstracts_lang')">
 							<div class="form__error" x-text="form.errors.abstracts_lang"></div>
@@ -843,7 +856,7 @@
                         <button class="form__button button button_primary" type="submit"
 							:disabled="form.processing || formDisabled"
 						>
-							Создать мероприятие
+							Сохранить изменения
 						</button>
                     </div>
                     <div class="form__row">

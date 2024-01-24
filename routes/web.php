@@ -58,6 +58,9 @@ Route::group([
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');
                 Route::middleware(['precognitive'])->post('create', [ConferenceController::class, 'store'])
                     ->name('conference.store');
+                Route::get('{conference:slug}/edit', [ConferenceController::class, 'edit'])->name('conference.edit');
+                Route::middleware(['precognitive'])->post('{conference:slug}/edit', [ConferenceController::class, 'update'])
+                    ->name('conference.update');
 
                 Route::get('{conference:slug}/participate', [ParticipationController::class, 'create'])->name('participation.create');
                 Route::middleware(['precognitive'])

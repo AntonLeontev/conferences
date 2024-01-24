@@ -56,6 +56,8 @@ class Conference extends Model
         'abstracts_price',
         'abstracts_format',
         'abstracts_lang',
+        'max_thesis_characters',
+        'thesis_instruction',
     ];
 
     protected $casts = [

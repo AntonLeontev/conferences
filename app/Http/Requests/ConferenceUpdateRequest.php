@@ -13,33 +13,28 @@ use Src\Domains\Conferences\Enums\ConferenceLanguage;
 use Src\Domains\Conferences\Enums\ParticipantsNumber;
 use Src\Domains\Conferences\Enums\ReportForm;
 
-class ConferenceStoreRequest extends FormRequest
+class ConferenceUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->organization()->exists();
+        return $this->route('conference')->organization_id === auth()->user()->organization->id;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
             'title_ru' => ['required', 'string', 'max:250'],
             'title_en' => ['required', 'string', 'max:250'],
-            'slug' => ['required', 'bail', 'string', 'max:20', 'regex:/^[a-zA-Z0-9\-_]+$/u', 'unique:conferences,slug'],
             'conference_type_id' => ['required', 'in:'.conference_types()->pluck('id')->join(',')],
             'format' => ['required',  Rule::enum(ConferenceFormat::class)],
             'with_foreign_participation' => ['required', 'boolean'],
             'subjects' => ['required', 'array'],
             'subjects.*' => ['required', 'int', 'in:'.subjects()->pluck('id')->join(',')],
             'sections' => ['nullable', 'array', 'max:8'],
+            'sections.*.id' => ['nullable', 'int', 'exists:sections,id'],
             'sections.*.title_ru' => ['required', 'string', 'max:255'],
             'sections.*.short_title_ru' => ['required', 'string', 'max:255'],
             'sections.*.title_en' => ['required', 'string', 'max:255'],

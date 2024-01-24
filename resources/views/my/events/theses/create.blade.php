@@ -7,8 +7,8 @@
 @section('back_link', route('conference.show', $conference->slug))
 
 @section('head_scripts')
-	{{-- @vite(['resources/js/wysiwyg.js', 'node_modules/quill/dist/quill.snow.css']) --}}
-	<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+	@vite(['resources/js/wysiwyg.js'])
+	{{-- <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script> --}}
 @endsection
 
 @section('content')
@@ -21,7 +21,7 @@
 	@select-callback.camel.document="select"
 	@submit.prevent="submit" 
 	x-data="{
-		editor: null,
+		characters: 0,
         form: $form('post', '{{ route('theses.store', $conference->slug) }}', {
             participation_id: '{{ $participation->id }}',
             section_id: '',
@@ -49,27 +49,9 @@
 			text: '',
         }),
 
-		init() {
-			this.$nextTick(() => {
-				{{-- this.editor = new Quill('#editor', {
-					debug: 'info',
-					modules: {
-						toolbar: quillToolbarOptions
-					},
-					placeholder: 'Введите текст',
-					readOnly: false,
-					theme: 'snow'
-				}) --}}
-				ClassicEditor
-					.create( document.querySelector( '#editor' ) )
-					.then(editor => window.editor = editor)
-					.catch( error => {
-						console.error( error );
-					} );
-			})
-		},
         submit() {
-			this.form.text = editor.getData()
+			this.form.title = editorTitle.getData()
+			this.form.text = editorText.getData()
 
             this.form.submit()
                 .then(response => {
@@ -91,6 +73,14 @@
 			} else if (select.dataset.name == 'contact') {
 				this.form.contact.id = select.value
 			}
+		},
+		postpone(ready, make) {
+			if (ready()) {
+				make()
+				return
+			}
+
+			setTimeout(() => this.postpone(ready, make), 1000);
 		},
     }">
         <div class="form__row">
@@ -130,15 +120,6 @@
             </select>
         </div>
 
-        <div class="form__row" :class="form.invalid('title') && '_error'">
-            <label class="form__label" for="n_1">Название доклада (*)</label>
-            <input id="n_1" class="input" autocomplete="off" type="text" name="title"
-                placeholder="Введите название доклада" x-model="form.title" @input.debounce.1000ms="form.validate('title')">
-            <template x-if="form.invalid('title')">
-                <div class="form__error" x-text="form.errors.title"></div>
-            </template>
-        </div>
-
         <label class="form__label _mb0">Список авторов (*) </label>
 
 		<div x-data="{
@@ -147,9 +128,18 @@
 
 			init() {
 				this.ai = +Object.keys(this.form.authors).pop() + 1
+
+				this.postpone(this.checkModules, this.saveSelects)
+			},
+			postpone() {
 				setTimeout(() => {
+					if (typeof modules_flsModules == 'undefined') {
+						this.postpone()
+						return;
+					}
+					
 					this.selectClass = modules_flsModules.select
-				}, 100)
+				}, 500)
 			},
 			add() {
                 this.form.authors[this.ai] = {
@@ -427,7 +417,57 @@
 
         </div>
 
-        <div class="form__row">
+		<div class="form__row editor-title" :class="form.invalid('title') && '_error'" x-data="{
+			init() {
+				let check = () => typeof ClassicEditor !== 'undefined'
+				let make = () => {
+					ClassicEditor
+					.create(document.querySelector( '#editor-title' ), TitleEditorSettings)
+					.then(editor => {
+						window.editorTitle = editor
+					})
+					.catch( error => {
+						console.error( error );
+					} );
+				}
+				this.postpone(check, make)
+			},
+		}">
+            <label class="form__label" for="n_1">Название доклада (*)</label>
+			<style>
+				.editor-title .ck-content {
+					height: 40px;
+				}
+			</style>
+			<div id="editor-title"></div>
+            <template x-if="form.invalid('title')">
+                <div class="form__error" x-text="form.errors.title"></div>
+            </template>
+        </div>
+
+        <div class="form__row" 
+		@text-editor-update.document="textUpdate"
+		x-data="{
+			textCount: 0,
+
+			init() {
+				let check = () => typeof ClassicEditor !== 'undefined'
+				let make = () => {
+					ClassicEditor
+					.create(document.querySelector( '#editor-text' ), TextEditorSettings)
+					.then(editor => {
+						window.editorText = editor
+					})
+					.catch( error => {
+						console.error( error );
+					} );
+				}
+				this.postpone(check, make)
+		},
+			textUpdate() {
+				this.textCount = this.$event.detail.characters
+			},
+		}">
             <label class="form__label" for="t_1">Текст доклада (*)</label>
 			<div class="form__line">
 				<style>
@@ -435,7 +475,13 @@
 						height: 300px;
 					}
 				</style>
-				<div id="editor"></div>
+				<div id="editor-text"></div>
+			</div>
+			<div class="form__line">
+				Символов:
+				<span id="characters" x-text="textCount"></span>
+				<span>/</span>
+				<span>{{ $conference->max_thesis_characters }}</span>
 			</div>
 			<div class="form__line">
 				<template x-if="form.invalid('text')">

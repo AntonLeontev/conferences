@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConferenceStoreRequest;
+use App\Http\Requests\ConferenceUpdateRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Src\Domains\Conferences\Actions\CreateConference;
 use Src\Domains\Conferences\Actions\CreateConferenceSections;
+use Src\Domains\Conferences\Actions\UpdateConference;
+use Src\Domains\Conferences\Actions\UpdateConferenceSections;
 use Src\Domains\Conferences\Models\Conference;
 use Src\Domains\Conferences\Models\Subject;
 
@@ -62,5 +65,23 @@ class ConferenceController extends Controller
     public function show(Conference $conference): View|Factory
     {
         return view('conference', ['conference' => $conference]);
+    }
+
+    public function edit(Conference $conference): View|Factory
+    {
+        return view('my.events.edit', compact('conference'));
+    }
+
+    public function update(
+        Conference $conference,
+        ConferenceUpdateRequest $request,
+        UpdateConference $updateConference,
+        UpdateConferenceSections $updateConferenceSections,
+    ): JsonResponse {
+        $updateConference->handle($conference, $request);
+
+        $updateConferenceSections->handle($conference, $request);
+
+        return response()->json(['redirect' => route('conference.show', $conference->slug)], Response::HTTP_OK);
     }
 }
