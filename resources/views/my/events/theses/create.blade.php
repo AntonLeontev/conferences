@@ -8,7 +8,6 @@
 
 @section('head_scripts')
 	@vite(['resources/js/wysiwyg.js'])
-	{{-- <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script> --}}
 @endsection
 
 @section('content')
@@ -24,7 +23,9 @@
 		characters: 0,
         form: $form('post', '{{ route('theses.store', $conference->slug) }}', {
             participation_id: '{{ $participation->id }}',
-            section_id: '',
+			@if ($conference->sections->isNotEmpty())
+				section_id: null,
+			@endif
             report_form: 'oral',
             title: '',
             authors: {
@@ -49,9 +50,14 @@
 			text: '',
         }),
 
+		init() {
+			setTimeout(() => {
+				document.querySelectorAll('select')
+					.forEach(select => this.getSelectValue(select))
+			}, 2000)
+		},
         submit() {
-			this.form.title = editorTitle.getData()
-			this.form.text = editorText.getData()
+			this.getEditorsData()
 
             this.form.submit()
                 .then(response => {
@@ -82,6 +88,10 @@
 
 			setTimeout(() => this.postpone(ready, make), 1000);
 		},
+		getEditorsData() {
+			this.form.title = editorTitle.getData()
+			this.form.text = editorText.getData()
+		},
     }">
         <div class="form__row">
             <h2 class="form__title">{{ $conference->{'title_' . loc()} }}</h2>
@@ -103,11 +113,14 @@
             <div class="form__row">
                 <label class="form__label">Выберите секцию (*)</label>
                 <select name="section_id" data-scroll="500" data-class-modif="form" data-name="section_id">
-                    <option value="" selected>Выбирите секцию</option>
+                    <option value="" selected>Выберите секцию</option>
                     @foreach ($conference->sections as $section)
                         <option value="{{ $section->id }}">{{ $section->{'title_' . loc()} }}</option>
                     @endforeach
                 </select>
+				<template x-if="form.invalid(`section_id`)">
+					<div class="form__error" x-text="form.errors[`section_id`]"></div>
+				</template>
             </div>
         @endif
 
@@ -492,7 +505,62 @@
 
         <div class="form__row">
             <div class="form__btns">
-                <button class="form__button button button_primary" type="submit">Зарегистрироваться</button>
+                <button 
+					class="form__button button button_primary" 
+					type="button"
+					@click="getPdf"
+					x-data="{
+						async getPdf() {
+							this.getEditorsData()
+
+							form.touch(['section_id', 'title', 'text']).validate();
+
+							if (this.form.title === '' || this.form.text === '') {
+								return
+							}
+
+							if (this.form.section_id == null) {
+								return
+							}
+
+							if (this.form.hasErrors) {
+								return
+							}
+
+							axios
+								.post(
+									'{{ route('pdf.thesis.preview', $conference->slug) }}',
+									this.form,
+									{responseType: 'blob'}
+								)
+								.then(res => {
+									console.log(res.data)
+									let blob = new Blob([res.data], {
+										type: 'application/pdf',
+									});
+									
+									let downloadLink = document.createElement('a');
+									downloadLink.target = '_blank';
+									downloadLink.download = 'abstracts preview.pdf';
+
+									let URL = window.URL || window.webkitURL;
+									let downloadUrl = URL.createObjectURL(blob);
+
+									downloadLink.href = downloadUrl;
+
+									document.body.append(downloadLink);
+
+									downloadLink.click();
+									downloadLink.remove();
+								})
+						}
+					}"
+				>Предпросмотр</button>
+            </div>
+        </div>
+        <div class="form__row">
+            <div class="form__btns">
+                <button class="form__button button button_primary" type="submit">Отправить тезисы</button>
             </div>
         </div>
 

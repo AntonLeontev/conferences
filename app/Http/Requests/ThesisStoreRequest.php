@@ -27,7 +27,7 @@ class ThesisStoreRequest extends FormRequest
     {
         return [
             'participation_id' => ['required', 'exists:participations,id'],
-            'section_id' => ['nullable', 'int'],
+            'section_id' => ['sometimes', 'required', 'int'],
             'report_form' => ['required', Rule::enum(ReportForm::class)],
             'title' => ['required', 'string', new MaxStripTagsCharacters(230)],
             'authors' => ['required', 'array', 'min:1'],

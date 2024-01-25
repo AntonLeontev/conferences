@@ -17,3 +17,6 @@ Alpine.plugin(Precognition);
 
 window.Alpine = Alpine;
 Alpine.start();
+
+import { saveAs } from "file-saver";
+window.saveAs = saveAs;

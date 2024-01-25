@@ -28,6 +28,7 @@
         "@ckeditor/vite-plugin-ckeditor5": "^0.1.3",
         "alpinejs": "^3.13.3",
         "clockwork-browser": "^1.1.2",
+        "file-saver": "^2.0.5",
         "laravel-precognition-alpine": "^0.5.2"
     }
 }

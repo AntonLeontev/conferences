@@ -5,6 +5,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordChangeController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ThesisController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -84,4 +85,9 @@ Route::group([
     Route::view('/archive', 'archive')->name('archive');
     Route::view('/search', 'search')->name('search');
     Route::view('/announcement', 'announcement')->name('announcement');
+
+    /**
+     * PDF generation
+     */
+    Route::post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])->name('pdf.thesis.preview');
 });
