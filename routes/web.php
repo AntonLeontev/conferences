@@ -89,5 +89,7 @@ Route::group([
     /**
      * PDF generation
      */
-    Route::post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])->name('pdf.thesis.preview');
+    Route::middleware(['auth'])
+        ->post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])
+        ->name('pdf.thesis.preview');
 });
