@@ -8,6 +8,10 @@ use Src\Domains\Conferences\Models\Section;
 
 class UpdateConferenceSections
 {
+    public function __construct(private CreateSection $createSection)
+    {
+    }
+
     public function handle(Conference $conference, Request $request)
     {
         $oldSections = $conference->sections;
@@ -24,18 +28,7 @@ class UpdateConferenceSections
         }
 
         foreach ($creatingSections as $section) {
-            $this->createSection($section, $conference);
+            $this->createSection->handle($section, $conference);
         }
-    }
-
-    public function createSection(array $section, Conference $conference): Section
-    {
-        return Section::create([
-            'conference_id' => $conference->id,
-            'title_ru' => $section['title_ru'],
-            'short_title_ru' => $section['short_title_ru'],
-            'title_en' => $section['title_en'],
-            'short_title_en' => $section['short_title_en'],
-        ]);
     }
 }
