@@ -42,16 +42,16 @@ if (! function_exists('localize_route')) {
     }
 }
 
-if (! function_exists('user_has_participation')) {
-    function user_has_participation(Conference $conference): bool
+if (! function_exists('user_participation')) {
+    function user_participation(Conference $conference): ?Participation
     {
         if (! auth()->check()) {
-            return false;
+            return null;
         }
 
         return Participation::where('participant_id', auth()->user()->participant->id)
             ->where('conference_id', $conference->id)
-            ->exists();
+            ->first();
     }
 }
 

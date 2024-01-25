@@ -516,6 +516,10 @@ body {
   line-height: 1.2142857143;
 }
 
+.event-item__body .button {
+  color: var(--text-secondary);
+}
+
 input[type=text],
 input[type=email],
 input[type=tel],
@@ -1797,6 +1801,27 @@ input[type=date]::-webkit-calendar-picker-indicator {
   background-color: var(--bg-primary);
 }
 
+.theses__title {
+  font-weight: 600;
+  margin-bottom: 0.625rem;
+}
+
+.theses__list {
+  padding-left: 1.25rem;
+}
+
+.theses__list li a {
+  color: var(--accent);
+}
+
+.theses__list li::marker {
+  color: var(--accent);
+}
+
+.theses__list li + li {
+  margin-top: 0.625rem;
+}
+
 .header__top {
   padding: 1.375rem 0;
 }
@@ -2462,7 +2487,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 .event__container {
-  max-width: 48.75rem;
+  max-width: 61.25rem;
 }
 
 .event__title {
@@ -2514,6 +2539,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
   gap: 0.625rem 1.25rem;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+}
+
+.event-item__footer._border {
+  border-top: 0.0625rem solid rgba(30, 71, 89, 0.3);
 }
 
 .header-item-event {
@@ -2588,6 +2617,29 @@ input[type=date]::-webkit-calendar-picker-indicator {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 1.5rem;
           flex: 0 0 1.5rem;
+}
+
+.contacts-event._flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 0.625rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+}
+
+.contacts-event__icons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.3125rem;
 }
 
 @media (min-width: 29.99875em) {
@@ -2747,6 +2799,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
     font-size: 0.875rem;
   }
 
+  .event-item__body .button {
+    margin-top: 1.25rem;
+  }
+
   ._select-multiple .select__content {
     width: 38.75rem;
   }
@@ -2819,6 +2875,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 
   .form .time-block {
     font-size: 1.125rem;
+  }
+
+  .theses:not(:last-child) {
+    margin-bottom: 2.5rem;
   }
 
   .header__link_notification {
@@ -2953,6 +3013,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
     margin-bottom: 2.5rem;
   }
 
+  .event-item__footer._border {
+    padding-top: 2.5rem;
+  }
+
   .header-item-event {
     gap: 1.25rem;
   }
@@ -3032,6 +3096,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
     font-size: 0.75rem;
   }
 
+  .event-item__body .button {
+    margin-top: 0.3125rem;
+  }
+
   ._select-multiple .select__content {
     width: 11.25rem;
   }
@@ -3104,6 +3172,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 
   .form .time-block {
     font-size: 0.875rem;
+  }
+
+  .theses:not(:last-child) {
+    margin-bottom: 1.25rem;
   }
 
   .header__link_notification {
@@ -3240,6 +3312,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 
   .event-item__body {
     margin-bottom: 1.875rem;
+  }
+
+  .event-item__footer._border {
+    padding-top: 1.875rem;
   }
 
   .header-item-event {
@@ -3734,6 +3810,18 @@ input[type=date]::-webkit-calendar-picker-indicator {
     }
 }
 
+@supports (margin-top: clamp( 0.3125rem , 0.0446428571rem  +  1.3392857143vw , 1.25rem )) {
+    .event-item__body .button {
+      margin-top: clamp( 0.3125rem , 0.0446428571rem  +  1.3392857143vw , 1.25rem );
+    }
+}
+
+@supports not (margin-top: clamp( 0.3125rem , 0.0446428571rem  +  1.3392857143vw , 1.25rem )) {
+    .event-item__body .button {
+      margin-top: calc(0.3125rem + 0.9375 * (100vw - 20rem) / 70);
+    }
+}
+
 @supports (width: clamp( 11.25rem , 3.3928571429rem  +  39.2857142857vw , 38.75rem )) {
     ._select-multiple .select__content {
       width: clamp( 11.25rem , 3.3928571429rem  +  39.2857142857vw , 38.75rem );
@@ -3951,6 +4039,18 @@ input[type=date]::-webkit-calendar-picker-indicator {
 @supports not (font-size: clamp( 0.875rem , 0.8035714286rem  +  0.3571428571vw , 1.125rem )) {
     .form .time-block {
       font-size: calc(0.875rem + 0.25 * (100vw - 20rem) / 70);
+    }
+}
+
+@supports (margin-bottom: clamp( 1.25rem , 0.8928571429rem  +  1.7857142857vw , 2.5rem )) {
+    .theses:not(:last-child) {
+      margin-bottom: clamp( 1.25rem , 0.8928571429rem  +  1.7857142857vw , 2.5rem );
+    }
+}
+
+@supports not (margin-bottom: clamp( 1.25rem , 0.8928571429rem  +  1.7857142857vw , 2.5rem )) {
+    .theses:not(:last-child) {
+      margin-bottom: calc(1.25rem + 1.25 * (100vw - 20rem) / 70);
     }
 }
 
@@ -4347,6 +4447,18 @@ input[type=date]::-webkit-calendar-picker-indicator {
 @supports not (margin-bottom: clamp( 1.875rem , 1.6964285714rem  +  0.8928571429vw , 2.5rem )) {
     .event-item__body {
       margin-bottom: calc(1.875rem + 0.625 * (100vw - 20rem) / 70);
+    }
+}
+
+@supports (padding-top: clamp( 1.875rem , 1.6964285714rem  +  0.8928571429vw , 2.5rem )) {
+    .event-item__footer._border {
+      padding-top: clamp( 1.875rem , 1.6964285714rem  +  0.8928571429vw , 2.5rem );
+    }
+}
+
+@supports not (padding-top: clamp( 1.875rem , 1.6964285714rem  +  0.8928571429vw , 2.5rem )) {
+    .event-item__footer._border {
+      padding-top: calc(1.875rem + 0.625 * (100vw - 20rem) / 70);
     }
 }
 

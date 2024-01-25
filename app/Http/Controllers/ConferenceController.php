@@ -64,7 +64,9 @@ class ConferenceController extends Controller
 
     public function show(Conference $conference): View|Factory
     {
-        return view('conference', ['conference' => $conference]);
+        $participation = user_participation($conference)->load('theses');
+
+        return view('conference', compact('conference', 'participation'));
     }
 
     public function edit(Conference $conference): View|Factory

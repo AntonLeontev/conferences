@@ -103,6 +103,23 @@
 											<a target="_blank" rel="nofollow" href="https://yandex.ru/maps/?text={{ $conference->address }}">{{ $conference->address }}</a>
 										</div>
 									@endunless
+									@if ($conference->whatsapp || $conference->telegram)
+										<div class="contacts-event _flex">
+											<span>Мессенджеры: </span>
+											<div class="contacts-event__icons">
+												@if ($conference->whatsapp)
+													<a href="{{ $conference->whatsapp }}" target="_blank">
+														<img src="{{ Vite::asset('resources/img/icons/wp.svg') }}" alt="WhatsApp-icon">
+													</a>
+												@endif
+												@if ($conference->telegram)
+													<a href="{{ $conference->telegram }}" target="_blank">
+														<img src="{{ Vite::asset('resources/img/icons/tg.svg') }}" alt="Telegram-icon">
+													</a>
+												@endif
+											</div>
+										</div>
+									@endif
                                 </div>
                             </li>
 							@unless (empty($conference->website))
@@ -111,32 +128,49 @@
 									<a href="{{ $conference->website }}" target="_blank" rel="nofollow">{{ $conference->website }}</a>
 								</li>
 							@endunless
+							@auth
+								@if ($conference->end_date > now())
+									@if (auth()->user()->organization?->id === $conference->organization_id)
+										<li>
+											<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary">Редактировать</a>
+										</li>
+									@endif
+								@endif
+							@endauth
                         </ul>
                     </div>
-                    <div class="event-item__footer">
-						@auth
-							@if (auth()->user()->participant)
-								@if (user_has_participation($conference))
-									@if (user_sent_thesis($conference))
-										<a href="" class="button button_primary" type="submit">
-											Редактировать тезисы
-										</a>
-									@else
-										<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button button_primary" type="submit">
-											Отправить тезисы
-										</a>
-									@endif
+					@auth
+						@if (auth()->user()->participant && $conference->end_date > now())
+							<div class="event-item__footer _border">
+								@if ($participation)
+									<div class="theses">
+										<div class="theses__title">
+											Список тезисов:
+										</div>
+										@if ($participation->theses->isNotEmpty())
+											<ol class="theses__list">
+												@foreach ($participation->theses as $thesis)
+													<li>
+														<a href="">{{ $thesis->title }}</a>
+													</li>
+												@endforeach
+											</ol>
+										@else
+											<p>Вы еще не отправляли тезисы</p>
+										@endif
+									</div>
+									<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button">Отправить тезисы</a>
 								@else
 									<a href="{{ route('participation.create', $conference->slug) }}" class="button button_primary" type="submit">
-										Учавствовать
+										Принять участие
 									</a>
 								@endif
-							@endif
-							@if (auth()->user()->organization?->id === $conference->organization_id)
-                        		<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary" type="submit">Редактировать</a>
-							@endif
-						@endauth
-                    </div>
+							</div>
+						@endif
+					@endauth
+					@if ($conference->end_date < now())
+						<p>Конференция завершилась</p>
+					@endif
                 </div>
             </div>
         </section>
