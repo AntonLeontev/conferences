@@ -68,9 +68,9 @@ Route::group([
                     ->post('{conference:slug}/participate', [ParticipationController::class, 'store'])
                     ->name('participation.store');
 
-                Route::get('{conference:slug}/abstracts', [ThesisController::class, 'create'])->name('theses.create');
+                Route::get('{conference:slug}/abstracts/create', [ThesisController::class, 'create'])->name('theses.create');
                 Route::middleware(['precognitive'])
-                    ->post('{conference:slug}/abstracts', [ThesisController::class, 'store'])
+                    ->post('{conference:slug}/abstracts/create', [ThesisController::class, 'store'])
                     ->name('theses.store');
             });
         });

@@ -10,6 +10,10 @@
 	@vite(['resources/js/wysiwyg.js'])
 @endsection
 
+@php
+	$lang = $conference->abstracts_lang->value;
+@endphp
+
 @section('content')
     <script>
         let affiliations = @json($participation->affiliations);
@@ -20,7 +24,6 @@
 	@select-callback.camel.document="select"
 	@submit.prevent="submit" 
 	x-data="{
-		characters: 0,
         form: $form('post', '{{ route('theses.store', $conference->slug) }}', {
             participation_id: '{{ $participation->id }}',
 			@if ($conference->sections->isNotEmpty())
@@ -30,12 +33,16 @@
             title: '',
             authors: {
                 1: {
-                    name_ru: '{{ $participation->name_ru }}',
-                    surname_ru: '{{ $participation->surname_ru }}',
-                    middle_name_ru: '{{ $participation->middle_name_ru }}',
-                    name_en: '{{ $participation->name_en }}',
-                    surname_en: '{{ $participation->surname_en }}',
-                    middle_name_en: '{{ $participation->middle_name_en }}',
+					@if ($lang === 'ru')
+						name_ru: '{{ $participation->name_ru }}',
+						surname_ru: '{{ $participation->surname_ru }}',
+						middle_name_ru: '{{ $participation->middle_name_ru }}',
+					@endif
+					@if ($lang === 'en')
+						name_en: '{{ $participation->name_en }}',
+						surname_en: '{{ $participation->surname_en }}',
+						middle_name_en: '{{ $participation->middle_name_en }}',
+					@endif
                     affiliations: affiliations,
                 }
             },
@@ -86,7 +93,7 @@
 				return
 			}
 
-			setTimeout(() => this.postpone(ready, make), 1000);
+			setTimeout(() => this.postpone(ready, make), 500);
 		},
 		getEditorsData() {
 			this.form.title = editorTitle.getData()
@@ -156,12 +163,16 @@
 			},
 			add() {
                 this.form.authors[this.ai] = {
-                    name_ru: '',
-                    surname_ru: '',
-                    middle_name_ru: '',
-                    name_en: '',
-                    surname_en: '',
-                    middle_name_en: '',
+					@if ($lang === 'ru')
+						name_ru: '',
+						surname_ru: '',
+						middle_name_ru: '',
+					@endif
+					@if ($lang === 'en')
+						name_en: '',
+						surname_en: '',
+						middle_name_en: '',
+					@endif
                     affiliations: {},
                 }
                 this.ai++
@@ -173,6 +184,16 @@
 				this.selectClass.updateSelect(document.querySelector('#reporter'))
 				this.selectClass.updateSelect(document.querySelector('#contact'))
 			},
+			inputName(id) {
+				this.updateSelects()
+
+				this.form.validate(`authors.${id}.name_{{ $lang }}`)
+			},
+			inputSurname(id) {
+				this.updateSelects()
+
+				this.form.validate(`authors.${id}.surname_{{ $lang }}`)
+			},
 			removeAuthor(id) {
 				this.remove(id)
 
@@ -183,66 +204,70 @@
 		}">
 			<template x-for="author, id in form.authors" x-key="id">
 				<div class="author">
-					<div class="form__row _three">
-						<div class="form__line" :class="form.invalid(`authors.${id}.name_ru`) && '_error'">
-							<label class="form__label" for="u_5">@lang('auth.register.name_ru') (*)</label>
-							<input id="u_5" class="input" autocomplete="off" type="text" name="name_ru"
-								data-error="Ошибка" placeholder="@lang('auth.register.name_ru')" x-model="form.authors[id].name_ru"
-								@input.debounce.500ms="updateSelects">
+					@if ($lang === 'ru')
+						<div class="form__row _three">
+							<div class="form__line" :class="form.invalid(`authors.${id}.name_ru`) && '_error'">
+								<label class="form__label" for="u_5">@lang('auth.register.name_ru') (*)</label>
+								<input id="u_5" class="input" autocomplete="off" type="text" name="name_ru"
+									data-error="Ошибка" placeholder="@lang('auth.register.name_ru')" x-model="form.authors[id].name_ru"
+									@input.debounce.500ms="inputName(id)">
+							</div>
+							<div class="form__line" :class="form.invalid(`authors.${id}.surname_ru`) && '_error'">
+								<label class="form__label" for="u_6">@lang('auth.register.surname_ru') (*)</label>
+								<input id="u_6" class="input" autocomplete="off" type="text" name="surname_ru"
+									data-error="Ошибка" placeholder="@lang('auth.register.surname_ru')" x-model="form.authors[id].surname_ru"
+									@input.debounce.500ms="inputSurname(id)">
+							</div>
+							<div class="form__line" :class="form.invalid(`authors.${id}.middle_name_ru`) && '_error'">
+								<label class="form__label" for="u_7">@lang('auth.register.middle_name_ru')</label>
+								<input id="u_7" class="input" autocomplete="off" type="text" name="middle_name_ru"
+									data-error="Ошибка" placeholder="@lang('auth.register.middle_name_ru')" x-model="form.authors[id].middle_name_ru"
+									@input.debounce.1000ms="form.validate(`authors.${id}.middle_name_ru`)">
+							</div>
 						</div>
-						<div class="form__line" :class="form.invalid(`authors.${id}.surname_ru`) && '_error'">
-							<label class="form__label" for="u_6">@lang('auth.register.surname_ru') (*)</label>
-							<input id="u_6" class="input" autocomplete="off" type="text" name="surname_ru"
-								data-error="Ошибка" placeholder="@lang('auth.register.surname_ru')" x-model="form.authors[id].surname_ru"
-								@input.debounce.500ms="updateSelects">
+						<template x-if="form.invalid(`authors.${id}.name_ru`)">
+							<div class="form__error" x-text="form.errors[`authors.${id}.name_ru`]"></div>
+						</template>
+						<template x-if="form.invalid(`authors.${id}.surname_ru`)">
+							<div class="form__error" x-text="form.errors[`authors.${id}.surname_ru`]"></div>
+						</template>
+						<template x-if="form.invalid(`authors.${id}.middle_name_ru`)">
+							<div class="form__error" x-text="form.errors[`authors.${id}.middle_name_ru`]"></div>
+						</template>
+					@endif
+						
+					@if ($lang === 'en')
+						<div class="form__row _three">
+							<div class="form__line" :class="form.invalid(`authors.${id}.name_en`) && '_error'">
+								<label class="form__label" for="u_8">@lang('auth.register.name_en') (*)</label>
+								<input id="u_8" class="input" autocomplete="off" type="text" name="name_en"
+									data-error="Ошибка" placeholder="@lang('auth.register.name_en')" x-model="form.authors[id].name_en"
+									@input.debounce.500ms="inputName(id)">
+							</div>
+							<div class="form__line" :class="form.invalid(`authors.${id}.surname_en`) && '_error'">
+								<label class="form__label" for="u_9">@lang('auth.register.surname_en') (*)</label>
+								<input id="u_9" class="input" autocomplete="off" type="text" name="surname_en"
+									data-error="Ошибка" placeholder="@lang('auth.register.surname_en')" x-model="form.authors[id].surname_en"
+									@input.debounce.500ms="inputSurname(id)">
+							</div>
+							<div class="form__line" :class="form.invalid(`authors.${id}.middle_name_en`) && '_error'">
+								<label class="form__label" for="u_10">@lang('auth.register.middle_name_en')</label>
+								<input id="u_10" class="input" autocomplete="off" type="text" name="middle_name_en"
+									data-error="Ошибка" placeholder="@lang('auth.register.middle_name_en')"
+									x-model="form.authors[id].middle_name_en"
+									@input.debounce.1000ms="form.validate(`authors.${id}.middle_name_en`)">
+							</div>
 						</div>
-						<div class="form__line" :class="form.invalid(`authors.${id}.middle_name_ru`) && '_error'">
-							<label class="form__label" for="u_7">@lang('auth.register.middle_name_ru')</label>
-							<input id="u_7" class="input" autocomplete="off" type="text" name="middle_name_ru"
-								data-error="Ошибка" placeholder="@lang('auth.register.middle_name_ru')" x-model="form.authors[id].middle_name_ru"
-								@input.debounce.1000ms="form.validate(`authors.${id}.middle_name_ru`)">
-						</div>
-					</div>
-					<template x-if="form.invalid(`authors.${id}.name_ru`)">
-						<div class="form__error" x-text="form.errors[`authors.${id}.name_ru`]"></div>
-					</template>
-					<template x-if="form.invalid(`authors.${id}.surname_ru`)">
-						<div class="form__error" x-text="form.errors[`authors.${id}.surname_ru`]"></div>
-					</template>
-					<template x-if="form.invalid(`authors.${id}.middle_name_ru`)">
-						<div class="form__error" x-text="form.errors[`authors.${id}.middle_name_ru`]"></div>
-					</template>
-	
-					<div class="form__row _three">
-						<div class="form__line" :class="form.invalid(`authors.${id}.name_en`) && '_error'">
-							<label class="form__label" for="u_8">@lang('auth.register.name_en') (*)</label>
-							<input id="u_8" class="input" autocomplete="off" type="text" name="name_en"
-								data-error="Ошибка" placeholder="@lang('auth.register.name_en')" x-model="form.authors[id].name_en"
-								@input.debounce.500ms="updateSelects">
-						</div>
-						<div class="form__line" :class="form.invalid(`authors.${id}.surname_en`) && '_error'">
-							<label class="form__label" for="u_9">@lang('auth.register.surname_en') (*)</label>
-							<input id="u_9" class="input" autocomplete="off" type="text" name="surname_en"
-								data-error="Ошибка" placeholder="@lang('auth.register.surname_en')" x-model="form.authors[id].surname_en"
-								@input.debounce.500ms="updateSelects">
-						</div>
-						<div class="form__line" :class="form.invalid(`authors.${id}.middle_name_en`) && '_error'">
-							<label class="form__label" for="u_10">@lang('auth.register.middle_name_en')</label>
-							<input id="u_10" class="input" autocomplete="off" type="text" name="middle_name_en"
-								data-error="Ошибка" placeholder="@lang('auth.register.middle_name_en')"
-								x-model="form.authors[id].middle_name_en"
-								@input.debounce.1000ms="form.validate(`authors.${id}.middle_name_en`)">
-						</div>
-					</div>
-					<template x-if="form.invalid(`authors.${id}.name_en`)">
-						<div class="form__error" x-text="form.errors[`authors.${id}.name_en`]"></div>
-					</template>
-					<template x-if="form.invalid(`authors.${id}.surname_en`)">
-						<div class="form__error" x-text="form.errors[`authors.${id}.surname_en`]"></div>
-					</template>
-					<template x-if="form.invalid(`authors.${id}.middle_name_en`)">
-						<div class="form__error" x-text="form.errors[`authors.${id}.middle_name_en`]"></div>
-					</template>
+						<template x-if="form.invalid(`authors.${id}.name_en`)">
+							<div class="form__error" x-text="form.errors[`authors.${id}.name_en`]"></div>
+						</template>
+						<template x-if="form.invalid(`authors.${id}.surname_en`)">
+							<div class="form__error" x-text="form.errors[`authors.${id}.surname_en`]"></div>
+						</template>
+						<template x-if="form.invalid(`authors.${id}.middle_name_en`)">
+							<div class="form__error" x-text="form.errors[`authors.${id}.middle_name_en`]"></div>
+						</template>
+					@endif
 	
 					<div class="form__row">
 						<div id="affiliations" class="form__row" x-data="{
@@ -323,16 +348,16 @@
 								}">
 									<div class="form__line" @click.outside="show = false">
 										<textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input"
-											:class="form.invalid(`affiliations.${id}.title_ru`) && '_error'" x-model="author.affiliations[id].title_ru"
+											:class="form.invalid(`affiliations.${id}.title_{{ $lang }}`) && '_error'" x-model="author.affiliations[id].title_{{ $lang }}"
 											@input.debounce.500ms="getSuggestions"></textarea>
-										<template x-if="form.invalid(`affiliations.${id}.title_ru`)">
-											<div class="form__error" x-text="form.errors[`affiliations.${id}.title_ru`]">
+										<template x-if="form.invalid(`affiliations.${id}.title_{{ $lang }}`)">
+											<div class="form__error" x-text="form.errors[`affiliations.${id}.title_{{ $lang }}`]">
 											</div>
 										</template>
 										<div class="input-tips" x-show="show" x-transition.opacity>
 											<ul>
 												<template x-for="suggestion in suggestions">
-													<li x-text="suggestion.title_ru" @click="select(suggestion, id)"></li>
+													<li x-text="suggestion.title_{{ $lang }}" @click="select(suggestion, id)"></li>
 												</template>
 												<template x-if="suggestions.length === 0">
 													<li>Ничего не найдено</li>
@@ -340,15 +365,6 @@
 											</ul>
 										</div>
 	
-									</div>
-									<div class="form__line">
-										<textarea autocomplete="off" name="form[]" placeholder="Full name" class="input"
-											:class="form.invalid(`affiliations.${id}.title_en`) && '_error'" :disabled="!hasMistake && !noAffiliation"
-											x-model="author.affiliations[id].title_en"></textarea>
-										<template x-if="form.invalid(`affiliations.${id}.title_en`)">
-											<div class="form__error" x-text="form.errors[`affiliations.${id}.title_en`]">
-											</div>
-										</template>
 									</div>
 	
 									<div class="form__line">
@@ -402,14 +418,14 @@
             <label class="form__label">Докладчик (*)</label>
             <select name="form[]" data-scroll="500" data-class-modif="form" data-name="reporter">
                 <template x-for="author, key in form.authors" x-key="key"> 
-					<option :value="key" x-text="`${author.name_{{ loc() }}} ${author.surname_{{ loc() }}}`"></option>
+					<option :value="key" x-text="`${author.name_{{ $lang }}} ${author.surname_{{ $lang }}}`"></option>
 				</template>
             </select>
 
             <div class="checkbox">
                 <input id="d_1" class="checkbox__input" type="checkbox" x-model="form.reporter.is_young">
                 <label for="d_1" class="checkbox__label">
-                    <span class="checkbox__text">Young scientist under 35 years old</span>
+                    <span class="checkbox__text">Молодой ученый до 35 лет</span>
                 </label>
             </div>
         </div>
@@ -418,7 +434,7 @@
             <label class="form__label">Контакт для связи (*)</label>
             <select name="form[]" data-scroll="500" data-class-modif="form" data-name="contact">
 				<template x-for="author, key in form.authors" x-key="key">
-					<option :value="key" x-text="`${author.name_{{ loc() }}} ${author.surname_{{ loc() }}}`"></option>
+					<option :value="key" x-text="`${author.name_{{ $lang }}} ${author.surname_{{ $lang }}}`"></option>
 				</template>
             </select>
         </div>
@@ -427,8 +443,16 @@
             <label class="form__label" for="c_1">E-mail для связи (*)</label>
             <input id="c_1" class="input" autocomplete="off" type="text" name="form[]"
                 placeholder="Enter e-mail address"  x-model="form.contact.email">
-
         </div>
+
+		<div class="form__row" style="padding-top: 15px">
+			@if ($lang === 'ru')
+				Текст тезисов должен быть на русском языке
+			@endif
+			@if ($lang === 'en')
+				Текст тезисов должен быть на английском языке
+			@endif
+		</div>
 
 		<div class="form__row editor-title" :class="form.invalid('title') && '_error'" x-data="{
 			init() {
@@ -519,11 +543,7 @@
 								return
 							}
 
-							if (this.form.section_id == null) {
-								return
-							}
-
-							if (this.form.hasErrors) {
+							if ((typeof this.form.section_id !== 'undefined') && this.form.section_id == null) {
 								return
 							}
 
