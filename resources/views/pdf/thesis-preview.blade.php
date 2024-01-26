@@ -42,7 +42,7 @@
 @php
 	$lang = $conference->abstracts_lang->value;	
 	$sectionSlug = $conference->sections->isNotEmpty()
-		? '-'.$conference->sections->where('id', $request->json('section_id'))->first()->{'title_'.$lang}
+		? '-'.$conference->sections->where('id', $request->json('section_id'))->first()->{'short_title_'.$lang}
 		: '';
 	
 	$affiliationsList = collect();
