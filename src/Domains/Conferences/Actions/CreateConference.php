@@ -43,6 +43,7 @@ class CreateConference
             'abstracts_format' => $request->get('abstracts_format'),
             'abstracts_lang' => $request->get('abstracts_lang'),
             'max_thesis_characters' => $request->get('max_thesis_characters'),
+            'thesis_instruction' => $request->get('thesis_instruction'),
         ]);
 
         $conference->subjects()->sync($request->get('subjects'));

@@ -445,6 +445,13 @@
                 placeholder="Enter e-mail address"  x-model="form.contact.email">
         </div>
 
+		@if ($conference->thesis_instruction)
+			<div class="form__row">
+				<label class="form__label">Инструкции по оформлению тезисов от организатора</label>
+				{!! nl2br(strip_tags($conference->thesis_instruction)) !!}
+			</div>
+		@endif
+
 		@php
 			if ($lang === 'en') {
 				$titlePlaceholder = 'Заголовок на английском языке';

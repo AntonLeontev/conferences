@@ -52,6 +52,7 @@ class ConferenceFactory extends Factory
             'abstracts_format' => fake()->randomElement(AbstractsFormat::values()),
             'abstracts_lang' => fake()->randomElement(AbstractsLanguage::values()),
             'max_thesis_characters' => $this->faker->numberBetween(1000, 5000),
+            'thesis_instruction' => $this->faker->realText(300),
         ];
     }
 }

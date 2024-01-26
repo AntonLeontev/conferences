@@ -708,41 +708,6 @@
 					</div>
 
                     {{-- <div class="form__row">
-                        <label class="form__label">Бесплатное участие</label>
-
-                        <div class="checkbox">
-                            <input id="chx_7" class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_7" class="checkbox__label">
-                                <span class="checkbox__text">Студенты</span>
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="chx_8" checked class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_8" class="checkbox__label">
-                                <span class="checkbox__text">Докладчик</span>
-                            </label>
-                        </div>
-
-                        <div class="checkbox">
-                            <input id="chx_9" class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_9" class="checkbox__label">
-                                <span class="checkbox__text">Специальный гость</span>
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="chx_10" checked class="checkbox__input" type="checkbox"
-                                value="1" name="form[]">
-                            <label for="chx_10" class="checkbox__label">
-                                <span class="checkbox__text">Молодой ученый до 35 лет</span>
-                            </label>
-                        </div>
-
-                    </div> --}}
-
-                    {{-- <div class="form__row">
                         <label class="form__label">Что необходимо для конференции</label>
                         <div class="checkbox-items">
                             <div class="checkbox">
@@ -830,12 +795,25 @@
 					<div class="form__row" :class="form.invalid('max_thesis_characters') && '_error'">
                         <label class="form__label" for="c_21">Максимальное количество символов в тексте тезисов (*)</label>
                         <input id="c_21" class="input" autocomplete="off" type="text" name="max_thesis_characters"
-                            placeholder="Event name"
+                            placeholder="Максимальное количество символов в тексте тезисов"
 							x-model="form.max_thesis_characters"	
 							@input.debounce.1000ms="form.validate('max_thesis_characters')"
 						>
 						<template x-if="form.invalid('max_thesis_characters')">
 							<div class="form__error" x-text="form.errors.max_thesis_characters"></div>
+						</template>
+                    </div>
+
+					<div class="form__row" :class="form.invalid('thesis_instruction') && '_error'">
+                        <label class="form__label" for="t_1">Требования к оформлению тезисов</label>
+                        <textarea id="t_1" autocomplete="off" name="thesis_instruction" placeholder="Требования к оформлению тезисов"
+                            class="input"
+							style="height: 300px"
+							x-model="form.thesis_instruction"
+							@change="form.validate('thesis_instruction')"
+						></textarea>
+						<template x-if="form.invalid('thesis_instruction')">
+							<div class="form__error" x-text="form.errors.thesis_instruction"></div>
 						</template>
                     </div>
 

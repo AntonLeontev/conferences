@@ -15,6 +15,7 @@
 					let discount_participants = @json($conference->discount_participants);
 					let discount_special_guest = @json($conference->discount_special_guest);
 					let discount_young_scientist = @json($conference->discount_young_scientist);
+					let thesis_instruction = @json($conference->thesis_instruction);
 				</script>
                 <form action="#" class="event__form form" 
 					@select-callback.camel.document="select"
@@ -54,7 +55,7 @@
 							abstracts_format: '',
 							abstracts_lang: '',
 							max_thesis_characters: {{ $conference->max_thesis_characters }},
-							thesis_instruction: '{{ $conference->thesis_instruction }}',
+							thesis_instruction: thesis_instruction,
 						}),
 						formatCheckShow: true,
 						formDisabled: false,
@@ -810,11 +811,21 @@
                         </div>
                     </div> --}}
 
+					@php
+						$hasThesis = $conference->theses()->exists();
+					@endphp
+
                     <div class="form__row" :class="form.invalid('abstracts_format') && '_error'">
                         <label class="form__label">Формат сборника тезисов</label>
-                        <select name="abstracts_format" data-scroll="500" data-class-modif="form" data-name="abstracts_format">
-                            <option value="A4" @if('A4' === $conference->abstracts_format) selected @endif>А4</option>
-							<option value="A5" @if('A5' === $conference->abstracts_format) selected @endif>А5</option>
+                        <select 
+							name="abstracts_format" 
+							data-scroll="500" 
+							data-class-modif="form" 
+							data-name="abstracts_format"
+							@if($hasThesis) disabled @endif 
+						>
+                            <option value="A4" @if('A4' === $conference->abstracts_format->value) selected @endif>А4</option>
+							<option value="A5" @if('A5' === $conference->abstracts_format->value) selected @endif>А5</option>
                         </select>
 						<template x-if="form.invalid('abstracts_format')">
 							<div class="form__error" x-text="form.errors.abstracts_format"></div>
@@ -831,9 +842,14 @@
 
                     <div class="form__row" :class="form.invalid('abstracts_lang') && '_error'">
                         <label class="form__label">Язык сборника тезисов</label>
-                        <select name="abstracts_lang" data-scroll="500" data-class-modif="form" data-name="abstracts_lang">
-                            <option value="ru" @if('ru' === $conference->abstracts_lang) selected @endif>Русский</option>
-                            <option value="en" @if('en' === $conference->abstracts_lang) selected @endif>Английский</option>
+                        <select name="abstracts_lang" 
+							@if($hasThesis) disabled @endif 
+							data-scroll="500" 
+							data-class-modif="form" 
+							data-name="abstracts_lang"
+						>
+                            <option value="ru" @if('ru' === $conference->abstracts_lang->value) selected @endif>Русский</option>
+                            <option value="en" @if('en' === $conference->abstracts_lang->value) selected @endif>Английский</option>
                         </select>
 						<template x-if="form.invalid('abstracts_lang')">
 							<div class="form__error" x-text="form.errors.abstracts_lang"></div>
@@ -842,13 +858,30 @@
 
 					<div class="form__row" :class="form.invalid('max_thesis_characters') && '_error'">
                         <label class="form__label" for="c_21">Максимальное количество символов в тексте тезисов (*)</label>
-                        <input id="c_21" class="input" autocomplete="off" type="text" name="max_thesis_characters"
-                            placeholder="Event name"
+                        <input id="c_21" 
+							class="input" 
+							autocomplete="off" 
+							name="max_thesis_characters"
+                            placeholder="Максимальное количество символов в тексте тезисов"
+							@if($hasThesis) disabled @endif 
 							x-model="form.max_thesis_characters"	
 							@input.debounce.1000ms="form.validate('max_thesis_characters')"
 						>
 						<template x-if="form.invalid('max_thesis_characters')">
 							<div class="form__error" x-text="form.errors.max_thesis_characters"></div>
+						</template>
+                    </div>
+
+					<div class="form__row" :class="form.invalid('thesis_instruction') && '_error'">
+                        <label class="form__label" for="t_1">Требования к оформлению тезисов</label>
+                        <textarea id="t_1" autocomplete="off" name="thesis_instruction" placeholder="Требования к оформлению тезисов"
+                            class="input"
+							style="height: 300px"
+							x-model="form.thesis_instruction"
+							@change="form.validate('thesis_instruction')"
+						></textarea>
+						<template x-if="form.invalid('thesis_instruction')">
+							<div class="form__error" x-text="form.errors.thesis_instruction"></div>
 						</template>
                     </div>
 

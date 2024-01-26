@@ -74,6 +74,7 @@ class ConferenceUpdateTest extends TestCase
                 ],
             ],
             'max_thesis_characters' => 3200,
+            'thesis_instruction' => 'instruction-test',
         ]);
 
         $response->assertOk();
@@ -101,6 +102,7 @@ class ConferenceUpdateTest extends TestCase
             'discount_young_scientist' => $this->castAsJson(['amount' => 0, 'unit' => 'RUB']),
             'abstracts_price' => 500,
             'max_thesis_characters' => 3200,
+            'thesis_instruction' => 'instruction-test',
         ]);
 
         $this->assertDatabaseCount('sections', 2);
