@@ -49,6 +49,10 @@ if (! function_exists('user_participation')) {
             return null;
         }
 
+        if (is_null(auth()->user()->participant)) {
+            return null;
+        }
+
         return Participation::where('participant_id', auth()->user()->participant->id)
             ->where('conference_id', $conference->id)
             ->first();
@@ -59,6 +63,10 @@ if (! function_exists('user_sent_thesis')) {
     function user_sent_thesis(Conference $conference): bool
     {
         if (! auth()->check()) {
+            return false;
+        }
+
+        if (is_null(auth()->user()->participant)) {
             return false;
         }
 
