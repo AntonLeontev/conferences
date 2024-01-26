@@ -114,6 +114,6 @@ class Conference extends Model
 
     public function participationByUser(): ?Participation
     {
-        return $this->participations()->where('participant_id', auth()->user()->participant->id)->first();
+        return $this->participations()->where('participant_id', auth()->user()->participant?->id)->first();
     }
 }

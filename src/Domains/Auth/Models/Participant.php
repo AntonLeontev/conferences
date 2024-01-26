@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Src\Domains\Conferences\Models\Conference;
 use Src\Domains\Conferences\Models\Participation;
+use Src\Domains\Conferences\Models\Thesis;
 
 class Participant extends Model
 {
@@ -47,5 +48,10 @@ class Participant extends Model
     public function conferences(): HasManyThrough
     {
         return $this->hasManyThrough(Conference::class, Participation::class);
+    }
+
+    public function theses(): HasManyThrough
+    {
+        return $this->hasManyThrough(Thesis::class, Participation::class);
     }
 }

@@ -72,6 +72,10 @@ Route::group([
                 Route::middleware(['precognitive'])
                     ->post('{conference:slug}/abstracts/create', [ThesisController::class, 'store'])
                     ->name('theses.store');
+                Route::get('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'edit'])->name('theses.edit');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'update'])
+                    ->name('theses.update');
             });
         });
 

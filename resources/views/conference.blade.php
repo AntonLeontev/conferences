@@ -151,7 +151,9 @@
 											<ol class="theses__list">
 												@foreach ($participation->theses as $thesis)
 													<li>
-														<a href="">{{ $thesis->title }}</a>
+														<a href="{{ route('theses.edit', [$conference->slug, $thesis->id]) }}">
+															{!! $thesis->title !!}
+														</a>
 													</li>
 												@endforeach
 											</ol>

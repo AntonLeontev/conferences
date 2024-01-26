@@ -24,6 +24,10 @@ class ThesisTitleCast implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return str($value)->replace('</p><p>', ' ')->stripTags()->value();
+        return str($value)
+            ->replace('</p><p>', ' ')
+            ->replace('<p>', '')
+            ->replace('</p>', '')
+            ->value();
     }
 }

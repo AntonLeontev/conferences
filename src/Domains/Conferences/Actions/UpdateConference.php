@@ -16,6 +16,7 @@ class UpdateConference
             'format' => $request->get('format'),
             'with_foreign_participation' => $request->get('with_foreign_participation'),
             'website' => $request->get('website'),
+            'need_site' => $request->get('need_site'),
             'co-organizers' => $request->get('co-organizers'),
             'address' => $request->get('address'),
             'phone' => $request->get('phone'),

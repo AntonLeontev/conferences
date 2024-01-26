@@ -1,8 +1,8 @@
 @extends('layouts.auth')
 
-@section('title', 'Подача тезисов')
+@section('title', 'Редактирование тезисов')
 
-@section('h1', 'Подача тезисов')
+@section('h1', 'Редактирование тезисов')
 
 @section('back_link', route('conference.show', $conference->slug))
 
@@ -18,42 +18,27 @@
     <script>
         let affiliations = @json($participation->affiliations);
         if (affiliations.length === 0) affiliations = {}
+
+		let thesisTitle = @json($thesis->title);
+		let thesisText = @json($thesis->text);
+		let authors = @json($thesis->authors);
+		let reporter = @json($thesis->reporter);
+		let contact = @json($thesis->contact);
     </script>
 
     <form class="registration__form form" 
 	@select-callback.camel.document="select"
 	@submit.prevent="submit" 
 	x-data="{
-        form: $form('post', '{{ route('theses.store', $conference->slug) }}', {
-            participation_id: '{{ $participation->id }}',
+        form: $form('post', '{{ route('theses.update', [$conference->slug, $thesis->id]) }}', {
 			@if ($conference->sections->isNotEmpty())
-				section_id: null,
+				section_id: {{ $thesis->section_id }},
 			@endif
-            report_form: 'oral',
+            report_form: '{{ $thesis->report_form }}',
             title: '',
-            authors: {
-                1: {
-					@if ($lang === 'ru')
-						name_ru: '{{ $participation->name_ru }}',
-						surname_ru: '{{ $participation->surname_ru }}',
-						middle_name_ru: '{{ $participation->middle_name_ru }}',
-					@endif
-					@if ($lang === 'en')
-						name_en: '{{ $participation->name_en }}',
-						surname_en: '{{ $participation->surname_en }}',
-						middle_name_en: '{{ $participation->middle_name_en }}',
-					@endif
-                    affiliations: affiliations,
-                }
-            },
-			reporter: {
-				id: 1,
-				is_young: false,
-			},
-			contact: {
-				id: 1,
-				email: '{{ $participation->email }}'
-			},
+            authors: authors,
+			reporter: reporter,
+			contact: contact,
 			text: '',
         }),
 
@@ -122,7 +107,9 @@
                 <select name="section_id" data-scroll="500" data-class-modif="form" data-name="section_id">
                     <option value="" selected>Выберите секцию</option>
                     @foreach ($conference->sections as $section)
-                        <option value="{{ $section->id }}">{{ $section->{'title_' . loc()} }}</option>
+                        <option value="{{ $section->id }}" @if($section->id === $thesis->section_id) selected @endif>
+							{{ $section->{'title_' . loc()} }}
+						</option>
                     @endforeach
                 </select>
 				<template x-if="form.invalid(`section_id`)">
@@ -134,9 +121,9 @@
         <div class="form__row">
             <label class="form__label">Форма доклада (*)</label>
             <select name="report_form" data-scroll="500" data-class-modif="form" data-name="report_form">
-                <option value="oral" selected>Устная</option>
-                <option value="stand">Стендовые доклады</option>
-                <option value="mixed">Нет предпочтения</option>
+                <option value="oral" @if('oral' === $thesis->report_form->value) selected @endif>Устная</option>
+                <option value="stand" @if('stand' === $thesis->report_form->value) selected @endif>Стендовые доклады</option>
+                <option value="mixed" @if('mixed' === $thesis->report_form->value) selected @endif>Нет предпочтения</option>
             </select>
         </div>
 
@@ -347,7 +334,7 @@
 									},
 								}">
 									<div class="form__line" @click.outside="show = false">
-										<textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input"
+										<textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input _small"
 											:class="form.invalid(`affiliations.${id}.title_{{ $lang }}`) && '_error'" x-model="author.affiliations[id].title_{{ $lang }}"
 											@input.debounce.500ms="getSuggestions"></textarea>
 										<template x-if="form.invalid(`affiliations.${id}.title_{{ $lang }}`)">
@@ -418,7 +405,11 @@
             <label class="form__label">Докладчик (*)</label>
             <select name="form[]" data-scroll="500" data-class-modif="form" data-name="reporter">
                 <template x-for="author, key in form.authors" x-key="key"> 
-					<option :value="key" x-text="`${author.name_{{ $lang }}} ${author.surname_{{ $lang }}}`"></option>
+					<option 
+						:value="key" 
+						:selected="key == form.reporter.id"
+						x-text="`${author.name_{{ $lang }}} ${author.surname_{{ $lang }}}`"
+					></option>
 				</template>
             </select>
 
@@ -434,7 +425,11 @@
             <label class="form__label">Контакт для связи (*)</label>
             <select name="form[]" data-scroll="500" data-class-modif="form" data-name="contact">
 				<template x-for="author, key in form.authors" x-key="key">
-					<option :value="key" x-text="`${author.name_{{ $lang }}} ${author.surname_{{ $lang }}}`"></option>
+					<option 
+						:value="key" 
+						:selected="key == form.contact.id"
+						x-text="`${author.name_{{ $lang }}} ${author.surname_{{ $lang }}}`"
+					></option>
 				</template>
             </select>
         </div>
@@ -448,7 +443,7 @@
 		@if ($conference->thesis_instruction)
 			<div class="form__row">
 				<label class="form__label">Инструкции по оформлению тезисов от организатора</label>
-				{!! nl2br(strip_tags($conference->thesis_instruction)) !!}
+				{!! nl2br(htmlspecialchars($conference->thesis_instruction)) !!}
 			</div>
 		@endif
 
@@ -471,6 +466,7 @@
 					.create(document.querySelector( '#editor-title' ), TitleEditorSettings)
 					.then(editor => {
 						editor.editing.view.document.getRoot( 'main' ).placeholder = '{{ $titlePlaceholder }}'
+						editor.setData(thesisTitle)
 						window.editorTitle = editor
 					})
 					.catch( error => {
@@ -504,6 +500,7 @@
 					.create(document.querySelector( '#editor-text' ), TextEditorSettings)
 					.then(editor => {
 						editor.editing.view.document.getRoot( 'main' ).placeholder = '{{ $textPlaceholder }}'
+						editor.setData( thesisText )
 						window.editorText = editor
 					})
 					.catch( error => {
@@ -591,7 +588,7 @@
         </div>
         <div class="form__row">
             <div class="form__btns">
-                <button class="form__button button button_primary" type="submit">Отправить тезисы</button>
+                <button class="form__button button button_primary" type="submit">Сохранить</button>
             </div>
         </div>
 

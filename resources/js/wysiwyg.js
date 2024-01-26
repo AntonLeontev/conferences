@@ -17,6 +17,7 @@ import {
 import { List } from "@ckeditor/ckeditor5-list";
 import { WordCount } from "@ckeditor/ckeditor5-word-count";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
+import { Clipboard } from "@ckeditor/ckeditor5-clipboard";
 
 function SpecialCharactersGreek(editor) {
     editor.plugins.get("SpecialCharacters").addItems(
@@ -91,6 +92,7 @@ window.TextEditorSettings = {
         Subscript,
         Superscript,
         PasteFromOffice,
+        Clipboard,
     ],
     toolbar: [
         "undo",
@@ -134,6 +136,7 @@ window.TitleEditorSettings = {
         WordCount,
         Subscript,
         Superscript,
+        Clipboard,
     ],
     toolbar: [
         "undo",

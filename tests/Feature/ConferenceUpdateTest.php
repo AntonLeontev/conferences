@@ -27,7 +27,7 @@ class ConferenceUpdateTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $conference = ConferenceFactory::new()->create();
+        $conference = ConferenceFactory::new()->create(['need_site' => false]);
 
         SectionFactory::new()->create(['conference_id' => $conference->id]);
 

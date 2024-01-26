@@ -60,7 +60,7 @@
 		</strong>
 	</div>
 	<div class="title">
-		<strong>{{ str($request->json('title'))->replace('</p><p>', ' ')->stripTags() }}</strong>
+		<strong>{!! str($request->get('title')) !!}</strong>
 	</div>
 
 	<div class="authors">
