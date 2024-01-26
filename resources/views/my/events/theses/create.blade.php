@@ -445,14 +445,16 @@
                 placeholder="Enter e-mail address"  x-model="form.contact.email">
         </div>
 
-		<div class="form__row" style="padding-top: 15px">
-			@if ($lang === 'ru')
-				Текст тезисов должен быть на русском языке
-			@endif
-			@if ($lang === 'en')
-				Текст тезисов должен быть на английском языке
-			@endif
-		</div>
+		@php
+			if ($lang === 'en') {
+				$titlePlaceholder = 'Заголовок на английском языке';
+				$textPlaceholder = 'Текст на английском языке';
+			}
+			if ($lang === 'ru') {
+				$titlePlaceholder = 'Заголовок на русском языке';
+				$textPlaceholder = 'Текст на русском языке';
+			}
+		@endphp
 
 		<div class="form__row editor-title" :class="form.invalid('title') && '_error'" x-data="{
 			init() {
@@ -461,6 +463,7 @@
 					ClassicEditor
 					.create(document.querySelector( '#editor-title' ), TitleEditorSettings)
 					.then(editor => {
+						editor.editing.view.document.getRoot( 'main' ).placeholder = '{{ $titlePlaceholder }}'
 						window.editorTitle = editor
 					})
 					.catch( error => {
@@ -493,6 +496,7 @@
 					ClassicEditor
 					.create(document.querySelector( '#editor-text' ), TextEditorSettings)
 					.then(editor => {
+						editor.editing.view.document.getRoot( 'main' ).placeholder = '{{ $textPlaceholder }}'
 						window.editorText = editor
 					})
 					.catch( error => {

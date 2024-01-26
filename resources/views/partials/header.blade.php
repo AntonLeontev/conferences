@@ -21,10 +21,10 @@
                 
 				@auth
 					<div class="header__btns">
-						<div class="header__link header__link_notification">
+						{{-- <div class="header__link header__link_notification">
 							<span></span>
 							<img src="{{ Vite::asset('resources/img/notification.svg') }}" alt="Image">
-							{{-- <div class="submenu-user">
+							<div class="submenu-user">
 								<div class="submenu-user__header">
 									<strong>Ваши уведомления</strong>
 								</div>
@@ -92,8 +92,8 @@
 										</li>
 									</ul>
 								</div>
-							</div> --}}
-						</div>
+							</div>
+						</div> --}}
 						<div class="header__link header__link_user">
 							<img class="img-user" src="{{ Vite::asset('resources/img/user.jpg') }}" alt="Image">
 							<span>{{ auth()->user()->email }}</span>
@@ -114,7 +114,7 @@
 													@endif
 												</ul>
 											@else
-												<a href="{{ route('participant.create') }}" class="button">Регистрация участника</a>
+												<a href="{{ route('participant.create') }}" class="button button_outline">Регистрация участника</a>
 											@endif
 										</div>
 										<div class="submenu-user__item">
@@ -129,7 +129,7 @@
 													@endif
 												</ul>
 											@else
-												<a href="{{ route('organization.create') }}" class="button">Регистрация организации</a>
+												<a href="{{ route('organization.create') }}" class="button button_outline">Регистрация организации</a>
 											@endif
 										</div>
 									@else

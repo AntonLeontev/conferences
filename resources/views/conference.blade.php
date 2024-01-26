@@ -145,7 +145,7 @@
 								@if ($participation)
 									<div class="theses">
 										<div class="theses__title">
-											Список тезисов:
+											Список ваших тезисов:
 										</div>
 										@if ($participation->theses->isNotEmpty())
 											<ol class="theses__list">

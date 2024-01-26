@@ -102,6 +102,11 @@ class Conference extends Model
         return $this->hasManyThrough(Participant::class, Participation::class);
     }
 
+    public function theses(): HasManyThrough
+    {
+        return $this->hasManyThrough(Thesis::class, Participation::class);
+    }
+
     public function participations(): HasMany
     {
         return $this->hasMany(Participation::class);
