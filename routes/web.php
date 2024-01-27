@@ -9,13 +9,14 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ThesisController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Src\Domains\Conferences\Models\Thesis;
 
 if (app()->isLocal()) {
     Route::any('test', function () {
 
-        echo preg_match('~^[\x{0430}-\x{044F}\x{0410}-\x{042F}0-9\-_]+$~u', 'фыва');
-        echo preg_match('~^[а-яА-Я0-9\-_]+$~m', '123');
-        echo preg_match('~^[а-яА-Я0-9\-_]+$~u', 'фыва');
+        $thesis = Thesis::get()->first()->load('participation')->participation->conference;
+
+        dd($thesis);
     });
 }
 

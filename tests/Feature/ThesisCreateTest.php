@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\ThesisController;
+use App\Notifications\ThesisCreatedOrganizationNotification;
+use App\Notifications\ThesisCreatedParticipantNotification;
 use Database\Factories\ConferenceFactory;
 use Database\Factories\OrganizationFactory;
 use Database\Factories\ParticipantFactory;
@@ -10,6 +12,7 @@ use Database\Factories\ParticipationFactory;
 use Database\Factories\SectionFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Src\Domains\Auth\Models\Organization;
 use Src\Domains\Auth\Models\User;
 use Src\Domains\Conferences\Enums\ReportForm;
@@ -23,6 +26,8 @@ class ThesisCreateTest extends TestCase
     use RefreshDatabase;
 
     protected User $participantUser;
+
+    protected User $organizationUser;
 
     protected Conference $conference;
 
@@ -38,10 +43,10 @@ class ThesisCreateTest extends TestCase
 
         $this->seed();
 
-        $organizationUser = UserFactory::new()->create();
+        $this->organizationUser = UserFactory::new()->create();
         $this->participantUser = UserFactory::new()->create();
         $this->organization = OrganizationFactory::new()->create([
-            'user_id' => $organizationUser->id,
+            'user_id' => $this->organizationUser->id,
         ]);
         $this->conference = ConferenceFactory::new()->create([
             'organization_id' => $this->organization->id,
@@ -57,6 +62,8 @@ class ThesisCreateTest extends TestCase
 
     public function test_creating_thesis(): void
     {
+        Notification::fake();
+
         $response = $this->actingAs($this->participantUser)->post(action([ThesisController::class, 'store'], $this->conference->slug), [
             'participation_id' => $this->participation->id,
             'section_id' => $this->section->id,
@@ -77,10 +84,13 @@ class ThesisCreateTest extends TestCase
             'text' => '<p>some text</p>',
         ]);
 
+        Notification::assertSentTo($this->organizationUser, ThesisCreatedOrganizationNotification::class);
+        Notification::assertSentTo($this->participantUser, ThesisCreatedParticipantNotification::class);
+
         $response->assertOk();
     }
 
-    public function test_fail_by_confarence_date(): void
+    public function test_fail_by_conference_date(): void
     {
         $conference = ConferenceFactory::new()->create([
             'organization_id' => $this->organization->id,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ThesisCreated;
 use App\Http\Requests\ThesisStoreRequest;
 use App\Http\Requests\ThesisUpdateRequest;
 use Illuminate\Contracts\View\Factory;
@@ -27,6 +28,8 @@ class ThesisController extends Controller
         CreateThesis $createThesis,
     ): JsonResponse {
         $thesis = $createThesis->handle($request);
+
+        event(new ThesisCreated($thesis));
 
         return response()->json(['redirect' => route('conference.show', $conference->slug)]);
     }

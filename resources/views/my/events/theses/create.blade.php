@@ -68,7 +68,7 @@
 
             this.form.submit()
                 .then(response => {
-                    location.replace(response.data.redirect ?? '/')
+					location.replace(response.data.redirect ?? '/')
                 })
                 .catch(error => {});
         },
@@ -591,7 +591,7 @@
         </div>
         <div class="form__row">
             <div class="form__btns">
-                <button class="form__button button button_primary" type="submit">Отправить тезисы</button>
+                <button class="form__button button button_primary" :disabled="form.processing" type="submit">Отправить тезисы</button>
             </div>
         </div>
 
