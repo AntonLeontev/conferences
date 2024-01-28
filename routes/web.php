@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordChangeController;
@@ -83,7 +84,7 @@ Route::group([
     /**
      * Pages
      */
-    Route::view('/', 'home')->name('home');
+    Route::get('/', [PageController::class, 'home'])->name('home');
     Route::get('/events/subject/{subject:slug}', [ConferenceController::class, 'subjectIndex'])->name('subject');
     Route::get('/events/{conference:slug}', [ConferenceController::class, 'show'])->name('conference.show');
 

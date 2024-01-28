@@ -4,7 +4,7 @@
 
 @section('content')
     <main class="page">
-        <div class="section-divider white-block">
+        {{-- <div class="section-divider white-block">
             <div class="white-block__container">
                 <div class="white-block__inner">
                     <form action="#" class="white-block__form form">
@@ -38,95 +38,50 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
+
         <section class="search-result section-divider">
             <div class="search-result__container">
                 <h2 class="search-result__title title">
                     Ближайшие конференции
                 </h2>
                 <div class="search-result__items">
-                    <div class="search-result-item">
-                        <div class="search-result-item__header">
-                            Математика
-                        </div>
-                        <div class="search-result-item__body">
-                            <div class="search-result-item__title">
-                                Семинар по границам теории множеств
-                            </div>
-                            <div class="search-result-item__details">
-                                <small>Июнь 05, 2023</small>
-                                <small>Институт Филдса</small>
-                            </div>
-                            <div class="search-result-item__text">
-                                Данный семинар будет носить менее целенаправленный характер и объединит небольшие группы
-                                экспертов, которые будут заниматься вопросами новых приложений теории множеств.
-                                экспертов, сосредоточенных на новых приложениях теории множеств. В их число войдут
-                                Применение теории множеств в алгебраической топологииЭтот семинар будет иметь менее
-                                целенаправленный характер и объединит небольшие группы экспертов, ориентированных на
-                                новые приложения теории множеств. В частности, речь пойдет о приложениях теории множеств
-                                в алгебраической топологии
-                            </div>
-                            <a href="" class="search-result-item__link">
-                                Читать полностью
-                            </a>
-                        </div>
-                    </div>
-                    <div class="search-result-item">
-                        <div class="search-result-item__header">
-                            Математика
-                        </div>
-                        <div class="search-result-item__body">
-                            <div class="search-result-item__title">
-                                Семинар по границам теории множеств
-                            </div>
-                            <div class="search-result-item__details">
-                                <small>Июнь 05, 2023</small>
-                                <small>Институт Филдса</small>
-                            </div>
-                            <div class="search-result-item__text">
-                                Данный семинар будет носить менее целенаправленный характер и объединит небольшие группы
-                                экспертов, которые будут заниматься вопросами новых приложений теории множеств.
-                                экспертов, сосредоточенных на новых приложениях теории множеств. В их число войдут
-                                Применение теории множеств в алгебраической топологииЭтот семинар будет иметь менее
-                                целенаправленный характер и объединит небольшие группы экспертов, ориентированных на
-                                новые приложения теории множеств. В частности, речь пойдет о приложениях теории множеств
-                                в алгебраической топологии
-                            </div>
-                            <a href="" class="search-result-item__link">
-                                Читать полностью
-                            </a>
-                        </div>
-                    </div>
-                    <div class="search-result-item">
-                        <div class="search-result-item__header">
-                            Математика
-                        </div>
-                        <div class="search-result-item__body">
-                            <div class="search-result-item__title">
-                                Семинар по границам теории множеств
-                            </div>
-                            <div class="search-result-item__details">
-                                <small>Июнь 05, 2023</small>
-                                <small>Институт Филдса</small>
-                            </div>
-                            <div class="search-result-item__text">
-                                Данный семинар будет носить менее целенаправленный характер и объединит небольшие группы
-                                экспертов, которые будут заниматься вопросами новых приложений теории множеств.
-                                экспертов, сосредоточенных на новых приложениях теории множеств. В их число войдут
-                                Применение теории множеств в алгебраической топологииЭтот семинар будет иметь менее
-                                целенаправленный характер и объединит небольшие группы экспертов, ориентированных на
-                                новые приложения теории множеств. В частности, речь пойдет о приложениях теории множеств
-                                в алгебраической топологии
-                            </div>
-                            <a href="" class="search-result-item__link">
-                                Читать полностью
-                            </a>
-                        </div>
-                    </div>
+					@if ($closest->isEmpty())
+						Конференций не запланировано
+					@else
+						@foreach ($closest as $conference)
+							<div class="search-result-item">
+								<div class="search-result-item__header">
+									@foreach ($conference->subjects as $subject)
+										<span>{{ $subject->{'title_'.loc()} }}</span>
+
+										@if (!$loop->last)
+											<span>|</span>
+										@endif
+									@endforeach
+								</div>
+								<div class="search-result-item__body">
+									<div class="search-result-item__title">
+										{{ $conference->{'title_'.loc()} }}
+									</div>
+									<div class="search-result-item__details">
+										<small>{{ $conference->start_date->translatedFormat('d M y') }}</small>
+										<small>{{ $conference->organization->{'full_name_'.loc()} }}</small>
+									</div>
+									<div class="search-result-item__text">
+										{{ $conference->{'description_'.loc()} }}
+									</div>
+									<a href="{{ route('conference.show', $conference->slug) }}" class="search-result-item__link">
+										Читать полностью
+									</a>
+								</div>
+							</div>
+						@endforeach
+					@endif
                 </div>
             </div>
         </section>
-        <section class="search-result page-divider">
+        {{-- <section class="search-result page-divider">
             <div class="search-result__container">
                 <h2 class="search-result__title title">
                     Рекомендации
@@ -199,8 +154,54 @@
                             </a>
                         </div>
                     </div>
+                    <div class="search-result-item">
+                        <div class="search-result-item__header">
+                            Информатика
+                        </div>
+                        <div class="search-result-item__body">
+                            <div class="search-result-item__title">
+                                Международная конференция "Информационно-коммуникационные технологии для устойчивого
+                                развития
+                            </div>
+                            <div class="search-result-item__details">
+                                <small>Июнь 05, 2023</small>
+                                <small>Институт Филдса</small>
+                            </div>
+                            <div class="search-result-item__text">
+                                Устойчивое развитие представляет интерес в первую очередь в контексте очного
+                                мероприятия, когда в организационном комитете есть специальный председатель по
+                                устойчивому развитию
+                            </div>
+                            <a href="" class="search-result-item__link">
+                                Читать полностью
+                            </a>
+                        </div>
+                    </div>
+                    <div class="search-result-item">
+                        <div class="search-result-item__header">
+                            Информатика
+                        </div>
+                        <div class="search-result-item__body">
+                            <div class="search-result-item__title">
+                                Международная конференция "Информационно-коммуникационные технологии для устойчивого
+                                развития
+                            </div>
+                            <div class="search-result-item__details">
+                                <small>Июнь 05, 2023</small>
+                                <small>Институт Филдса</small>
+                            </div>
+                            <div class="search-result-item__text">
+                                Устойчивое развитие представляет интерес в первую очередь в контексте очного
+                                мероприятия, когда в организационном комитете есть специальный председатель по
+                                устойчивому развитию
+                            </div>
+                            <a href="" class="search-result-item__link">
+                                Читать полностью
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
     </main>
 @endsection

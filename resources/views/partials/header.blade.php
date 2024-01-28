@@ -185,9 +185,9 @@
 								@endforeach
                             </ul>
                         </li>
-                        <li class="menu__item"><a href="{{ localize_route('announcement') }}" class="menu__link"><span>@lang('header.announcement')</span></a></li>
+                        {{-- <li class="menu__item"><a href="{{ localize_route('announcement') }}" class="menu__link"><span>@lang('header.announcement')</span></a></li>
                         <li class="menu__item"><a href="{{ localize_route('search') }}" class="menu__link"><span>@lang('header.search')</span></a></li>
-                        <li class="menu__item"><a href="{{ route('archive') }}" class="menu__link"><span>@lang('header.archive')</span></a></li>
+                        <li class="menu__item"><a href="{{ route('archive') }}" class="menu__link"><span>@lang('header.archive')</span></a></li> --}}
                     </ul>
                 </nav>
             </div>
