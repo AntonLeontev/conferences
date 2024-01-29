@@ -48,6 +48,10 @@
 	$affiliationsList = collect();
 	foreach ($request->json('authors') as $author) {
 		foreach ($author['affiliations'] as $affiliation) {
+			if ($affiliationsList->contains($affiliation['title_'.$lang])) {
+				continue;
+			}
+
 			$affiliationsList->push($affiliation['title_'.$lang]);
 		}
 	}
