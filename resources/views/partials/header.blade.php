@@ -2,8 +2,8 @@
     <div class="header__top">
         <div class="header__container">
             <a href="/" class="logo">
-                <span>crc</span>
-                <span>Conference Management Software</span>
+                <span>ucp</span>
+                <span>Universal Conference Portal</span>
             </a>
             <div class="header__action">
                 <div class="lang">
