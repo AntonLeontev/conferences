@@ -268,7 +268,7 @@
                         <button class="button" type="button" @click="add()">Добавить секцию</button>
                     </div>
 
-                    <div class="form__row">
+                    {{-- <div class="form__row">
                         <label class="form__label" for="formImage">Загрузите ваш файл</label>
                         <div class="file" data-file>
                             <div class="file__item">
@@ -281,7 +281,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form__row" :class="form.invalid('website') && '_error'">
                         <label class="form__label" for="c_5">Сайт мероприятия</label>
