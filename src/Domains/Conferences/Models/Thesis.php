@@ -13,6 +13,7 @@ class Thesis extends Model
     use HasFactory;
 
     protected $fillable = [
+        'thesis_id',
         'participation_id',
         'section_id',
         'report_form',
@@ -34,5 +35,30 @@ class Thesis extends Model
     public function participation(): BelongsTo
     {
         return $this->belongsTo(Participation::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Thesis $thesis) {
+            $conference = $thesis->load('participation')->participation->conference;
+            $conference->loadCount('theses');
+            $number = $conference->theses_count + 1;
+
+            if (! is_null($thesis->section_id)) {
+                $section = Section::find($thesis->section_id);
+                $thesis->thesis_id = sprintf(
+                    '%s-%s-%s',
+                    $conference->slug,
+                    $section->short_title_en,
+                    $number
+                );
+            } else {
+                $thesis->thesis_id = sprintf(
+                    '%s-%s',
+                    $conference->slug,
+                    $number
+                );
+            }
+        });
     }
 }
