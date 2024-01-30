@@ -113,7 +113,7 @@
                     </div>
 
                     <div class="form__row" id="affiliations" x-data="{
-						ai: +Object.keys(affiliations).pop() + 1,
+						ai: Object.keys(affiliations).length > 0 ? +Object.keys(affiliations).pop() + 1 : 1,
 
 						add() {
 							if (Object.keys(this.form.affiliations).length >= 5) return
