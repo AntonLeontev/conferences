@@ -43,8 +43,8 @@
 	$lang = $conference->abstracts_lang->value;	
 	
 	$affiliationsList = collect();
-	foreach ($thesis->authors as $author) {
-		foreach ($author['affiliations'] as $affiliation) {
+	foreach ($thesis->authors ?? [] as $author) {
+		foreach ($author['affiliations'] ?? [] as $affiliation) {
 			if ($affiliationsList->contains($affiliation['title_'.$lang])) {
 				continue;
 			}
@@ -68,7 +68,7 @@
 		@foreach ($thesis->authors as $key => $author)
 			@php
 				$authorAffiliationIndexes = [];
-				foreach ($author['affiliations'] as $affiliation) {
+				foreach ($author['affiliations'] ?? [] as $affiliation) {
 					if ($affiliationsList->contains($affiliation['title_'.$lang])) {
 						$authorAffiliationIndexes[] = $affiliationsList->search(fn($val) => $val === $affiliation['title_'.$lang]) + 1;
 					}
