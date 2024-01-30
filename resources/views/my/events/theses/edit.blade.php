@@ -16,14 +16,20 @@
 
 @section('content')
     <script>
-        let affiliations = @json($participation->affiliations);
-        if (affiliations.length === 0) affiliations = {}
+		let thesisTitle = @json($thesis->title ?? []);
+		let thesisText = @json($thesis->text ?? []);
+		let authors = @json($thesis->authors ?? []);
+		if (authors.lenght == 0) authors = {};
 
-		let thesisTitle = @json($thesis->title);
-		let thesisText = @json($thesis->text);
-		let authors = @json($thesis->authors);
-		let reporter = @json($thesis->reporter);
-		let contact = @json($thesis->contact);
+		let keys = Object.keys(authors);
+		keys.forEach(key => {
+			if (authors[key].affiliations.length === 0) {
+				authors[key].affiliations = {}
+			}
+		});
+
+		let reporter = @json($thesis->reporter ?? []);
+		let contact = @json($thesis->contact ?? []);
     </script>
 
     <form class="registration__form form" 

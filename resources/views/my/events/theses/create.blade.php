@@ -16,7 +16,7 @@
 
 @section('content')
     <script>
-        let affiliations = @json($participation->affiliations);
+        let affiliations = @json($participation->affiliations ?? []);
         if (affiliations.length === 0) affiliations = {}
     </script>
 
