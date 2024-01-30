@@ -43,13 +43,13 @@ class ThesisCreatedOrganizationNotification extends Notification implements Shou
 
         foreach ($this->thesis->authors as $author) {
             if (is_null($author['middle_name_'.$locale])) {
-                $authors .= $author['name_'.$locale].' '.$author['surname_'.$locale].' ';
+                $authors .= $author['name_'.$locale].' '.$author['surname_'.$locale].', ';
             } else {
-                $authors .= $author['name_'.$locale].' '.mb_substr($author['middle_name_'.$locale], 0, 1).' '.$author['surname_'.$locale].' ';
+                $authors .= $author['name_'.$locale].' '.mb_substr($author['middle_name_'.$locale], 0, 1).'. '.$author['surname_'.$locale].', ';
             }
         }
 
-        $authors = trim($authors);
+        $authors = trim($authors, " \n\r\t\v\0,");
 
         App::setLocale($locale);
 
@@ -60,14 +60,14 @@ class ThesisCreatedOrganizationNotification extends Notification implements Shou
             ->line(__(
                 'emails/notifications.thesis_created_organization_notification.text',
                 [
-                    'conference' => $conference->{'title_'.$locale},
+                    'conference_title' => $conference->{'title_'.$locale},
                     'abstract_title' => $this->thesis->title,
                     'authors' => $authors,
                     'datetime' => $this->thesis->created_at->translatedFormat('d M Y H:i'),
                     'abstract_id' => $this->thesis->thesis_id,
                 ],
             ))
-            ->attachData($pdf->output(), "Abstracts {$this->thesis->thesis_id}.pdf");
+            ->attachData($pdf->output(), "Abstract {$this->thesis->thesis_id}.pdf");
     }
 
     /**

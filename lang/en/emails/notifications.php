@@ -3,8 +3,8 @@
 return [
     'thesis_created_participant_notification' => [
         'subject' => 'Abstracts sending success',
-        'title' => 'Abstracts were sent for event ":conference"',
-        'action' => 'Learn more',
+        'text' => 'This is to notify that your abstract ":abstract_title" has been received and given the ID ":abstract_id". Please use this ID in the further correspondence. Pdf copy of this abstract is attached.',
+        'action' => 'Edit abstract',
     ],
     'thesis_created_organization_notification' => [
         'subject' => 'Abstracts were received',
