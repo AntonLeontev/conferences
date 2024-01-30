@@ -129,7 +129,7 @@
 													@endif
 												</ul>
 											@else
-												<a href="{{ route('organization.create') }}" class="button button_outline">Регистрация организации</a>
+												{{-- <a href="{{ route('organization.create') }}" class="button button_outline">Регистрация организации</a> --}}
 											@endif
 										</div>
 									@else

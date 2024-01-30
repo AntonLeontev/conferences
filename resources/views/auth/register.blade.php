@@ -482,7 +482,7 @@
 						</template>
                     </div>
 
-                    <div class="form__row">
+                    {{-- <div class="form__row">
                         <div class="file" data-file>
                             <div class="file__item">
                                 <div x-ref="formPreview" class="file__preview"></div>
@@ -496,7 +496,7 @@
                                 <div class="file__button button">Добавить лого</div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form__row" :class="form.invalid('vk') && '_error'">
                         <label class="form__label" for="o_9">Вконтакте</label>

@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 
 <head>
-    <title>@yield('title') | CRC</title>
+    <title>@yield('title') | {{ config('app.name') }}</title>
     <meta charset="UTF-8">
     <meta name="format-detection" content="telephone=no">
     <link rel="shortcut icon" href="favicon.ico">
