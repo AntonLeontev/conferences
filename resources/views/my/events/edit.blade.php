@@ -34,7 +34,7 @@
 							need_site: {{ $conference->need_site }},
 							'co-organizers': coOrginizers,
 							address: '{{ $conference->address }}',
-							phone: '{{ $conference->phone->raw() }}',
+							phone: '{{ $conference->phone?->raw() }}',
 							email: '{{ $conference->email }}',
 							start_date: '{{ $conference->start_date->format('Y-m-d') }}',
 							end_date: '{{ $conference->end_date->format('Y-m-d') }}',
