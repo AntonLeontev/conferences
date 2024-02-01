@@ -25,6 +25,7 @@
 			list-style-type: none;
 		}
 		.email {
+			color: #124fd3;
 			margin-bottom: 20px;
 		}
 		.text {
