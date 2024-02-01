@@ -1,20 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-
 <head>
-    <title>@yield('title') | {{ config('app.name') }}</title>
-    <meta charset="UTF-8">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" href="favicon.ico">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	@include('partials.head')
 
-    @vite(['resources/css/style.css', 'resources/js/app.js'])
+    <title>@yield('title') | {{ config('app.name') }}</title>
 
     @yield('head_scripts')
-	<style>
-		[x-cloak] {display: none;}
-	</style>
 	<script src="/js/scripts.js" defer></script>
 </head>
 
