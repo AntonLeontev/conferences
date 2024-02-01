@@ -1,7 +1,9 @@
 <meta charset="UTF-8">
 <meta name="format-detection" content="telephone=no">
 <link rel="shortcut icon" href="favicon.ico">
-<meta name="robots" content="noindex, nofollow">
+@if (app()->isLocal())
+	<meta name="robots" content="noindex, nofollow">
+@endif
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 @vite(['resources/css/style.css', 'resources/js/app.js'])
