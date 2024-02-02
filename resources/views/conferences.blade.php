@@ -4,22 +4,24 @@
 
 @section('content')
 	<main class="page">
-        <div class="section-divider white-block">
-            <div class="white-block__container">
-                <div class="white-block__inner">
-                    <nav class="white-block__breadcrumbs breadcrumbs">
-                        <ul class="breadcrumbs__list">
-                            <li class="breadcrumbs__item"><a href="#" class="breadcrumbs__link">Конференции</a></li>
-							@isset($breadcrumbs)
-								<li class="breadcrumbs__item">
-									<span class="breadcrumbs__current">{{ $breadcrumbs }}</span>
-								</li>
-							@endisset 
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
+		@if (!empty($breadcrumbs))
+			<div class="section-divider white-block">
+				<div class="white-block__container">
+					<div class="white-block__inner">
+						<nav class="white-block__breadcrumbs breadcrumbs">
+							<ul class="breadcrumbs__list">
+								<li class="breadcrumbs__item"><a href="{{ route('home') }}" class="breadcrumbs__link">Конференции</a></li>
+								@isset($breadcrumbs)
+									<li class="breadcrumbs__item">
+										<span class="breadcrumbs__current">{{ $breadcrumbs }}</span>
+									</li>
+								@endisset 
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		@endif
         <section class="subject-result page-divider">
             <div class="subject-result__container">
                 <div class="subject-result__items">

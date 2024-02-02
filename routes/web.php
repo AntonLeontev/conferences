@@ -49,12 +49,14 @@ Route::group([
             Route::middleware(['precognitive'])
                 ->post('participant/edit', [ParticipantController::class, 'update'])
                 ->name('participant.update');
+            Route::get('participant/events', [ConferenceController::class, 'participantIndex'])->name('events.participant-index');
 
             // Organizer
             Route::get('organization/create', [OrganizationController::class, 'create'])->name('organization.create');
             Route::middleware(['precognitive'])
                 ->post('organization/store', [OrganizationController::class, 'store'])
                 ->name('organization.store');
+            Route::get('organization/events', [ConferenceController::class, 'organizationIndex'])->name('events.organization-index');
 
             Route::prefix('events')->group(function () {
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');

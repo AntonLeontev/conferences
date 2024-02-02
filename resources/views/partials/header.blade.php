@@ -112,6 +112,13 @@
 													@if (Route::has('participant.edit'))
 														<li><a class="submenu-user__link" href="{{ route('participant.edit') }}">Мои данные</a></li>
 													@endif
+													@if (Route::has('events.participant-index'))
+														<li>
+															<a class="submenu-user__link" href="{{ route('events.participant-index') }}">
+																Мои мероприятия
+															</a>
+														</li>
+													@endif
 												</ul>
 											@else
 												<a href="{{ route('participant.create') }}" class="button button_outline">Регистрация участника</a>
@@ -124,6 +131,13 @@
 														<li>
 															<a class="submenu-user__link" href="{{ localize_route('conference.create') }}">
 																Создать мероприятие
+															</a>
+														</li>
+													@endif
+													@if (Route::has('events.organization-index'))
+														<li>
+															<a class="submenu-user__link" href="{{ route('events.organization-index') }}">
+																Организованные мероприятия
 															</a>
 														</li>
 													@endif
