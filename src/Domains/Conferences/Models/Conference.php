@@ -58,6 +58,8 @@ class Conference extends Model
         'abstracts_lang',
         'max_thesis_characters',
         'thesis_instruction',
+        'thesis_accept_until',
+        'thesis_edit_until',
     ];
 
     protected $casts = [
@@ -75,6 +77,8 @@ class Conference extends Model
         'discount_participants' => DiscountCast::class,
         'discount_special_guest' => DiscountCast::class,
         'discount_young_scientist' => DiscountCast::class,
+        'thesis_accept_until' => 'date',
+        'thesis_edit_until' => 'date',
     ];
 
     public function organization(): BelongsTo

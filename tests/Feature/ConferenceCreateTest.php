@@ -76,6 +76,8 @@ class ConferenceCreateTest extends TestCase
             ],
             'max_thesis_characters' => 3200,
             'thesis_instruction' => 'instruction',
+            'thesis_accept_until' => '2024-01-03',
+            'thesis_edit_until' => '2024-01-03',
         ]);
 
         $response->assertCreated();
@@ -105,6 +107,8 @@ class ConferenceCreateTest extends TestCase
             'abstracts_price' => 500,
             'max_thesis_characters' => 3200,
             'thesis_instruction' => 'instruction',
+            'thesis_accept_until' => '2024-01-03',
+            'thesis_edit_until' => '2024-01-03',
         ]);
 
         $this->assertDatabaseCount('sections', 2);

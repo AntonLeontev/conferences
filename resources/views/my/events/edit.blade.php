@@ -55,6 +55,8 @@
 							abstracts_format: '',
 							abstracts_lang: '',
 							max_thesis_characters: {{ $conference->max_thesis_characters }},
+							thesis_accept_until: '{{ $conference->thesis_accept_until?->format('Y-m-d') }}',
+							thesis_edit_until: '{{ $conference->thesis_edit_until?->format('Y-m-d') }}',
 							thesis_instruction: thesis_instruction,
 						}),
 						formatCheckShow: true,
@@ -870,6 +872,31 @@
 						<template x-if="form.invalid('max_thesis_characters')">
 							<div class="form__error" x-text="form.errors.max_thesis_characters"></div>
 						</template>
+                    </div>
+
+					<div class="form__row _two">
+                        <div class="form__line" :class="form.invalid('thesis_accept_until') && '_error'">
+                            <label class="form__label" for="thesis_accept_until">Последний день подачи тезисов (*)</label>
+                            <input id="thesis_accept_until" class="input" autocomplete="off" type="date"
+                                placeholder="__.__.____"
+								x-model="form.thesis_accept_until"
+								@change="form.validate('thesis_accept_until')"
+							>
+                            <template x-if="form.invalid('thesis_accept_until')">
+								<div class="form__error" x-text="form.errors.thesis_accept_until"></div>
+							</template>
+                        </div>
+                        <div class="form__line" :class="form.invalid('thesis_edit_until') && '_error'">
+                            <label class="form__label" for="thesis_edit_until">Последний день изменения тезисов (*)</label>
+                            <input id="thesis_edit_until" class="input" autocomplete="off" type="date"
+                                placeholder="__.__.____"
+								x-model="form.thesis_edit_until"
+								@change="form.validate('thesis_edit_until')"
+							>
+							<template x-if="form.invalid('thesis_edit_until')">
+								<div class="form__error" x-text="form.errors.thesis_edit_until"></div>
+							</template>
+                        </div>
                     </div>
 
 					<div class="form__row" :class="form.invalid('thesis_instruction') && '_error'">

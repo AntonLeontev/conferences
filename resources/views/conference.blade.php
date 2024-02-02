@@ -151,9 +151,13 @@
 											<ol class="theses__list">
 												@foreach ($participation->theses as $thesis)
 													<li>
-														<a href="{{ route('theses.edit', [$conference->slug, $thesis->id]) }}">
-															{!! $thesis->title !!}
-														</a>
+														@if ($conference->thesis_edit_until?->endOfDay()->isPast())
+															<span>{!! $thesis->title !!}</span>
+														@else
+															<a href="{{ route('theses.edit', [$conference->slug, $thesis->id]) }}">
+																{!! $thesis->title !!}
+															</a>
+														@endif
 													</li>
 												@endforeach
 											</ol>
@@ -161,7 +165,21 @@
 											<p>Вы еще не отправляли тезисы</p>
 										@endif
 									</div>
-									<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button">Отправить тезисы</a>
+
+									@if ($participation->theses->isNotEmpty())
+										@if ($conference->thesis_edit_until?->endOfDay()->isPast())
+											<p class="tw-mb-4">Редактирование тезисов закрыто организатором мероприятия</p>
+										@else
+											<p class="tw-mb-4">Тезисы можно изменить до {{ $conference->thesis_edit_until?->translatedFormat('j F Y') }} включительно</p>
+										@endif
+									@endif
+
+									@if ($conference->thesis_accept_until?->endOfDay()->isPast())
+										<p class="tw-mb-4">Прием тезисов завершен</p>
+									@else
+										<p class="tw-mb-4">Тезисы можно подать до {{ $conference->thesis_accept_until?->translatedFormat('j F Y') }} включительно</p>
+										<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button">Отправить тезисы</a>
+									@endif
 								@else
 									<a href="{{ route('participation.create', $conference->slug) }}" class="button button_primary" type="submit">
 										Принять участие

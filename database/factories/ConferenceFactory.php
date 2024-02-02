@@ -22,6 +22,12 @@ class ConferenceFactory extends Factory
 
     public function definition(): array
     {
+        $start = $this->faker->dateTimeBetween('-10 days', '+5 days');
+        $end = $this->faker->dateTimeBetween($start, $start->modify('+5 days'));
+
+        $accept = $this->faker->dateTimeBetween($start->modify('-10 days'), $start);
+        $edit = $this->faker->dateTimeBetween($accept, $accept->modify('+5 days'));
+
         return [
             'organization_id' => Organization::inRandomOrder()->first()->id,
             'title_ru' => 'Конференция',
@@ -35,8 +41,8 @@ class ConferenceFactory extends Factory
             'address' => 'Москва',
             'phone' => '+7-912-000-56-23',
             'email' => 'aner-ant@ya.ru',
-            'start_date' => '2024-01-03',
-            'end_date' => '2024-01-06',
+            'start_date' => $start,
+            'end_date' => $end,
             'description_ru' => $this->faker->realText(300),
             'description_en' => $this->faker->realText(300),
             'lang' => fake()->randomElement(ConferenceLanguage::values()),
@@ -53,6 +59,8 @@ class ConferenceFactory extends Factory
             'abstracts_lang' => fake()->randomElement(AbstractsLanguage::values()),
             'max_thesis_characters' => $this->faker->numberBetween(1000, 5000),
             'thesis_instruction' => $this->faker->realText(300),
+            'thesis_accept_until' => $accept,
+            'thesis_edit_until' => $edit,
         ];
     }
 }

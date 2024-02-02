@@ -84,18 +84,20 @@ class ThesisCreateTest extends TestCase
             'text' => '<p>some text</p>',
         ]);
 
-        Notification::assertSentTo($this->organizationUser, ThesisCreatedOrganizationNotification::class);
         Notification::assertSentTo($this->participantUser, ThesisCreatedParticipantNotification::class);
+        Notification::assertSentTo($this->organizationUser, ThesisCreatedOrganizationNotification::class);
 
         $response->assertOk();
     }
 
-    public function test_fail_by_conference_date(): void
+    public function test_fail_by_conference_thesis_accept_date(): void
     {
         $conference = ConferenceFactory::new()->create([
             'organization_id' => $this->organization->id,
             'start_date' => now()->subDay(),
             'end_date' => now()->subDay(),
+            'thesis_accept_until' => now()->subDay(),
+            'thesis_edit_until' => now()->subDay(),
         ]);
 
         $participation = ParticipationFactory::new()->create([

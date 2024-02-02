@@ -50,8 +50,8 @@ class ThesisStoreRequest extends FormRequest
 
     protected function passedValidation()
     {
-        if ($this->route('conference')->end_date < now()) {
-            abort(Response::HTTP_BAD_REQUEST, 'Попытка отправить тезисы на завершившееся событие');
+        if ($this->route('conference')->thesis_accept_until->endOfDay()->isPast()) {
+            abort(Response::HTTP_BAD_REQUEST, 'Прием тезисов на это мероприятие завершен');
         }
     }
 }
