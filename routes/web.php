@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConferenceController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipantController;
@@ -100,3 +101,5 @@ Route::group([
         ->post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])
         ->name('pdf.thesis.preview');
 });
+
+Route::middleware(['precognitive'])->post('feedback', FeedbackController::class)->name('feedback');
