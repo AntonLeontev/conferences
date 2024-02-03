@@ -26,6 +26,8 @@
                     }),
                 
                     submit() {
+						this.copyEnglishAffiliationName()
+
                         this.form.submit()
                             .then(response => {
                                 location.replace(response.data.redirect ?? '/')
@@ -40,6 +42,14 @@
 								result.push(el.id)
 							})
 						return result
+					},
+					copyEnglishAffiliationName() {
+						Object.keys(this.form.affiliations)
+							.forEach(key => {
+								if (this.form.affiliations[key].no_affiliation && this.form.affiliations[key].title_ru === '') {
+									this.form.affiliations[key].title_ru = this.form.affiliations[key].title_en
+								}
+							})
 					},
                 }">
                     @csrf
@@ -121,6 +131,7 @@
 								id: '',
 								title_ru: '', 
 								title_en: '', 
+								country: {},
 								has_mistake: false,
 								no_affiliation: false,
 							}
@@ -134,11 +145,14 @@
 						<template x-for="affiliation, id in form.affiliations" x-key="id">
 							<div class="affiliation form__line" x-data="{
 								suggestions: [],
+								countries: [],
 								show: false,
-								hasMistake: false,
-								noAffiliation: false,
+								showCountries: false,
+								hasMistake: affiliation.has_mistake,
+								noAffiliation: affiliation.no_affiliation,
 	
 								getSuggestions() {
+									if (this.noAffiliation || this.hasMistake) return
 									if (this.$el.value.trim() === '') return
 	
 									axios
@@ -153,11 +167,29 @@
 											this.show = true
 										})
 								},
+								getCountries() {
+									if (this.$el.value.trim() === '') return
+
+									axios
+										.get('{{ route('countries.index') }}', {
+											params: {
+												search: this.$el.value,
+											}
+										})
+										.then(resp => {
+											this.countries = resp.data
+											this.showCountries = true
+										})
+								},
 								select(suggestion, id) {
 									this.form.affiliations[id].id = suggestion.id
 									this.form.affiliations[id].title_ru = suggestion.title_ru
 									this.form.affiliations[id].title_en = suggestion.title_en
 									this.show = false
+								},
+								selectCountry(country, id) {
+									this.form.affiliations[id].country= country
+									this.showCountries = false
 								},
 								changeMistake() {
 									if (this.$el.checked) {
@@ -170,17 +202,37 @@
 									this.form.affiliations[id].has_mistake = this.$el.checked
 								},
 								changeNoAffiliation() {
-									if (this.$el.checked) {
-										this.hasMistake = false
-									}
 									this.form.affiliations[id].id = ''
 									this.form.affiliations[id].title_ru = ''
 									this.form.affiliations[id].title_en = ''
 									this.form.affiliations[id].no_affiliation = this.$el.checked
+
+									if (this.$el.checked) {
+										this.hasMistake = false
+										this.form.affiliations[id].country.id = ''
+									} else {
+										this.form.affiliations[id].country = {}
+									}
+								},
+								placeholderRu() {
+									if (this.noAffiliation) {
+										return 'Укажите аффилиацию на русском языке (если применимо)'
+									}
+
+									return 'Начните вводить название организации на русском языке, появится выпадающий список. Если Вашей организации нет в списке, отметьте чекбокс ниже'
+								},
+								placeholderEn() {
+									if (this.noAffiliation) {
+										return 'Please insert your affiliation in English'
+									}
+
+									return 'The name of your institution will be translated automatically. If the translation is incorrect,  check the box \'Аффилиация имеет ошибку в написании\' below to edit the name'
 								},
 							}">
 								<div class="form__line" @click.outside="show = false">
-									<textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input"
+									<textarea autocomplete="off"
+										:placeholder="placeholderRu" 
+										class="input"
 										:class="form.invalid(`affiliations.${id}.title_ru`) && '_error'"
 										x-model="form.affiliations[id].title_ru" 
 										@input.debounce.500ms="getSuggestions"	
@@ -201,7 +253,7 @@
 	
 								</div>
 								<div class="form__line">
-									<textarea autocomplete="off" name="form[]" placeholder="Full name" class="input"
+									<textarea autocomplete="off" :placeholder="placeholderEn"  class="input"
 										:class="form.invalid(`affiliations.${id}.title_en`) && '_error'"
 										:disabled="!hasMistake && !noAffiliation"
 										x-model="form.affiliations[id].title_en" 
@@ -209,6 +261,30 @@
 									<template x-if="form.invalid(`affiliations.${id}.title_en`)">
 										<div class="form__error" x-text="form.errors[`affiliations.${id}.title_en`]"></div>
 									</template>
+								</div>
+
+								<div class="form__line" 
+									x-show="noAffiliation" 
+									:class="form.invalid('country.id') && '_error'" 
+									@click.outside="showCountries = false"
+								>
+									<input class="form-block__input input" autocomplete="off" type="text"
+										placeholder="Please insert the country"
+										:value="affiliation.country?.name_ru + ' | ' + affiliation.country?.name_en"
+										@input.debounce.500ms="getCountries">
+									<template x-if="form.invalid(`affiliations.${id}.country.id`)">
+										<div class="form__error" x-text="form.errors[`affiliations.${id}.country.id`]"></div>
+									</template>
+									<div class="input-tips" x-show="showCountries" x-transition.opacity>
+										<ul>
+											<template x-for="country in countries">
+												<li x-text="country.name_ru + `| ${country.name_en}`" @click="selectCountry(country, id)"></li>
+											</template>
+											<template x-if="countries.length === 0">
+												<li>Ничего не найдено</li>
+											</template>
+										</ul>
+									</div>
 								</div>
 
 								<div class="form__line">

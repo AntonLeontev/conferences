@@ -26,6 +26,8 @@ class ParticipantUpdateRequest extends FormRequest
             'affiliations.*.id' => ['nullable'],
             'affiliations.*.title_ru' => ['required', 'string', 'max:255', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
             'affiliations.*.title_en' => ['required', 'string', 'max:255', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
+            'affiliations.*.country' => ['array', 'nullable'],
+            'affiliations.*.country.id' => ['sometimes', 'required', 'exists:countries,id'],
             'orcid_id' => ['nullable', 'max:50', 'regex:~\d{4}-\d{4}-\d{4}-\d{4}~u'],
             'website' => ['nullable', 'url', 'max:255'],
         ];

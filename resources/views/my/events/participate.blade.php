@@ -32,12 +32,22 @@
         }),
     
         submit() {
+			this.copyEnglishAffiliationName()
+			
             this.form.submit()
                 .then(response => {
                     location.replace(response.data.redirect ?? '/')
                 })
                 .catch(error => {});
         },
+		copyEnglishAffiliationName() {
+			Object.keys(this.form.affiliations)
+				.forEach(key => {
+					if (this.form.affiliations[key].no_affiliation && this.form.affiliations[key].title_ru === '') {
+						this.form.affiliations[key].title_ru = this.form.affiliations[key].title_en
+					}
+				})
+		},
     }">
         <div class="form__row">
             <h2 class="form__title">{{ $conference->{'title_' . loc()} }}</h2>
@@ -114,140 +124,201 @@
             <div class="form__error" x-text="form.errors.middle_name_en"></div>
         </template>
 
-        <div id="affiliations" class="form__row" x-data="{
-            ai: Object.keys(affiliations).length > 0 ? +Object.keys(affiliations).pop() + 1 : 1,
-        
-            add() {
-                if (Object.keys(this.form.affiliations).length >= 5) return
-                this.form.affiliations[this.ai] = {
-                    id: '',
-                    title_ru: '',
-                    title_en: '',
-                    has_mistake: false,
-                    no_affiliation: false,
-                }
-                this.ai++
-            },
-            remove(id) {
-                delete this.form.affiliations[id]
-            },
-			affiliationsIds() {
-				let result = []
-				Object.values(this.form.affiliations)
-					.forEach(el => {
-						if (el.id == '') return
-						result.push(el.id)
-					})
-				return result
-			},
-        }">
-            <label class="form__label" for="f_1">Аффилиации</label>
-            <template x-for="affiliation, id in form.affiliations" x-key="id">
-                <div class="affiliation form__line" x-data="{
-                    suggestions: [],
-                    show: false,
-                    hasMistake: false,
-                    noAffiliation: false,
-                
-                    getSuggestions() {
-                        if (this.$el.value.trim() === '') return
-                
-                        axios
-                            .get('{{ route('affiliations.index') }}', {
-                                params: {
-                                    search: this.$el.value,
-                                    except: this.affiliationsIds()
-                                }
-                            })
-                            .then(resp => {
-                                this.suggestions = resp.data
-                                this.show = true
-                            })
-                    },
-                    select(suggestion, id) {
-                        this.form.affiliations[id].id = suggestion.id
-                        this.form.affiliations[id].title_ru = suggestion.title_ru
-                        this.form.affiliations[id].title_en = suggestion.title_en
-                        this.show = false
-                    },
-                    changeMistake() {
-                        if (this.$el.checked) {
-                            this.noAffiliation = false
-                        } else {
-                            this.form.affiliations[id].id = ''
-                            this.form.affiliations[id].title_ru = ''
-                            this.form.affiliations[id].title_en = ''
-                        }
-                        this.form.affiliations[id].has_mistake = this.$el.checked
-                    },
-                    changeNoAffiliation() {
-                        if (this.$el.checked) {
-                            this.hasMistake = false
-                        }
-                        this.form.affiliations[id].id = ''
-                        this.form.affiliations[id].title_ru = ''
-                        this.form.affiliations[id].title_en = ''
-                        this.form.affiliations[id].no_affiliation = this.$el.checked
-                    },
-                }">
-                    <div class="form__line" @click.outside="show = false">
-                        <textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input"
-                            :class="form.invalid(`affiliations.${id}.title_ru`) && '_error'" x-model="form.affiliations[id].title_ru"
-                            @input.debounce.500ms="getSuggestions"></textarea>
-                        <template x-if="form.invalid(`affiliations.${id}.title_ru`)">
-                            <div class="form__error" x-text="form.errors[`affiliations.${id}.title_ru`]"></div>
-                        </template>
-                        <div class="input-tips" x-show="show" x-transition.opacity>
-                            <ul>
-                                <template x-for="suggestion in suggestions">
-                                    <li x-text="suggestion.title_ru" @click="select(suggestion, id)"></li>
-                                </template>
-                                <template x-if="suggestions.length === 0">
-                                    <li>Ничего не найдено</li>
-                                </template>
-                            </ul>
-                        </div>
+        <div class="form__row" id="affiliations" x-data="{
+						ai: Object.keys(affiliations).length > 0 ? +Object.keys(affiliations).pop() + 1 : 1,
 
-                    </div>
-                    <div class="form__line">
-                        <textarea autocomplete="off" name="form[]" placeholder="Full name" class="input"
-                            :class="form.invalid(`affiliations.${id}.title_en`) && '_error'" :disabled="!hasMistake && !noAffiliation"
-                            x-model="form.affiliations[id].title_en"></textarea>
-                        <template x-if="form.invalid(`affiliations.${id}.title_en`)">
-                            <div class="form__error" x-text="form.errors[`affiliations.${id}.title_en`]"></div>
-                        </template>
-                    </div>
+						add() {
+							if (Object.keys(this.form.affiliations).length >= 5) return
+							this.form.affiliations[this.ai] = {
+								id: '',
+								title_ru: '', 
+								title_en: '', 
+								country: {},
+								has_mistake: false,
+								no_affiliation: false,
+							}
+							this.ai++
+						},
+						remove(id) {
+							delete this.form.affiliations[id]
+						},
+					}">
+                        <label class="form__label" for="f_1">Аффилиации</label>
+						<template x-for="affiliation, id in form.affiliations" x-key="id">
+							<div class="affiliation form__line" x-data="{
+								suggestions: [],
+								countries: [],
+								show: false,
+								showCountries: false,
+								hasMistake: affiliation.has_mistake,
+								noAffiliation: affiliation.no_affiliation,
+	
+								getSuggestions() {
+									if (this.noAffiliation || this.hasMistake) return
+									if (this.$el.value.trim() === '') return
+	
+									axios
+										.get('{{ route('affiliations.index') }}', {
+											params: {
+												search: this.$el.value,
+												except: this.affiliationsIds()
+											}
+										})
+										.then(resp => {
+											this.suggestions = resp.data
+											this.show = true
+										})
+								},
+								getCountries() {
+									if (this.$el.value.trim() === '') return
 
-                    <div class="form__line">
-                        <div class="checkbox-items">
-                            <div class="checkbox">
-                                <input :id="'a_1' + id" class="checkbox__input" type="checkbox"
-                                    :name="'handle' + id" x-model="hasMistake" @change="changeMistake">
-                                <label :for="'a_1' + id" class="checkbox__label">
-                                    <span class="checkbox__text">Аффилиация имеет ошибку в написании</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <input :id="'a_2' + id" class="checkbox__input" type="checkbox"
-                                    :name="'handle' + id" x-model="noAffiliation" @change="changeNoAffiliation">
-                                <label :for="'a_2' + id" class="checkbox__label">
-                                    <span class="checkbox__text">Аффилиации нет в списке</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form__line">
-                        <button class="form__button button button_outline" type="button" @click="remove(id)">
-                            Убрать аффилиацию
-                        </button>
-                    </div>
-                </div>
-            </template>
+									axios
+										.get('{{ route('countries.index') }}', {
+											params: {
+												search: this.$el.value,
+											}
+										})
+										.then(resp => {
+											this.countries = resp.data
+											this.showCountries = true
+										})
+								},
+								select(suggestion, id) {
+									this.form.affiliations[id].id = suggestion.id
+									this.form.affiliations[id].title_ru = suggestion.title_ru
+									this.form.affiliations[id].title_en = suggestion.title_en
+									this.show = false
+								},
+								selectCountry(country, id) {
+									this.form.affiliations[id].country= country
+									this.showCountries = false
+								},
+								changeMistake() {
+									if (this.$el.checked) {
+										this.noAffiliation = false
+									} else {
+										this.form.affiliations[id].id = ''
+										this.form.affiliations[id].title_ru = ''
+										this.form.affiliations[id].title_en = ''
+									}
+									this.form.affiliations[id].has_mistake = this.$el.checked
+								},
+								changeNoAffiliation() {
+									this.form.affiliations[id].id = ''
+									this.form.affiliations[id].title_ru = ''
+									this.form.affiliations[id].title_en = ''
+									this.form.affiliations[id].no_affiliation = this.$el.checked
 
-            <div class="form__line">
-                <button class="form__button button" type="button" @click="add">Добавить аффилиацию</button>
-            </div>
-        </div>
+									if (this.$el.checked) {
+										this.hasMistake = false
+										this.form.affiliations[id].country.id = ''
+									} else {
+										this.form.affiliations[id].country = {}
+									}
+								},
+								placeholderRu() {
+									if (this.noAffiliation) {
+										return 'Укажите аффилиацию на русском языке (если применимо)'
+									}
+
+									return 'Начните вводить название организации на русском языке, появится выпадающий список. Если Вашей организации нет в списке, отметьте чекбокс ниже'
+								},
+								placeholderEn() {
+									if (this.noAffiliation) {
+										return 'Please insert your affiliation in English'
+									}
+
+									return 'The name of your institution will be translated automatically. If the translation is incorrect,  check the box \'Аффилиация имеет ошибку в написании\' below to edit the name'
+								},
+							}">
+								<div class="form__line" @click.outside="show = false">
+									<textarea autocomplete="off"
+										:placeholder="placeholderRu" 
+										class="input"
+										:class="form.invalid(`affiliations.${id}.title_ru`) && '_error'"
+										x-model="form.affiliations[id].title_ru" 
+										@input.debounce.500ms="getSuggestions"	
+									></textarea>
+									<template x-if="form.invalid(`affiliations.${id}.title_ru`)">
+										<div class="form__error" x-text="form.errors[`affiliations.${id}.title_ru`]"></div>
+									</template>
+									<div class="input-tips" x-show="show" x-transition.opacity>
+										<ul>
+											<template x-for="suggestion in suggestions">
+												<li x-text="suggestion.title_ru" @click="select(suggestion, id)"></li>
+											</template>
+											<template x-if="suggestions.length === 0">
+												<li>Ничего не найдено</li>
+											</template>
+										</ul>
+									</div>
+	
+								</div>
+								<div class="form__line">
+									<textarea autocomplete="off" :placeholder="placeholderEn"  class="input"
+										:class="form.invalid(`affiliations.${id}.title_en`) && '_error'"
+										:disabled="!hasMistake && !noAffiliation"
+										x-model="form.affiliations[id].title_en" 
+									></textarea>
+									<template x-if="form.invalid(`affiliations.${id}.title_en`)">
+										<div class="form__error" x-text="form.errors[`affiliations.${id}.title_en`]"></div>
+									</template>
+								</div>
+
+								<div class="form__line" 
+									x-show="noAffiliation" 
+									:class="form.invalid('country.id') && '_error'" 
+									@click.outside="showCountries = false"
+								>
+									<input class="form-block__input input" autocomplete="off" type="text"
+										placeholder="Please insert the country"
+										:value="affiliation.country?.name_en"
+										@input.debounce.500ms="getCountries">
+									<template x-if="form.invalid('phone')">
+										<div class="form__error" x-text="form.errors.country"></div>
+									</template>
+									<div class="input-tips" x-show="showCountries" x-transition.opacity>
+										<ul>
+											<template x-for="country in countries">
+												<li x-text="country.name_ru + `| ${country.name_en}`" @click="selectCountry(country, id)"></li>
+											</template>
+											<template x-if="countries.length === 0">
+												<li>Ничего не найдено</li>
+											</template>
+										</ul>
+									</div>
+								</div>
+
+								<div class="form__line">
+									<div class="checkbox-items">
+										<div class="checkbox">
+											<input :id="'a_1' + id" class="checkbox__input" type="checkbox" :name="'handle' + id"
+												x-model="hasMistake" @change="changeMistake">
+											<label :for="'a_1' + id" class="checkbox__label">
+												<span class="checkbox__text">Аффилиация имеет ошибку в написании</span>
+											</label>
+										</div>
+										<div class="checkbox">
+											<input :id="'a_2' + id" class="checkbox__input" type="checkbox" :name="'handle' + id"
+												x-model="noAffiliation" @change="changeNoAffiliation">
+											<label :for="'a_2' + id" class="checkbox__label">
+												<span class="checkbox__text">Аффилиации нет в списке</span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form__line">
+									<button class="form__button button button_outline" type="button" @click="remove(id)">
+										Убрать аффилиацию
+									</button>
+								</div>
+							</div>
+						</template>
+
+						<div class="form__line">
+							<button class="form__button button" type="button" @click="add">Добавить аффилиацию</button>
+						</div>
+                    </div>
 
         <div class="form__row" :class="form.invalid('orcid_id') && '_error'">
             <label class="form__label" for="c_4">ORCID ID</label>
