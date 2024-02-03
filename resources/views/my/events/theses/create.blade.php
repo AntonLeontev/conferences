@@ -412,8 +412,8 @@
 										@click.outside="showCountries = false"
 									>
 										<input class="form-block__input input" autocomplete="off" type="text"
-											placeholder="Please insert the country"
-											:value="affiliation.country?.name_ru + ' | ' + affiliation.country?.name_en"
+											placeholder="Please start typing the country"
+											:value="affiliation.country?.name_ru ? affiliation.country?.name_ru + ' | ' + affiliation.country?.name_en : ''"
 											@input.debounce.500ms="getCountries">
 										<template x-if="form.invalid(`affiliations.${id}.country.id`)">
 											<div class="form__error" x-text="form.errors[`affiliations.${id}.country.id`]"></div>
