@@ -396,7 +396,7 @@
         <div class="form__row">
             {{-- <p>Вы можете заполнить форму тезисов позже самостоятельно через карточку мероприятия</p> --}}
             <div class="form__btns">
-                <button class="form__button button button_primary" type="submit">Зарегистрироваться</button>
+                <button class="form__button button button_primary" :disabled="form.processing" type="submit">Зарегистрироваться</button>
                 {{-- <button class="form__button button" type="submit">Заполнить форму</button> --}}
             </div>
         </div>

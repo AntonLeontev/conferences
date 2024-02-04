@@ -660,7 +660,7 @@
         </div>
         <div class="form__row">
             <div class="form__btns">
-                <button class="form__button button button_primary" type="submit">Сохранить</button>
+                <button class="form__button button button_primary" :disabled="form.processing" type="submit">Сохранить</button>
             </div>
         </div>
 
