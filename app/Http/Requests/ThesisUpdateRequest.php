@@ -39,8 +39,20 @@ class ThesisUpdateRequest extends FormRequest
             'authors.*.middle_name_en' => ['sometimes', 'nullable', 'string', 'max:255', 'regex:/^[a-zA-Z \-_]+$/u'],
             'authors.*.affiliations' => ['nullable', 'array'],
             'authors.*.affiliations.*.id' => ['nullable'],
-            'authors.*.affiliations.*.title_ru' => ['required', 'string', 'max:255', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
-            'authors.*.affiliations.*.title_en' => ['required', 'string', 'max:255', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
+            'authors.*.affiliations.*.title_ru' => [
+                'sometimes',
+                'required_unless:authors.*.affiliations.*.no_affiliation,true',
+                'string',
+                'nullable',
+                'max:255',
+            ],
+            'authors.*.affiliations.*.title_en' => [
+                'sometimes',
+                'required_unless:authors.*.affiliations.*.no_affiliation,true',
+                'nullable',
+                'string',
+                'max:255',
+            ],
             'authors.*.affiliations.*.country' => ['array', 'nullable'],
             'authors.*.affiliations.*.country.id' => ['sometimes', 'required', 'exists:countries,id'],
             'reporter' => ['required', 'array'],
@@ -51,6 +63,10 @@ class ThesisUpdateRequest extends FormRequest
             'contact.email' => ['required', 'email'],
             'text' => ['required', 'string', new MaxStripTagsCharacters($this->route('conference')->max_thesis_characters)],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
     }
 
     protected function passedValidation()

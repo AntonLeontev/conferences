@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AffiliationCharactersBothLanguages;
 use App\Rules\Phone;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,9 +24,10 @@ class ParticipantUpdateRequest extends FormRequest
             'middle_name_en' => ['nullable', 'max:255', 'string', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
             'phone' => ['nullable', 'max:50', 'string', new Phone],
             'affiliations' => ['nullable', 'array'],
+            'affiliations.*' => [new AffiliationCharactersBothLanguages],
             'affiliations.*.id' => ['nullable'],
-            'affiliations.*.title_ru' => ['required', 'string', 'max:255', 'regex:~[а-яА-Я0-9\-_ ]+~u'],
-            'affiliations.*.title_en' => ['required', 'string', 'max:255', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
+            'affiliations.*.title_ru' => ['required', 'string', 'max:255'],
+            'affiliations.*.title_en' => ['required', 'string', 'max:255'],
             'affiliations.*.country' => ['array', 'nullable'],
             'affiliations.*.country.id' => ['sometimes', 'required', 'exists:countries,id'],
             'orcid_id' => ['nullable', 'max:50', 'regex:~\d{4}-\d{4}-\d{4}-\d{4}~u'],

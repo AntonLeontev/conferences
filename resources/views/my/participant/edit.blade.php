@@ -200,6 +200,7 @@
 										this.form.affiliations[id].title_en = ''
 									}
 									this.form.affiliations[id].has_mistake = this.$el.checked
+									this.form.affiliations[id].country = {}
 								},
 								changeNoAffiliation() {
 									this.form.affiliations[id].id = ''
@@ -260,6 +261,9 @@
 									></textarea>
 									<template x-if="form.invalid(`affiliations.${id}.title_en`)">
 										<div class="form__error" x-text="form.errors[`affiliations.${id}.title_en`]"></div>
+									</template>
+									<template x-if="form.invalid(`affiliations.${id}`)">
+										<div class="form__error" x-text="form.errors[`affiliations.${id}`]"></div>
 									</template>
 								</div>
 

@@ -277,8 +277,12 @@
 								if (Object.keys(author.affiliations).length >= 5) return
 								author.affiliations[this.ai] = {
 									id: '',
-									title_ru: '',
-									title_en: '',
+									@if ($lang === 'ru')
+										title_ru: '',
+									@endif
+									@if ($lang === 'en')
+										title_en: '',
+									@endif
 									country: {},
 									has_mistake: false,
 									no_affiliation: false,
@@ -357,6 +361,7 @@
 											author.affiliations[id].title_en = ''
 										}
 										author.affiliations[id].has_mistake = this.$el.checked
+										this.form.affiliations[id].country = {}
 									},
 									changeNoAffiliation() {
 										author.affiliations[id].id = ''

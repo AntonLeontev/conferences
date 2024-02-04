@@ -11,13 +11,12 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ThesisController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use Src\Domains\Conferences\Models\Thesis;
 
 if (app()->isLocal()) {
     Route::any('test', function () {
-        $thesis = Thesis::get()->first()->load('participation')->participation->conference;
+        $test = ['test' => 'foo'];
 
-        dd($thesis);
+        dd(isset($test['foo']));
     });
 }
 
