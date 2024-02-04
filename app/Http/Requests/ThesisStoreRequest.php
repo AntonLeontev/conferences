@@ -38,6 +38,21 @@ class ThesisStoreRequest extends FormRequest
             'authors.*.surname_en' => ['sometimes', 'required', 'string', 'max:255', 'regex:/^[a-zA-Z \-_]+$/u'],
             'authors.*.middle_name_en' => ['sometimes', 'nullable', 'string', 'max:255', 'regex:/^[a-zA-Z \-_]+$/u'],
             'authors.*.affiliations' => ['nullable', 'array'],
+            'authors.*.affiliations.*.id' => ['nullable'],
+            'authors.*.affiliations.*.title_ru' => [
+                'sometimes',
+                'required_unless:authors.*.affiliations.*.no_affiliation,true',
+                'string',
+                'max:255',
+            ],
+            'authors.*.affiliations.*.title_en' => [
+                'sometimes',
+                'required_unless:authors.*.affiliations.*.no_affiliation,true',
+                'string',
+                'max:255',
+            ],
+            'authors.*.affiliations.*.country' => ['array', 'nullable'],
+            'authors.*.affiliations.*.country.id' => ['sometimes', 'required', 'exists:countries,id'],
             'reporter' => ['required', 'array'],
             'reporter.id' => ['required', 'int'],
             'reporter.is_young' => ['required', 'boolean'],
@@ -48,10 +63,14 @@ class ThesisStoreRequest extends FormRequest
         ];
     }
 
+    protected function prepareForValidation()
+    {
+    }
+
     protected function passedValidation()
     {
-        if ($this->route('conference')->end_date < now()) {
-            abort(Response::HTTP_BAD_REQUEST, 'Попытка отправить тезисы на завершившееся событие');
+        if ($this->route('conference')->thesis_accept_until->endOfDay()->isPast()) {
+            abort(Response::HTTP_BAD_REQUEST, 'Прием тезисов на это мероприятие завершен');
         }
     }
 }

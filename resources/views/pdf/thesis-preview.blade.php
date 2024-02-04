@@ -25,6 +25,7 @@
 			list-style-type: none;
 		}
 		.email {
+			color: #124fd3;
 			margin-bottom: 20px;
 		}
 		.text {
@@ -48,11 +49,11 @@
 	$affiliationsList = collect();
 	foreach ($request->json('authors') ?? [] as $author) {
 		foreach ($author['affiliations'] ?? [] as $affiliation) {
-			if ($affiliationsList->contains($affiliation['title_'.$lang])) {
+			if ($affiliationsList->contains(fn($value) => $affiliation['title_'.$lang] === $value['title_'.$lang])) {
 				continue;
 			}
 
-			$affiliationsList->push($affiliation['title_'.$lang]);
+			$affiliationsList->push($affiliation);
 		}
 	}
 @endphp
@@ -72,8 +73,9 @@
 			@php
 				$authorAffiliationIndexes = [];
 				foreach ($author['affiliations'] ?? [] as $affiliation) {
-					if ($affiliationsList->contains($affiliation['title_'.$lang])) {
-						$authorAffiliationIndexes[] = $affiliationsList->search(fn($val) => $val === $affiliation['title_'.$lang]) + 1;
+					if ($affiliationsList->contains(fn($value) => $affiliation['title_'.$lang] === $value['title_'.$lang])) {
+						$index = $affiliationsList->search(fn($val) => $val['title_'.$lang] === $affiliation['title_'.$lang]);
+						$authorAffiliationIndexes[] = $index + 1;
 					}
 				}
 			@endphp
@@ -90,7 +92,10 @@
 	</div>
 	<ul class="affiliations-list">
 		@foreach ($affiliationsList as $key => $affiliation)
-			<li class=""><sup>{{ $key + 1 }}</sup>{{ $affiliation }}</li>
+			<li class="">
+				<sup>{{ $key + 1 }}</sup>
+				{{ $affiliation['title_'.$lang] }}@if($affiliation['no_affiliation']), {{ $affiliation['country']["name_$lang"] }}@endif
+			</li>
 		@endforeach
 	</ul>
 	<div class="email">{{ $request->json('contact.email') }}</div>

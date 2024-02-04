@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConferenceController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipantController;
@@ -10,13 +11,12 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ThesisController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use Src\Domains\Conferences\Models\Thesis;
 
 if (app()->isLocal()) {
     Route::any('test', function () {
-        $thesis = Thesis::get()->first()->load('participation')->participation->conference;
+        $test = ['test' => 'foo'];
 
-        dd($thesis);
+        dd(isset($test['foo']));
     });
 }
 
@@ -49,12 +49,14 @@ Route::group([
             Route::middleware(['precognitive'])
                 ->post('participant/edit', [ParticipantController::class, 'update'])
                 ->name('participant.update');
+            Route::get('participant/events', [ConferenceController::class, 'participantIndex'])->name('events.participant-index');
 
             // Organizer
             Route::get('organization/create', [OrganizationController::class, 'create'])->name('organization.create');
             Route::middleware(['precognitive'])
                 ->post('organization/store', [OrganizationController::class, 'store'])
                 ->name('organization.store');
+            Route::get('organization/events', [ConferenceController::class, 'organizationIndex'])->name('events.organization-index');
 
             Route::prefix('events')->group(function () {
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');
@@ -98,3 +100,5 @@ Route::group([
         ->post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])
         ->name('pdf.thesis.preview');
 });
+
+Route::middleware(['precognitive'])->post('feedback', FeedbackController::class)->name('feedback');

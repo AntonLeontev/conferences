@@ -120,7 +120,7 @@ return [
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
     'phone' => [
-        'digits' => 'Telephone number must contains 11 digits',
+        'digits' => 'Telephone number must contain from 7 to 15 digits',
     ],
     'present' => 'The :attribute field must be present.',
     'prohibited' => 'The :attribute field is prohibited.',

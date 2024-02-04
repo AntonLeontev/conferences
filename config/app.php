@@ -187,4 +187,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'feedback_email' => env('FEEDBACK_EMAIL'),
+
 ];

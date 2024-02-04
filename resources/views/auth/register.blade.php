@@ -163,7 +163,7 @@
 						</template>
                     </div>
                     <div class="form__row">
-                        <button class="form__button button button_primary" type="submit">@lang('auth.register.send')</button>
+                        <button class="form__button button button_primary" :disabled="form.processing" type="submit">@lang('auth.register.send')</button>
                     </div>
                 </form>
             </div>
@@ -513,7 +513,7 @@
                     </div>
 
                     <div class="form__row">
-                        <button class="form__button button button_primary" type="submit">Отправить</button>
+                        <button class="form__button button button_primary" :disabled="form.processing" type="submit">Отправить</button>
                     </div>
                 </form>
             </div>

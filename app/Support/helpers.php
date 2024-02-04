@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Eloquent\Collection;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Src\Domains\Auth\Models\Organization;
+use Src\Domains\Auth\Models\Participant;
 use Src\Domains\Conferences\Models\Conference;
 use Src\Domains\Conferences\Models\ConferenceType;
 use Src\Domains\Conferences\Models\Participation;
@@ -56,6 +58,28 @@ if (! function_exists('user_participation')) {
         return Participation::where('participant_id', auth()->user()->participant->id)
             ->where('conference_id', $conference->id)
             ->first();
+    }
+}
+
+if (! function_exists('participant')) {
+    function participant(): ?Participant
+    {
+        if (! auth()->check()) {
+            return null;
+        }
+
+        return auth()->user()->participant;
+    }
+}
+
+if (! function_exists('organization')) {
+    function organization(): ?Organization
+    {
+        if (! auth()->check()) {
+            return null;
+        }
+
+        return auth()->user()->organization;
     }
 }
 

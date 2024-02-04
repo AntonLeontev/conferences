@@ -66,6 +66,8 @@ class ConferenceUpdateRequest extends FormRequest
             'abstracts_lang' => ['required',  Rule::enum(AbstractsLanguage::class)],
             'max_thesis_characters' => ['required', 'int', 'min:100', 'max:20000'],
             'thesis_instruction' => ['nullable', 'string', 'max:2000'],
+            'thesis_accept_until' => ['required', 'date'],
+            'thesis_edit_until' => ['required', 'date', 'after_or_equal:thesis_accept_until'],
         ];
     }
 

@@ -277,8 +277,13 @@
 								if (Object.keys(author.affiliations).length >= 5) return
 								author.affiliations[this.ai] = {
 									id: '',
-									title_ru: '',
-									title_en: '',
+									@if ($lang === 'ru')
+										title_ru: '',
+									@endif
+									@if ($lang === 'en')
+										title_en: '',
+									@endif
+									country: {},
 									has_mistake: false,
 									no_affiliation: false,
 								}
@@ -301,13 +306,16 @@
 							<template x-for="affiliation, id in author.affiliations" x-key="id">
 								<div class="affiliation form__line" x-data="{
 									suggestions: [],
+									countries: [],
 									show: false,
-									hasMistake: false,
-									noAffiliation: false,
-								
+									showCountries: false,
+									hasMistake: affiliation.has_mistake,
+									noAffiliation: affiliation.no_affiliation,
+		
 									getSuggestions() {
+										if (this.noAffiliation || this.hasMistake) return
 										if (this.$el.value.trim() === '') return
-								
+		
 										axios
 											.get('{{ route('affiliations.index') }}', {
 												params: {
@@ -320,11 +328,29 @@
 												this.show = true
 											})
 									},
+									getCountries() {
+										if (this.$el.value.trim() === '') return
+
+										axios
+											.get('{{ route('countries.index') }}', {
+												params: {
+													search: this.$el.value,
+												}
+											})
+											.then(resp => {
+												this.countries = resp.data
+												this.showCountries = true
+											})
+									},
 									select(suggestion, id) {
 										author.affiliations[id].id = suggestion.id
 										author.affiliations[id].title_ru = suggestion.title_ru
 										author.affiliations[id].title_en = suggestion.title_en
 										this.show = false
+									},
+									selectCountry(country, id) {
+										author.affiliations[id].country= country
+										this.showCountries = false
 									},
 									changeMistake() {
 										if (this.$el.checked) {
@@ -335,19 +361,38 @@
 											author.affiliations[id].title_en = ''
 										}
 										author.affiliations[id].has_mistake = this.$el.checked
+										this.form.affiliations[id].country = {}
 									},
 									changeNoAffiliation() {
-										if (this.$el.checked) {
-											this.hasMistake = false
-										}
 										author.affiliations[id].id = ''
 										author.affiliations[id].title_ru = ''
 										author.affiliations[id].title_en = ''
 										author.affiliations[id].no_affiliation = this.$el.checked
+
+										if (this.$el.checked) {
+											this.hasMistake = false
+											author.affiliations[id].country.id = ''
+										} else {
+											author.affiliations[id].country = {}
+										}
+									},
+									placeholderRu() {
+										if (this.noAffiliation) {
+											return 'Укажите аффилиацию на русском языке (если применимо)'
+										}
+
+										return 'Начните вводить название организации на русском языке, появится выпадающий список. Если Вашей организации нет в списке, отметьте чекбокс ниже'
+									},
+									placeholderEn() {
+										if (this.noAffiliation) {
+											return 'Please insert your affiliation in English'
+										}
+
+										return 'The name of your institution will be translated automatically. If the translation is incorrect,  check the box \'Аффилиация имеет ошибку в написании\' below to edit the name'
 									},
 								}">
 									<div class="form__line" @click.outside="show = false">
-										<textarea autocomplete="off" name="form[]" placeholder="Введите вашу аффилиацию" class="input"
+										<textarea autocomplete="off" :placeholder="placeholder{{ ucfirst($lang) }}" class="input"
 											:class="form.invalid(`affiliations.${id}.title_{{ $lang }}`) && '_error'" x-model="author.affiliations[id].title_{{ $lang }}"
 											@input.debounce.500ms="getSuggestions"></textarea>
 										<template x-if="form.invalid(`affiliations.${id}.title_{{ $lang }}`)">
@@ -364,7 +409,30 @@
 												</template>
 											</ul>
 										</div>
-	
+									</div>
+
+									<div class="form__line" 
+										x-show="noAffiliation" 
+										:class="form.invalid('country.id') && '_error'" 
+										@click.outside="showCountries = false"
+									>
+										<input class="form-block__input input" autocomplete="off" type="text"
+											placeholder="Please start typing the country"
+											:value="affiliation.country?.name_ru ? affiliation.country?.name_ru + ' | ' + affiliation.country?.name_en : ''"
+											@input.debounce.500ms="getCountries">
+										<template x-if="form.invalid(`affiliations.${id}.country.id`)">
+											<div class="form__error" x-text="form.errors[`affiliations.${id}.country.id`]"></div>
+										</template>
+										<div class="input-tips" x-show="showCountries" x-transition.opacity>
+											<ul>
+												<template x-for="country in countries">
+													<li x-text="country.name_ru + `| ${country.name_en}`" @click="selectCountry(country, id)"></li>
+												</template>
+												<template x-if="countries.length === 0">
+													<li>Ничего не найдено</li>
+												</template>
+											</ul>
+										</div>
 									</div>
 	
 									<div class="form__line">

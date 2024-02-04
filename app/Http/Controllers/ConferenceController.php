@@ -17,14 +17,34 @@ use Src\Domains\Conferences\Models\Subject;
 
 class ConferenceController extends Controller
 {
-    public function organizerIndex(): View|Factory
+    public function organizationIndex(): View|Factory
     {
-        return view('conferences');
+        $conferences = Conference::where('organization_id', organization()->id)
+            ->with(['organization', 'subjects'])
+            ->orderByDesc('start_date')
+            ->get();
+
+        return view('conferences', [
+            'title' => 'Мои мероприятия',
+            'h1' => 'Организуемые мероприятия',
+            'conferences' => $conferences,
+        ]);
     }
 
     public function participantIndex(): View|Factory
     {
-        return view('conferences');
+        $conferenceIds = participant()->participations->pluck('conference_id');
+
+        $conferences = Conference::whereIn('id', $conferenceIds)
+            ->with(['organization', 'subjects'])
+            ->orderByDesc('start_date')
+            ->get();
+
+        return view('conferences', [
+            'title' => 'Мои мероприятия',
+            'h1' => 'Мероприятия в которых Вы участвуете',
+            'conferences' => $conferences,
+        ]);
     }
 
     public function subjectIndex(Subject $subject): View|Factory

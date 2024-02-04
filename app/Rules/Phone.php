@@ -16,7 +16,7 @@ class Phone implements ValidationRule
     {
         $clean = strlen(preg_replace('~\D~', '', $value));
 
-        if ($clean < 11 || $clean > 11) {
+        if ($clean < 7 || $clean > 15) {
             $fail(__('validation.phone.digits'));
         }
     }
