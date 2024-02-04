@@ -380,7 +380,7 @@
 											return 'Please insert your affiliation in English'
 										}
 
-										return 'The name of your institution will be translated automatically. If the translation is incorrect,  check the box \'Аффилиация имеет ошибку в написании\' below to edit the name'
+										return 'Start typing name of your organization'
 									},
 								}">
 									<div class="form__line" @click.outside="show = false">
@@ -409,7 +409,7 @@
 										@click.outside="showCountries = false"
 									>
 										<input class="form-block__input input" autocomplete="off" type="text"
-											placeholder="Please start typing the country"
+											placeholder="Начните печатать страну аффилиации и выберите из выпадающего списка"
 											:value="affiliation.country?.name_ru ? affiliation.country?.name_ru + ' | ' + affiliation.country?.name_en : ''"
 											@input.debounce.500ms="getCountries">
 										<template x-if="form.invalid(`affiliations.${id}.country.id`)">
