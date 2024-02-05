@@ -24,7 +24,7 @@
 								@endif
                             </div>
                             <div class="header-item-event__descr">
-                                <div class="descr-item">
+                                <div class="descr-item" title="Стоимость для участников">
                                     <div class="descr-item__img">
                                         <img src="{{ Vite::asset('resources/img/icons/student.svg') }}" alt="Image">
                                     </div>
@@ -36,7 +36,7 @@
 										@endif
                                     </div>
                                 </div>
-                                <div class="descr-item">
+                                <div class="descr-item" title="Стоимость для посетителей">
                                     <div class="descr-item__img">
                                         <img src="{{ Vite::asset('resources/img/icons/projector.svg') }}" alt="Image">
                                     </div>
@@ -48,7 +48,7 @@
 										@endif
                                     </div>
                                 </div>
-                                <div class="descr-item">
+                                <div class="descr-item" title="Стоимость отправки тезисов">
                                     <div class="descr-item__img">
                                         <img src="{{ Vite::asset('resources/img/icons/star.svg') }}" alt="Image">
                                     </div>
