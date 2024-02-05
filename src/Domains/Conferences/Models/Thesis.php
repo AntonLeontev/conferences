@@ -42,21 +42,21 @@ class Thesis extends Model
         static::creating(function (Thesis $thesis) {
             $conference = $thesis->load('participation')->participation->conference;
             $conference->loadCount('theses');
-            $number = $conference->theses_count + 1;
+            $number = (string) ($conference->theses_count + 1);
 
             if (! is_null($thesis->section_id)) {
                 $section = Section::find($thesis->section_id);
                 $thesis->thesis_id = sprintf(
-                    '%s-%s-%s',
+                    '%s-%s%s',
                     $conference->slug,
                     $section->short_title_en,
-                    $number
+                    str_pad($number, 3, '0', STR_PAD_LEFT)
                 );
             } else {
                 $thesis->thesis_id = sprintf(
-                    '%s-%s',
+                    '%s%s',
                     $conference->slug,
-                    $number
+                    str_pad($number, 3, '0', STR_PAD_LEFT)
                 );
             }
         });
