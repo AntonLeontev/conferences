@@ -56,6 +56,10 @@ class ThesisCreatedParticipantNotification extends Notification implements Shoul
                 __('emails/notifications.thesis_created_participant_notification.action'),
                 route('theses.edit', [$conference->slug, $this->thesis->id])
             )
+            ->salutation(__(
+                'emails/notifications.thesis_created_participant_notification.salutation',
+                ['conference_title' => $conference->{'title_'.$locale}]
+            ))
             ->attachData($pdf->output(), "Abstract {$this->thesis->thesis_id}.pdf");
     }
 

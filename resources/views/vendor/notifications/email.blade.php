@@ -35,11 +35,14 @@
 
 {{-- Salutation --}}
 @if (! empty($salutation))
+@lang('Regards'),<br>
 {{ $salutation }}
 @else
 @lang('Regards'),<br>
 {{ config('app.name') }}
 @endif
+
+<span style="font-size: 10px">Powered by <a href="{{ route('home') }}" target="_blank">UCP</a></span>
 
 {{-- Subcopy --}}
 @isset($actionText)
