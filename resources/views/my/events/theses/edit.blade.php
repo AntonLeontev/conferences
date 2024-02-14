@@ -199,20 +199,20 @@
 					@if ($lang === 'ru')
 						<div class="form__row _three">
 							<div class="form__line" :class="form.invalid(`authors.${id}.name_ru`) && '_error'">
-								<label class="form__label" for="u_5">@lang('auth.register.name_ru') (*)</label>
-								<input id="u_5" class="input" autocomplete="off" type="text" name="name_ru"
+								<label class="form__label" :for="'u_5'+id">@lang('auth.register.name_ru') (*)</label>
+								<input :id="'u_5'+id" class="input" autocomplete="off" type="text" name="name_ru"
 									data-error="Ошибка" placeholder="@lang('auth.register.name_ru')" x-model="form.authors[id].name_ru"
 									@input.debounce.500ms="inputName(id)">
 							</div>
 							<div class="form__line" :class="form.invalid(`authors.${id}.surname_ru`) && '_error'">
-								<label class="form__label" for="u_6">@lang('auth.register.surname_ru') (*)</label>
-								<input id="u_6" class="input" autocomplete="off" type="text" name="surname_ru"
+								<label class="form__label" :for="'u_6'+id">@lang('auth.register.surname_ru') (*)</label>
+								<input :id="'u_6'+id" class="input" autocomplete="off" type="text" name="surname_ru"
 									data-error="Ошибка" placeholder="@lang('auth.register.surname_ru')" x-model="form.authors[id].surname_ru"
 									@input.debounce.500ms="inputSurname(id)">
 							</div>
 							<div class="form__line" :class="form.invalid(`authors.${id}.middle_name_ru`) && '_error'">
-								<label class="form__label" for="u_7">@lang('auth.register.middle_name_ru')</label>
-								<input id="u_7" class="input" autocomplete="off" type="text" name="middle_name_ru"
+								<label class="form__label" :for="'u_7'+id">@lang('auth.register.middle_name_ru')</label>
+								<input :id="'u_7'+id" class="input" autocomplete="off" type="text" name="middle_name_ru"
 									data-error="Ошибка" placeholder="@lang('auth.register.middle_name_ru')" x-model="form.authors[id].middle_name_ru"
 									@input.debounce.1000ms="form.validate(`authors.${id}.middle_name_ru`)">
 							</div>
@@ -231,20 +231,20 @@
 					@if ($lang === 'en')
 						<div class="form__row _three">
 							<div class="form__line" :class="form.invalid(`authors.${id}.name_en`) && '_error'">
-								<label class="form__label" for="u_8">@lang('auth.register.name_en') (*)</label>
-								<input id="u_8" class="input" autocomplete="off" type="text" name="name_en"
+								<label class="form__label" :for="'u_8'+id">@lang('auth.register.name_en') (*)</label>
+								<input :id="'u_8'+id" class="input" autocomplete="off" type="text" name="name_en"
 									data-error="Ошибка" placeholder="@lang('auth.register.name_en')" x-model="form.authors[id].name_en"
 									@input.debounce.500ms="inputName(id)">
 							</div>
 							<div class="form__line" :class="form.invalid(`authors.${id}.surname_en`) && '_error'">
-								<label class="form__label" for="u_9">@lang('auth.register.surname_en') (*)</label>
-								<input id="u_9" class="input" autocomplete="off" type="text" name="surname_en"
+								<label class="form__label" :for="'u_9'+id">@lang('auth.register.surname_en') (*)</label>
+								<input :id="'u_9'+id" class="input" autocomplete="off" type="text" name="surname_en"
 									data-error="Ошибка" placeholder="@lang('auth.register.surname_en')" x-model="form.authors[id].surname_en"
 									@input.debounce.500ms="inputSurname(id)">
 							</div>
 							<div class="form__line" :class="form.invalid(`authors.${id}.middle_name_en`) && '_error'">
-								<label class="form__label" for="u_10">@lang('auth.register.middle_name_en')</label>
-								<input id="u_10" class="input" autocomplete="off" type="text" name="middle_name_en"
+								<label class="form__label" :for="'u_10'+id">@lang('auth.register.middle_name_en')</label>
+								<input :id="'u_10'+id" class="input" autocomplete="off" type="text" name="middle_name_en"
 									data-error="Ошибка" placeholder="@lang('auth.register.middle_name_en')"
 									x-model="form.authors[id].middle_name_en"
 									@input.debounce.1000ms="form.validate(`authors.${id}.middle_name_en`)">
@@ -295,7 +295,7 @@
 							},
 						}">
 							<label class="form__label" for="f_1">Аффилиации</label>
-							<template x-for="affiliation, id in author.affiliations" x-key="id">
+							<template x-for="affiliation, affId in author.affiliations" x-key="affId">
 								<div class="affiliation form__line" x-data="{
 									suggestions: [],
 									countries: [],
@@ -385,16 +385,16 @@
 								}">
 									<div class="form__line" @click.outside="show = false">
 										<textarea autocomplete="off" :placeholder="placeholder{{ ucfirst($lang) }}" class="input"
-											:class="form.invalid(`affiliations.${id}.title_{{ $lang }}`) && '_error'" x-model="author.affiliations[id].title_{{ $lang }}"
+											:class="form.invalid(`affiliations.${affId}.title_{{ $lang }}`) && '_error'" x-model="author.affiliations[affId].title_{{ $lang }}"
 											@input.debounce.500ms="getSuggestions"></textarea>
-										<template x-if="form.invalid(`affiliations.${id}.title_{{ $lang }}`)">
-											<div class="form__error" x-text="form.errors[`affiliations.${id}.title_{{ $lang }}`]">
+										<template x-if="form.invalid(`affiliations.${affId}.title_{{ $lang }}`)">
+											<div class="form__error" x-text="form.errors[`affiliations.${affId}.title_{{ $lang }}`]">
 											</div>
 										</template>
 										<div class="input-tips" x-show="show" x-transition.opacity>
 											<ul>
 												<template x-for="suggestion in suggestions">
-													<li x-text="suggestion.title_{{ $lang }}" @click="select(suggestion, id)"></li>
+													<li x-text="suggestion.title_{{ $lang }}" @click="select(suggestion, affId)"></li>
 												</template>
 												<template x-if="suggestions.length === 0">
 													<li>Ничего не найдено</li>
@@ -412,13 +412,13 @@
 											placeholder="Начните печатать страну аффилиации и выберите из выпадающего списка"
 											:value="affiliation.country?.name_ru ? affiliation.country?.name_ru + ' | ' + affiliation.country?.name_en : ''"
 											@input.debounce.500ms="getCountries">
-										<template x-if="form.invalid(`affiliations.${id}.country.id`)">
-											<div class="form__error" x-text="form.errors[`affiliations.${id}.country.id`]"></div>
+										<template x-if="form.invalid(`affiliations.${affId}.country.id`)">
+											<div class="form__error" x-text="form.errors[`affiliations.${affId}.country.id`]"></div>
 										</template>
 										<div class="input-tips" x-show="showCountries" x-transition.opacity>
 											<ul>
 												<template x-for="country in countries">
-													<li x-text="country.name_ru + `| ${country.name_en}`" @click="selectCountry(country, id)"></li>
+													<li x-text="country.name_ru + `| ${country.name_en}`" @click="selectCountry(country, affId)"></li>
 												</template>
 												<template x-if="countries.length === 0">
 													<li>Ничего не найдено</li>
@@ -430,17 +430,17 @@
 									<div class="form__line">
 										<div class="checkbox-items">
 											<div class="checkbox">
-												<input :id="'a_1' + id" class="checkbox__input" type="checkbox"
-													:name="'handle' + id" x-model="hasMistake" @change="changeMistake">
-												<label :for="'a_1' + id" class="checkbox__label">
+												<input :id="'a_1' + id + affId" class="checkbox__input" type="checkbox"
+													:name="'handle' + id + affId" x-model="hasMistake" @change="changeMistake">
+												<label :for="'a_1' + id + affId" class="checkbox__label">
 													<span class="checkbox__text">Аффилиация имеет ошибку в написании</span>
 												</label>
 											</div>
 											<div class="checkbox">
-												<input :id="'a_2' + id" class="checkbox__input" type="checkbox"
-													:name="'handle' + id" x-model="noAffiliation"
+												<input :id="'a_2' + id + affId" class="checkbox__input" type="checkbox"
+													:name="'handle' + id + affId" x-model="noAffiliation"
 													@change="changeNoAffiliation">
-												<label :for="'a_2' + id" class="checkbox__label">
+												<label :for="'a_2' + id + affId" class="checkbox__label">
 													<span class="checkbox__text">Аффилиации нет в списке</span>
 												</label>
 											</div>
@@ -448,7 +448,7 @@
 									</div>
 									<div class="form__line">
 										<button class="form__button button button_outline" type="button"
-											@click="remove(id)">
+											@click="remove(affId)">
 											Убрать аффилиацию
 										</button>
 									</div>
