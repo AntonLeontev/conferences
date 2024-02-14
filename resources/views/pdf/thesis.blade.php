@@ -83,7 +83,7 @@
 					{{ $author['name_'.$lang] }}@if (!empty($author['middle_name_'.$lang])) {{ mb_substr($author['middle_name_'.$lang], 0, 1) }}.@endif {{ $author['surname_'.$lang] }}<sup class="sup">{{ implode(',', $authorAffiliationIndexes) }}</sup>@if (!$loop->last),@endif
 				</span>
 			@if ($thesis->reporter['id'] == $key)
-			</strong>
+				</strong>
 			@endif
 		@endforeach
 	</div>

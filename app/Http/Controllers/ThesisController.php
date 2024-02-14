@@ -15,6 +15,20 @@ use Src\Domains\Conferences\Models\Thesis;
 
 class ThesisController extends Controller
 {
+    public function indexByConference(Conference $conference): View|Factory
+    {
+        $theses = $conference->theses;
+
+        return view('my.events.theses.index-by-conference', compact('conference', 'theses'));
+    }
+
+    public function show(Conference $conference, Thesis $thesis): View|Factory
+    {
+        $thesis->load('participation');
+
+        return view('my.events.theses.show', compact('conference', 'thesis'));
+    }
+
     public function create(Conference $conference): View|Factory
     {
         $participation = $conference->participationByUser();

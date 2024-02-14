@@ -39,6 +39,15 @@ class Participation extends Model
         'affiliations' => 'array',
     ];
 
+    public function getFullnameAttribute(): string
+    {
+        if ($this->{'middle_name_'.loc()}) {
+            return $this->{'name_'.loc()}.' '.mb_substr($this->{'middle_name_'.loc()}, 0, 1).'. '.$this->{'surname_'.loc()};
+        }
+
+        return $this->{'name_'.loc()}.' '.$this->{'surname_'.loc()};
+    }
+
     public function participant(): BelongsTo
     {
         return $this->belongsTo(Participant::class);

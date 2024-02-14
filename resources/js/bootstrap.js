@@ -9,6 +9,9 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+import { DateTime } from "luxon";
+window.DateTime = DateTime;
+
 import Alpine from "alpinejs";
 import mask from "@alpinejs/mask";
 import Precognition from "laravel-precognition-alpine";
