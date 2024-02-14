@@ -348,24 +348,24 @@
 										if (this.$el.checked) {
 											this.noAffiliation = false
 										} else {
-											author.affiliations[id].id = ''
-											author.affiliations[id].title_ru = ''
-											author.affiliations[id].title_en = ''
+											author.affiliations[affId].id = ''
+											author.affiliations[affId].title_ru = ''
+											author.affiliations[affId].title_en = ''
 										}
-										author.affiliations[id].has_mistake = this.$el.checked
-										this.form.affiliations[id].country = {}
+										author.affiliations[affId].has_mistake = this.$el.checked
+										this.form.affiliations[affId].country = {}
 									},
 									changeNoAffiliation() {
-										author.affiliations[id].id = ''
-										author.affiliations[id].title_ru = ''
-										author.affiliations[id].title_en = ''
-										author.affiliations[id].no_affiliation = this.$el.checked
+										author.affiliations[affId].id = ''
+										author.affiliations[affId].title_ru = ''
+										author.affiliations[affId].title_en = ''
+										author.affiliations[affId].no_affiliation = this.$el.checked
 
 										if (this.$el.checked) {
 											this.hasMistake = false
-											author.affiliations[id].country.id = ''
+											author.affiliations[affId].country.id = ''
 										} else {
-											author.affiliations[id].country = {}
+											author.affiliations[affId].country = {}
 										}
 									},
 									placeholderRu() {
