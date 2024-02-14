@@ -41,7 +41,14 @@ class ThesisCreatedParticipantNotification extends Notification implements Shoul
 
         App::setLocale($locale);
 
-        $pdf = Pdf::loadView('pdf.thesis', ['thesis' => $this->thesis, 'conference' => $conference]);
+        $authors = $this->thesis->authors;
+        $thesisId = $this->thesis->thesis_id;
+        $title = $this->thesis->title;
+        $reporter = $this->thesis->reporter;
+        $contact = $this->thesis->contact;
+        $text = $this->thesis->text;
+
+        $pdf = Pdf::loadView('pdf.thesis', compact('conference', 'authors', 'thesisId', 'title', 'reporter', 'contact', 'text'));
 
         return (new MailMessage)
             ->subject(__('emails/notifications.thesis_created_participant_notification.subject'))

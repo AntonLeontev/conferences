@@ -101,7 +101,7 @@
                                 </div>
                             </div>
                             <div class="thesis-single__buttons">
-                                <a href="" class="button">Скачать PDF</a>
+                                <a href="{{ route('pdf.thesis.download', [$conference->slug, $thesis->id]) }}" download class="button">Скачать PDF</a>
                             </div>
                         </div>
                     </div>

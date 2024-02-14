@@ -52,6 +52,8 @@ class ThesisCreateTest extends TestCase
             'organization_id' => $this->organization->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDay(),
+            'thesis_accept_until' => now()->addDay(),
+            'thesis_edit_until' => now()->addDay(),
         ]);
         $this->section = SectionFactory::new()->create(['conference_id' => $this->conference->id]);
         $participant = ParticipantFactory::new()->create([
@@ -84,10 +86,11 @@ class ThesisCreateTest extends TestCase
             'text' => '<p>some text</p>',
         ]);
 
+        $response->assertJson(['redirect' => route('conference.show', $this->conference->slug)]);
+        $response->assertOk();
+
         Notification::assertSentTo($this->participantUser, ThesisCreatedParticipantNotification::class);
         Notification::assertSentTo($this->organizationUser, ThesisCreatedOrganizationNotification::class);
-
-        $response->assertOk();
     }
 
     public function test_fail_by_conference_thesis_accept_date(): void

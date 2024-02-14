@@ -44,7 +44,7 @@
 	$lang = $conference->abstracts_lang->value;	
 	
 	$affiliationsList = collect();
-	foreach ($thesis->authors ?? [] as $author) {
+	foreach ($authors ?? [] as $author) {
 		foreach ($author['affiliations'] ?? [] as $affiliation) {
 			if ($affiliationsList->contains(fn($value) => $affiliation['title_'.$lang] === $value['title_'.$lang])) {
 				continue;
@@ -58,15 +58,15 @@
 @section('content')
 	<div class="acronim">
 		<strong>
-			{{ $thesis->thesis_id }}
+			{{ $thesisId }}
 		</strong>
 	</div>
 	<div class="title">
-		<strong>{!! $thesis->title !!}</strong>
+		<strong>{!! $title !!}</strong>
 	</div>
 
 	<div class="authors">
-		@foreach ($thesis->authors as $key => $author)
+		@foreach ($authors as $key => $author)
 			@php
 				$authorAffiliationIndexes = [];
 				foreach ($author['affiliations'] ?? [] as $affiliation) {
@@ -76,13 +76,13 @@
 					}
 				}
 			@endphp
-			@if ($thesis->reporter['id'] == $key)
+			@if ($reporter['id'] == $key)
 				<strong>
 			@endif
 				<span>
 					{{ $author['name_'.$lang] }}@if (!empty($author['middle_name_'.$lang])) {{ mb_substr($author['middle_name_'.$lang], 0, 1) }}.@endif {{ $author['surname_'.$lang] }}<sup class="sup">{{ implode(',', $authorAffiliationIndexes) }}</sup>@if (!$loop->last),@endif
 				</span>
-			@if ($thesis->reporter['id'] == $key)
+			@if ($reporter['id'] == $key)
 				</strong>
 			@endif
 		@endforeach
@@ -95,6 +95,6 @@
 			</li>
 		@endforeach
 	</ul>
-	<div class="email">{{ $thesis->contact['email'] }}</div>
-	<div class="text">{!! str($thesis->text)->replace('<br>', ' ') !!}</div>
+	<div class="email">{{ $contact['email'] }}</div>
+	<div class="text">{!! str($text)->replace('<br>', ' ') !!}</div>
 @endsection

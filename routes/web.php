@@ -102,6 +102,9 @@ Route::group([
     Route::middleware(['auth'])
         ->post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])
         ->name('pdf.thesis.preview');
+    Route::middleware(['auth'])
+        ->get('pdf/events/{conference:slug}/theses/{thesis}/pdf', [PdfController::class, 'thesisDownload'])
+        ->name('pdf.thesis.download');
 });
 
 Route::middleware(['precognitive'])->post('feedback', FeedbackController::class)->name('feedback');

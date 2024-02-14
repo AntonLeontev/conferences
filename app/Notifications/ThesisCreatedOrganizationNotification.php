@@ -39,21 +39,16 @@ class ThesisCreatedOrganizationNotification extends Notification implements Shou
         $conference = $this->thesis->load('participation')->participation->conference;
         $locale = $conference->abstracts_lang->value;
 
-        $authors = '';
-
-        foreach ($this->thesis->authors as $author) {
-            if (is_null($author['middle_name_'.$locale])) {
-                $authors .= $author['name_'.$locale].' '.$author['surname_'.$locale].', ';
-            } else {
-                $authors .= $author['name_'.$locale].' '.mb_substr($author['middle_name_'.$locale], 0, 1).'. '.$author['surname_'.$locale].', ';
-            }
-        }
-
-        $authors = trim($authors, " \n\r\t\v\0,");
-
         App::setLocale($locale);
 
-        $pdf = Pdf::loadView('pdf.thesis', ['thesis' => $this->thesis, 'conference' => $conference]);
+        $authors = $this->thesis->authors;
+        $thesisId = $this->thesis->thesis_id;
+        $title = $this->thesis->title;
+        $reporter = $this->thesis->reporter;
+        $contact = $this->thesis->contact;
+        $text = $this->thesis->text;
+
+        $pdf = Pdf::loadView('pdf.thesis', compact('conference', 'authors', 'thesisId', 'title', 'reporter', 'contact', 'text'));
 
         return (new MailMessage)
             ->subject(__('emails/notifications.thesis_created_organization_notification.subject'))
