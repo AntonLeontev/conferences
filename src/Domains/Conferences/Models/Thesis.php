@@ -6,6 +6,7 @@ use App\Casts\ThesisTitleCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use RuntimeException;
 use Src\Domains\Conferences\Enums\ReportForm;
 
 class Thesis extends Model
@@ -37,25 +38,38 @@ class Thesis extends Model
         return $this->belongsTo(Participation::class);
     }
 
+    public function section(): BelongsTo
+    {
+        return $this->belongsTo(Section::class);
+    }
+
     protected static function booted(): void
     {
         static::creating(function (Thesis $thesis) {
-            $conference = $thesis->load('participation')->participation->conference;
-            $conference->loadCount('theses');
-            $number = (string) ($conference->theses_count + 1);
+            $conference = $thesis->load(['participation'])->participation->conference;
 
-            if (! is_null($thesis->section_id)) {
+            if ($conference->sections->isEmpty()) {
+                $conference->loadCount('theses');
+                $number = (string) ($conference->theses_count + 1);
+
+                $thesis->thesis_id = sprintf(
+                    '%s%s',
+                    $conference->slug,
+                    str_pad($number, 3, '0', STR_PAD_LEFT)
+                );
+            } else {
+                if (is_null($thesis->section_id)) {
+                    throw new RuntimeException('Сохранение тезисов бeз указания секции, хотя в конференции есть секции');
+                }
+
+                $thesesInSectionCount = Thesis::where('section_id', $thesis->section_id)->count();
+                $number = (string) ($thesesInSectionCount + 1);
+
                 $section = Section::find($thesis->section_id);
                 $thesis->thesis_id = sprintf(
                     '%s-%s%s',
                     $conference->slug,
                     $section->short_title_en,
-                    str_pad($number, 3, '0', STR_PAD_LEFT)
-                );
-            } else {
-                $thesis->thesis_id = sprintf(
-                    '%s%s',
-                    $conference->slug,
                     str_pad($number, 3, '0', STR_PAD_LEFT)
                 );
             }

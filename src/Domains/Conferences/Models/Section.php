@@ -5,6 +5,7 @@ namespace Src\Domains\Conferences\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Section extends Model
 {
@@ -22,6 +23,11 @@ class Section extends Model
     public function conference(): BelongsTo
     {
         return $this->belongsTo(Conference::class);
+    }
+
+    public function theses(): HasMany
+    {
+        return $this->hasMany(Thesis::class);
     }
 
     protected static function booted(): void
