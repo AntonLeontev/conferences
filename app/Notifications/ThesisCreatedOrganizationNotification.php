@@ -41,6 +41,18 @@ class ThesisCreatedOrganizationNotification extends Notification implements Shou
 
         App::setLocale($locale);
 
+        $authorsList = '';
+
+        foreach ($this->thesis->authors as $author) {
+            if (is_null($author['middle_name_'.$locale])) {
+                $authorsList .= $author['name_'.$locale].' '.$author['surname_'.$locale].', ';
+            } else {
+                $authorsList .= $author['name_'.$locale].' '.mb_substr($author['middle_name_'.$locale], 0, 1).'. '.$author['surname_'.$locale].', ';
+            }
+        }
+
+        $authorsList = trim($authorsList, " \n\r\t\v\0,");
+
         $authors = $this->thesis->authors;
         $thesisId = $this->thesis->thesis_id;
         $title = $this->thesis->title;
@@ -57,7 +69,7 @@ class ThesisCreatedOrganizationNotification extends Notification implements Shou
                 [
                     'conference_title' => $conference->{'title_'.$locale},
                     'abstract_title' => $this->thesis->title,
-                    'authors' => $authors,
+                    'authors' => $authorsList,
                     'datetime' => $this->thesis->created_at->translatedFormat('d M Y H:i'),
                     'abstract_id' => $this->thesis->thesis_id,
                 ],
