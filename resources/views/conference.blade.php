@@ -132,7 +132,7 @@
 								@if ($conference->end_date > now())
 									@if (auth()->user()->organization?->id === $conference->organization_id)
 										<li>
-											<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary">Редактировать</a>
+											<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary">Управление мероприятием</a>
 										</li>
 									@endif
 								@endif
