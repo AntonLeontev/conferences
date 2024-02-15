@@ -3,15 +3,18 @@
 namespace Src\Domains\Conferences\Models;
 
 use App\Casts\ThesisTitleCast;
+use App\Events\ThesisDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use RuntimeException;
 use Src\Domains\Conferences\Enums\ReportForm;
 
 class Thesis extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'thesis_id',
@@ -33,6 +36,10 @@ class Thesis extends Model
         'contact' => 'array',
     ];
 
+    protected $dispatchesEvents = [
+        'deleted' => ThesisDeleted::class,
+    ];
+
     public function participation(): BelongsTo
     {
         return $this->belongsTo(Participation::class);
@@ -49,7 +56,11 @@ class Thesis extends Model
             $conference = $thesis->load(['participation'])->participation->conference;
 
             if ($conference->sections->isEmpty()) {
-                $conference->loadCount('theses');
+                $conference->loadCount([
+                    'theses' => function ($query) {
+                        $query->withTrashed();
+                    },
+                ]);
                 $number = (string) ($conference->theses_count + 1);
 
                 $thesis->thesis_id = sprintf(
@@ -62,7 +73,7 @@ class Thesis extends Model
                     throw new RuntimeException('Сохранение тезисов бeз указания секции, хотя в конференции есть секции');
                 }
 
-                $thesesInSectionCount = Thesis::where('section_id', $thesis->section_id)->count();
+                $thesesInSectionCount = Thesis::where('section_id', $thesis->section_id)->withTrashed()->count();
                 $number = (string) ($thesesInSectionCount + 1);
 
                 $section = Section::find($thesis->section_id);

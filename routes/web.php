@@ -89,7 +89,9 @@ Route::group([
                 Route::middleware(['precognitive'])
                     ->post('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'update'])
                     ->name('theses.update');
-
+                Route::middleware([OnlyThesisOwner::class])
+                    ->delete('abstracts/{thesis}/edit', [ThesisController::class, 'destroy'])
+                    ->name('theses.destroy');
             });
         });
 

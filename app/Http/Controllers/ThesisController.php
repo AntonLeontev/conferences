@@ -8,6 +8,7 @@ use App\Http\Requests\ThesisUpdateRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Src\Domains\Conferences\Actions\CreateThesis;
 use Src\Domains\Conferences\Actions\UpdateThesis;
 use Src\Domains\Conferences\Models\Conference;
@@ -64,5 +65,12 @@ class ThesisController extends Controller
         $updateThesis->handle($thesis, $request);
 
         return response()->json(['redirect' => route('conference.show', $conference->slug)]);
+    }
+
+    public function destroy(Thesis $thesis): JsonResponse
+    {
+        $thesis->delete();
+
+        return response()->json(status: Response::HTTP_NO_CONTENT);
     }
 }
