@@ -12,14 +12,30 @@ use Src\Domains\Conferences\Models\Subject;
 if (! function_exists('subjects')) {
     function subjects(): Collection
     {
-        return Subject::all();
+        if (cache()->has('subjects')) {
+            return cache('subjects');
+        }
+
+        $subjects = Subject::all();
+
+        cache(['subjects' => $subjects]);
+
+        return $subjects;
     }
 }
 
 if (! function_exists('conference_types')) {
     function conference_types(): Collection
     {
-        return ConferenceType::all();
+        if (cache()->has('conference_types')) {
+            return cache('conference_types');
+        }
+
+        $types = ConferenceType::all();
+
+        cache(['conference_types' => $types]);
+
+        return $types;
     }
 }
 

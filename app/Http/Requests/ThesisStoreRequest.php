@@ -63,6 +63,20 @@ class ThesisStoreRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'authors.*.affiliations.*.country.id' => 'Страна аффилиации',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'authors.*.affiliations.*.country.id.required' => 'Поле :attribute должно быть выбрано из выпадающего списка',
+        ];
+    }
+
     protected function prepareForValidation()
     {
     }

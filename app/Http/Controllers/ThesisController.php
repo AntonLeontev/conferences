@@ -8,6 +8,7 @@ use App\Http\Requests\ThesisUpdateRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Src\Domains\Conferences\Actions\CreateThesis;
 use Src\Domains\Conferences\Actions\UpdateThesis;
 use Src\Domains\Conferences\Models\Conference;
@@ -15,6 +16,24 @@ use Src\Domains\Conferences\Models\Thesis;
 
 class ThesisController extends Controller
 {
+    public function indexByConference(Conference $conference): View|Factory
+    {
+        $theses = $conference->load([
+            'theses' => function ($query) {
+                $query->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at']);
+            },
+        ])->theses;
+
+        return view('my.events.theses.index-by-conference', compact('conference', 'theses'));
+    }
+
+    public function show(Conference $conference, Thesis $thesis): View|Factory
+    {
+        $thesis->load('participation');
+
+        return view('my.events.theses.show', compact('conference', 'thesis'));
+    }
+
     public function create(Conference $conference): View|Factory
     {
         $participation = $conference->participationByUser();
@@ -50,5 +69,12 @@ class ThesisController extends Controller
         $updateThesis->handle($thesis, $request);
 
         return response()->json(['redirect' => route('conference.show', $conference->slug)]);
+    }
+
+    public function destroy(Thesis $thesis): JsonResponse
+    {
+        $thesis->delete();
+
+        return response()->json(status: Response::HTTP_NO_CONTENT);
     }
 }

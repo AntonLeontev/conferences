@@ -18,7 +18,6 @@ use Src\Domains\Auth\Models\User;
 use Src\Domains\Conferences\Enums\ReportForm;
 use Src\Domains\Conferences\Models\Conference;
 use Src\Domains\Conferences\Models\Participation;
-use Src\Domains\Conferences\Models\Section;
 use Tests\TestCase;
 
 class ThesisCreateTest extends TestCase
@@ -31,11 +30,11 @@ class ThesisCreateTest extends TestCase
 
     protected Conference $conference;
 
-    protected Section $section;
-
     protected Participation $participation;
 
     protected Organization $organization;
+
+    protected array $data;
 
     public function setUp(): void
     {
@@ -52,21 +51,17 @@ class ThesisCreateTest extends TestCase
             'organization_id' => $this->organization->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDay(),
+            'thesis_accept_until' => now()->addDay(),
+            'thesis_edit_until' => now()->addDay(),
         ]);
-        $this->section = SectionFactory::new()->create(['conference_id' => $this->conference->id]);
+
         $participant = ParticipantFactory::new()->create([
             'user_id' => $this->participantUser->id,
         ]);
         $this->participation = ParticipationFactory::new()->create();
-    }
 
-    public function test_creating_thesis(): void
-    {
-        Notification::fake();
-
-        $response = $this->actingAs($this->participantUser)->post(action([ThesisController::class, 'store'], $this->conference->slug), [
+        $this->data = [
             'participation_id' => $this->participation->id,
-            'section_id' => $this->section->id,
             'report_form' => ReportForm::mixed->value,
             'title' => '<p>Some title <sub>123</sub></p>',
             'authors' => [
@@ -82,12 +77,55 @@ class ThesisCreateTest extends TestCase
             'reporter' => ['id' => 1, 'is_young' => true],
             'contact' => ['id' => 1, 'email' => 'test@ya.ru'],
             'text' => '<p>some text</p>',
+        ];
+    }
+
+    public function test_creating_thesis_with_sections(): void
+    {
+        Notification::fake();
+
+        $firstSection = SectionFactory::new()->create(['conference_id' => $this->conference->id]);
+        $secondSection = SectionFactory::new()->create(['conference_id' => $this->conference->id]);
+
+        $data = array_merge($this->data, ['section_id' => $firstSection->id]);
+
+        $response = $this->actingAs($this->participantUser)->post(action([ThesisController::class, 'store'], $this->conference->slug), $data);
+
+        $response->assertJson(['redirect' => route('conference.show', $this->conference->slug)]);
+        $response->assertOk();
+
+        $this->assertDatabaseHas('theses', [
+            'thesis_id' => "{$this->conference->slug}-{$firstSection->short_title_en}001",
         ]);
 
         Notification::assertSentTo($this->participantUser, ThesisCreatedParticipantNotification::class);
         Notification::assertSentTo($this->organizationUser, ThesisCreatedOrganizationNotification::class);
 
+        $data['section_id'] = $secondSection->id;
+
+        $response = $this->actingAs($this->participantUser)->post(action([ThesisController::class, 'store'], $this->conference->slug), $data);
+
+        $this->assertDatabaseCount('theses', 2);
+        $this->assertDatabaseHas('theses', [
+            'thesis_id' => "{$this->conference->slug}-{$secondSection->short_title_en}001",
+        ]);
+    }
+
+    public function test_creating_thesis_without_sections(): void
+    {
+        Notification::fake();
+
+        $response = $this->actingAs($this->participantUser)->post(action([ThesisController::class, 'store'], $this->conference->slug), $this->data);
+
+        $response->assertJson(['redirect' => route('conference.show', $this->conference->slug)]);
         $response->assertOk();
+
+        $this->assertDatabaseHas('theses', [
+            'thesis_id' => "{$this->conference->slug}001",
+        ]);
+
+        Notification::assertSentTo($this->participantUser, ThesisCreatedParticipantNotification::class);
+        Notification::assertSentTo($this->organizationUser, ThesisCreatedOrganizationNotification::class);
     }
 
     public function test_fail_by_conference_thesis_accept_date(): void

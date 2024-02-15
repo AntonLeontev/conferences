@@ -132,7 +132,7 @@
 								@if ($conference->end_date > now())
 									@if (auth()->user()->organization?->id === $conference->organization_id)
 										<li>
-											<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary">Редактировать</a>
+											<a href="{{ route('conference.edit', $conference->slug) }}" class="button button_primary">Управление мероприятием</a>
 										</li>
 									@endif
 								@endif
@@ -148,19 +148,45 @@
 											Список ваших тезисов:
 										</div>
 										@if ($participation->theses->isNotEmpty())
-											<ol class="theses__list">
+											<ol class="theses__list" x-data="theses">
 												@foreach ($participation->theses as $thesis)
-													<li>
-														@if ($conference->thesis_edit_until?->endOfDay()->isPast())
-															<span>{!! $thesis->title !!}</span>
-														@else
-															<a href="{{ route('theses.edit', [$conference->slug, $thesis->id]) }}">
-																{!! $thesis->title !!}
-															</a>
-														@endif
+													<li class="">
+														<div class="tw-flex tw-justify-between tw-items-center tw-gap-3">
+															@if ($conference->thesis_edit_until?->endOfDay()->isPast())
+																<span>{!! $thesis->title !!}</span>
+															@else
+																<a href="{{ route('theses.edit', [$conference->slug, $thesis->id]) }}">
+																	{!! $thesis->title !!}
+																</a>
+															@endif
+															@if ($conference->thesis_accept_until?->endOfDay()->isFuture())
+																<button class="hover:tw-text-[#e25553] tw-transition" 
+																	title="Отозвать и удалить тезисы" 
+																	@click="deleteThesis({{ $thesis->id }}, '{{ $thesis->title }}', '{{ $thesis->thesis_id }}')"
+																>
+																	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="tw-w-6 tw-h-6">
+																		<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+																	</svg>
+																</button>
+															@endif
+														</div>
 													</li>
 												@endforeach
 											</ol>
+											<script>
+												document.addEventListener('alpine:init', () => {
+													Alpine.data('theses', () => ({
+														deleteThesis(id, title, thesisId) {
+															if (confirm(`Вы намерены отозвать тезисы ${thesisId}, ${title}. Отозвать и удалить?`)) {
+																axios
+																	.delete(route('theses.destroy', id))
+																	.then(resp => location.reload())
+																	.catch(err => alert('Ошибка удаления'))
+															}
+														},
+													}))
+												})
+											</script>
 										@else
 											<p>Вы еще не отправляли тезисы</p>
 										@endif
