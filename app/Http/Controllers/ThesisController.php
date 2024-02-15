@@ -18,7 +18,11 @@ class ThesisController extends Controller
 {
     public function indexByConference(Conference $conference): View|Factory
     {
-        $theses = $conference->theses;
+        $theses = $conference->load([
+            'theses' => function ($query) {
+                $query->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at']);
+            },
+        ])->theses;
 
         return view('my.events.theses.index-by-conference', compact('conference', 'theses'));
     }
