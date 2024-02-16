@@ -110,4 +110,9 @@ class ConferenceController extends Controller
 
         return response()->json(['redirect' => route('conference.show', $conference->slug)], Response::HTTP_OK);
     }
+
+    public function participationsIndex(Conference $conference): View|Factory
+    {
+        return view('my.events.personal.participations', compact('conference'));
+    }
 }

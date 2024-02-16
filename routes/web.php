@@ -84,6 +84,9 @@ Route::group([
                 Route::middleware([OnlyConferenceOwner::class])
                     ->get('{conference:slug}/abstracts/{thesis}', [ThesisController::class, 'show'])
                     ->name('theses.show');
+                Route::middleware([OnlyConferenceOwner::class])
+                    ->get('{conference:slug}/participations', [ConferenceController::class, 'participationsIndex'])
+                    ->name('conference.participations');
                 Route::middleware([OnlyThesisOwner::class])
                     ->get('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'edit'])->name('theses.edit');
                 Route::middleware(['precognitive'])
