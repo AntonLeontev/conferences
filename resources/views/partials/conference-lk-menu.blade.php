@@ -7,5 +7,8 @@
         <li @if(Route::is('theses.index-by-conference')) class="active" @endif>
             <a href="{{ route('theses.index-by-conference', $conference->slug) }}">Список тезисов</a>
         </li>
+        <li @if(Route::is('conference.participations')) class="active" @endif>
+            <a href="{{ route('conference.participations', $conference->slug) }}">Список участников</a>
+        </li>
     </ul>
 </aside>

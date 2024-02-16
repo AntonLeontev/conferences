@@ -95,7 +95,7 @@ class ConferenceController extends Controller
 
     public function edit(Conference $conference): View|Factory
     {
-        return view('my.events.edit', compact('conference'));
+        return view('my.events.personal.edit', compact('conference'));
     }
 
     public function update(
@@ -109,5 +109,10 @@ class ConferenceController extends Controller
         $updateConferenceSections->handle($conference, $request);
 
         return response()->json(['redirect' => route('conference.show', $conference->slug)], Response::HTTP_OK);
+    }
+
+    public function participationsIndex(Conference $conference): View|Factory
+    {
+        return view('my.events.personal.participations', compact('conference'));
     }
 }

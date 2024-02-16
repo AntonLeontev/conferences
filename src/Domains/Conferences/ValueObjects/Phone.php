@@ -2,7 +2,9 @@
 
 namespace Src\Domains\Conferences\ValueObjects;
 
-class Phone
+use JsonSerializable;
+
+class Phone implements JsonSerializable
 {
     public function __construct(private string $phone)
     {
@@ -19,5 +21,13 @@ class Phone
             ->replaceMatches('~\D~', '')
             ->replaceStart('8', '+7')
             ->value();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'raw' => $this->raw(),
+            'clean' => $this->clean(),
+        ];
     }
 }

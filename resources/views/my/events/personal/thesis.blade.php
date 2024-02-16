@@ -37,6 +37,7 @@
                         <div class="thesis-single">
                             <div class="thesis-single__content content-thesis">
                                 <h1 class="content-thesis__title">{!! $thesis->title !!}</h1>
+								<h2 class="tw-font-bold tw-text-[1.2rem] tw-mb-[25px]">{{ $thesis->thesis_id }}</h2>
                                 <div class="content-thesis__header header-thesis">
                                     {{-- <img class="header-thesis__img" src="img/avatar/01.png" alt="Image"> --}}
                                     <div class="header-thesis__body">
@@ -97,7 +98,7 @@
                                 </div>
                                 <div class="content-thesis__date">
                                     Отправлено {{ $thesis->created_at->diffForHumans() }}
-									(<span x-data x-text="DateTime.fromISO('{{ $thesis->created_at->toISOString() }}').toLocaleString(DateTime.DATE_MED)"></span>)
+									(<span x-data x-text="DateTime.fromISO('{{ $thesis->created_at->toISOString() }}').toLocaleString(DateTime.DATETIME_MED)"></span>)
                                 </div>
                             </div>
                             <div class="thesis-single__buttons">
