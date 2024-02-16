@@ -3,6 +3,9 @@
 @section('title', 'Список тезисов')
 
 @section('content')
+	@php
+		$lang = $conference->abstracts_lang->value;
+	@endphp
     <nav class="edit-content__breadcrumbs breadcrumbs" data-da=".edit__wrapper, 767.98, first">
         <ul class="breadcrumbs__list">
             <li class="breadcrumbs__item">
@@ -26,19 +29,25 @@
 		<template x-if="theses.length > 0">
 			<table class="table" width="100%">
 				<thead>
-					<th>Заголовок</th>
 					<th>ID</th>
+					<th>Заголовок</th>
+					<th>Авторы</th>
 					<th>Дата</th>
 					<th></th>
 				</thead>
 				<tbody>
 					<template x-for="thesis in theses">
 						<tr>
+							<td x-text="thesis.thesis_id">
+								1234
+							</td>
 							<td>
 								<a :href="`/my/events/${conference.slug}/abstracts/${thesis.id}`" x-html="thesis.title"></a>
 							</td>
-							<td x-text="thesis.thesis_id">
-								1234
+							<td>
+								<template x-for="author in thesis.authors">
+									<div x-text="author.surname_{{ $lang }} + ' ' + author.name_{{ $lang }}"></div>
+								</template>
 							</td>
 							<td>
 								<time x-text="DateTime.fromISO(thesis.created_at).toLocaleString()">май 1, 2023</time>

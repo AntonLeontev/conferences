@@ -20,18 +20,18 @@ class ThesisController extends Controller
     {
         $theses = $conference->load([
             'theses' => function ($query) {
-                $query->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at']);
+                $query->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors']);
             },
         ])->theses;
 
-        return view('my.events.theses.index-by-conference', compact('conference', 'theses'));
+        return view('my.events.personal.theses', compact('conference', 'theses'));
     }
 
     public function show(Conference $conference, Thesis $thesis): View|Factory
     {
         $thesis->load('participation');
 
-        return view('my.events.theses.show', compact('conference', 'thesis'));
+        return view('my.events.personal.thesis', compact('conference', 'thesis'));
     }
 
     public function create(Conference $conference): View|Factory

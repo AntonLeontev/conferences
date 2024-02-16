@@ -95,7 +95,7 @@ class ConferenceController extends Controller
 
     public function edit(Conference $conference): View|Factory
     {
-        return view('my.events.edit', compact('conference'));
+        return view('my.events.personal.edit', compact('conference'));
     }
 
     public function update(
