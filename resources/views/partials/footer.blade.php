@@ -6,7 +6,7 @@
 					<span>ucp</span>
 					<span>Universal Conference Portal</span>
 				</a>
-				<a class="tw-text-[#fff]" href="/policy_ru.pdf" download>Политика конфиденциальности</a>
+				<a class="tw-text-[#fff]" href="/policy_{{ loc() }}.pdf" download>Политика конфиденциальности</a>
 			</div>
 			<form class="tw-flex tw-flex-col tw-min-w-96 tw-gap-3 tw-p-2"
 				@submit.prevent="submit"

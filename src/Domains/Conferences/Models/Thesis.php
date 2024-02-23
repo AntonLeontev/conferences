@@ -21,6 +21,7 @@ class Thesis extends Model
         'participation_id',
         'section_id',
         'report_form',
+        'solicited_talk',
         'title',
         'authors',
         'reporter',
@@ -31,6 +32,7 @@ class Thesis extends Model
     protected $casts = [
         'title' => ThesisTitleCast::class,
         'report_form' => ReportForm::class,
+        'solicited_talk' => 'boolean',
         'authors' => 'array',
         'reporter' => 'array',
         'contact' => 'array',

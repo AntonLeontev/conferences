@@ -40,6 +40,7 @@
 				section_id: {{ $thesis->section_id }},
 			@endif
             report_form: '{{ $thesis->report_form }}',
+			solicited_talk: {{ $thesis->solicited_talk ? 'true' : 'false' }},
             title: '',
             authors: authors,
 			reporter: reporter,
@@ -131,6 +132,17 @@
                 <option value="mixed" @if('mixed' === $thesis->report_form->value) selected @endif>Нет предпочтения</option>
             </select>
         </div>
+
+		<div class="form__row">
+			 <div class="checkbox">
+				 <input id="solicited_talk" class="checkbox__input" type="checkbox"
+					 name="solicited_talk" x-model="form.solicited_talk">
+				 <label for="solicited_talk" class="checkbox__label">
+					 <span class="checkbox__text">Приглашённый доклад</span>
+				 </label>
+			 </div>
+			 <div>Отметьте этот чекбокс если Вы персонально приглашены организаторами мероприятия</div>
+		 </div>
 
         <label class="form__label _mb0">Список авторов (*) </label>
 
