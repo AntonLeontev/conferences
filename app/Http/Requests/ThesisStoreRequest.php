@@ -29,6 +29,7 @@ class ThesisStoreRequest extends FormRequest
             'participation_id' => ['required', 'exists:participations,id'],
             'section_id' => ['sometimes', 'required', 'int'],
             'report_form' => ['required', Rule::enum(ReportForm::class)],
+            'solicited_talk' => ['required', 'boolean'],
             'title' => ['required', 'string', new MaxStripTagsCharacters(230)],
             'authors' => ['required', 'array', 'min:1'],
             'authors.*.name_ru' => ['sometimes', 'required', 'string', 'max:255', 'regex:/^[а-яА-Я \-_]+$/u'],

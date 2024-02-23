@@ -12,6 +12,7 @@ class UpdateThesis
         $thesis->update([
             'section_id' => $request->get('section_id'),
             'report_form' => $request->get('report_form'),
+            'solicited_talk' => $request->get('solicited_talk'),
             'title' => $request->get('title'),
             'authors' => $request->get('authors'),
             'reporter' => $request->get('reporter'),

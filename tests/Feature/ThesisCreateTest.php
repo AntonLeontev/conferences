@@ -63,6 +63,7 @@ class ThesisCreateTest extends TestCase
         $this->data = [
             'participation_id' => $this->participation->id,
             'report_form' => ReportForm::mixed->value,
+            'solicited_talk' => true,
             'title' => '<p>Some title <sub>123</sub></p>',
             'authors' => [
                 1 => [
@@ -145,6 +146,7 @@ class ThesisCreateTest extends TestCase
         $response = $this->actingAs($this->participantUser)->post(action([ThesisController::class, 'store'], $conference->slug), [
             'participation_id' => $participation->id,
             'report_form' => ReportForm::mixed->value,
+            'solicited_talk' => true,
             'title' => '<p>Some title <sub>123</sub></p>',
             'authors' => [
                 1 => [
