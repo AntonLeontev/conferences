@@ -26,6 +26,7 @@
         let sections = @json($conference->sections->keyBy('id'));
         if (sections.length === 0) sections = {}
         let coOrginizers = @json($conference->{'co-organizers'});
+		if (coOrginizers.length === 0) coOrginizers = {}
         let discount_students = @json($conference->discount_students);
         let discount_participants = @json($conference->discount_participants);
         let discount_special_guest = @json($conference->discount_special_guest);
@@ -314,7 +315,7 @@
                 <label class="form__label" for="c_6">Соорганизаторы мероприятия</label>
             </div>
             <div class="form__line">
-                <template x-for="organizer, id in form['co-organizers']">
+                <template x-for="(organizer, id) in form['co-organizers']" :key="id">
                     <div class="form-list" :class="form.invalid(`co-organizers.${id}`) && '_error'">
                         <input class="input" autocomplete="off" type="text" name="form[]" data-error="Ошибка"
                             placeholder="Название организации" x-model="form['co-organizers'][id]"
