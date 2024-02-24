@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\MaxStripTagsCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Src\Domains\Conferences\Enums\ReportForm;
 
@@ -15,8 +16,7 @@ class ThesisUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->participant->theses
-            ->contains(fn ($thesis) => $thesis->id === $this->route('thesis')->id);
+        return Gate::allows('update', $this->route('thesis'));
     }
 
     /**

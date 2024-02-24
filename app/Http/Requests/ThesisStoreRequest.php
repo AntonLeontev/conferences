@@ -5,8 +5,10 @@ namespace App\Http\Requests;
 use App\Rules\MaxStripTagsCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Src\Domains\Conferences\Enums\ReportForm;
+use Src\Domains\Conferences\Models\Thesis;
 
 class ThesisStoreRequest extends FormRequest
 {
@@ -15,9 +17,7 @@ class ThesisStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $participation = user_participation($this->route('conference'));
-
-        return $participation->participation_type->value === 'speaker';
+        return Gate::allows('create', Thesis::class);
     }
 
     /**
