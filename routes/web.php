@@ -69,10 +69,14 @@ Route::group([
                 Route::middleware(['precognitive'])->post('{conference:slug}/edit', [ConferenceController::class, 'update'])
                     ->name('conference.update');
 
-                Route::get('{conference:slug}/participate', [ParticipationController::class, 'create'])->name('participation.create');
+                Route::get('{conference:slug}/participation', [ParticipationController::class, 'create'])->name('participation.create');
                 Route::middleware(['precognitive'])
-                    ->post('{conference:slug}/participate', [ParticipationController::class, 'store'])
+                    ->post('{conference:slug}/participation', [ParticipationController::class, 'store'])
                     ->name('participation.store');
+                Route::get('{conference:slug}/participation/edit', [ParticipationController::class, 'edit'])->name('participation.edit');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/participation/edit', [ParticipationController::class, 'update'])
+                    ->name('participation.update');
 
                 Route::middleware([OnlyConferenceOwner::class])
                     ->get('{conference:slug}/abstracts', [ThesisController::class, 'indexByConference'])

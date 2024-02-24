@@ -40,6 +40,9 @@ if (! function_exists('conference_types')) {
 }
 
 if (! function_exists('loc')) {
+    /**
+     * Returns current locale. Alias for app()->getLocale()
+     */
     function loc(): string
     {
         return app()->getLocale();
@@ -61,6 +64,9 @@ if (! function_exists('localize_route')) {
 }
 
 if (! function_exists('user_participation')) {
+    /**
+     * Возвращает экземпляр Participation для конференции, если он есть у авторизованного пользователя
+     */
     function user_participation(Conference $conference): ?Participation
     {
         if (! auth()->check()) {
@@ -78,6 +84,9 @@ if (! function_exists('user_participation')) {
 }
 
 if (! function_exists('participant')) {
+    /**
+     * Возвращает экземпляр Participant если он есть у авторизованного пользователя
+     */
     function participant(): ?Participant
     {
         if (! auth()->check()) {
