@@ -15,7 +15,9 @@ class ThesisStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return (bool) auth()->user()->participant;
+        $participation = user_participation($this->route('conference'));
+
+        return $participation->participation_type->value === 'speaker';
     }
 
     /**

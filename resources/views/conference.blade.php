@@ -200,11 +200,13 @@
 										@endif
 									@endif
 
-									@if ($conference->thesis_accept_until?->endOfDay()->isPast())
-										<p class="tw-mb-4">Прием тезисов завершен</p>
-									@else
-										<p class="tw-mb-4">Тезисы можно подать до {{ $conference->thesis_accept_until?->translatedFormat('j F Y') }} включительно</p>
-										<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button">Отправить тезисы</a>
+									@if (user_participation($conference)->participation_type->value === 'speaker')
+										@if ($conference->thesis_accept_until?->endOfDay()->isPast())
+											<p class="tw-mb-4">Прием тезисов завершен</p>
+										@else
+											<p class="tw-mb-4">Тезисы можно подать до {{ $conference->thesis_accept_until?->translatedFormat('j F Y') }} включительно</p>
+											<a href="{{ localize_route('theses.create', $conference->slug) }}" class="button">Отправить тезисы</a>
+										@endif
 									@endif
 
 									@if ($conference->thesis_edit_until?->endOfDay()->isFuture())
