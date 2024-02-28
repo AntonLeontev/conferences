@@ -14,7 +14,7 @@ class PdfController extends Controller
         $authors = $request->json('authors');
 
         $sectionSlug = $conference->sections->isNotEmpty()
-            ? '-'.$conference->sections->where('id', $request->json('section_id'))->first()?->{'short_title_'.$conference->abstracts_lang->value}
+            ? '-'.$conference->sections->where('id', $request->json('section_id'))->first()?->slug
             : '';
         $thesisId = $conference->slug.$sectionSlug;
 

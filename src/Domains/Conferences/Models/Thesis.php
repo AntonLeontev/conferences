@@ -82,7 +82,7 @@ class Thesis extends Model
                 $thesis->thesis_id = sprintf(
                     '%s-%s%s',
                     $conference->slug,
-                    $section->short_title_en,
+                    $section->slug,
                     str_pad($number, 3, '0', STR_PAD_LEFT)
                 );
             }

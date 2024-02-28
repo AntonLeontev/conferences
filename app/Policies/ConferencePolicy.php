@@ -26,4 +26,9 @@ class ConferencePolicy
     {
         return $conference->organization_id === $user->organization->id;
     }
+
+    public function massSectionUpdate(User $user, Conference $conference): bool
+    {
+        return $conference->organization_id === $user->organization->id;
+    }
 }

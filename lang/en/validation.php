@@ -185,6 +185,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'acronim' => 'acronim',
+    ],
 
 ];

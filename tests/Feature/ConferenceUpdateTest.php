@@ -7,6 +7,8 @@ use Database\Factories\ConferenceFactory;
 use Database\Factories\OrganizationFactory;
 use Database\Factories\SectionFactory;
 use Database\Factories\UserFactory;
+use Database\Seeders\ConferenceTypeSeeder;
+use Database\Seeders\SubjectSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Src\Domains\Conferences\Enums\AbstractsFormat;
 use Src\Domains\Conferences\Enums\AbstractsLanguage;
@@ -20,7 +22,8 @@ class ConferenceUpdateTest extends TestCase
 
     public function test_updating_conference(): void
     {
-        $this->seed();
+        $this->seed(SubjectSeeder::class);
+        $this->seed(ConferenceTypeSeeder::class);
 
         $user = UserFactory::new()->create();
         $organization = OrganizationFactory::new()->create([
@@ -61,16 +64,14 @@ class ConferenceUpdateTest extends TestCase
             'subjects' => Subject::inRandomOrder()->take(2)->pluck('id')->toArray(),
             'sections' => [
                 [
-                    'short_title_ru' => 'Секция 1',
+                    'slug' => 'slug1',
                     'title_ru' => 'Секция 1',
-                    'short_title_en' => 'Секция 1',
                     'title_en' => 'Секция 1',
                 ],
                 [
-                    'short_title_ru' => 'Секция 2',
+                    'slug' => 'slug-2',
                     'title_ru' => 'Секция 2',
-                    'short_title_en' => 'Секция 2',
-                    'title_en' => 'Секция 1',
+                    'title_en' => 'Секция 2',
                 ],
             ],
             'max_thesis_characters' => 3200,
@@ -111,18 +112,14 @@ class ConferenceUpdateTest extends TestCase
 
         $this->assertDatabaseCount('sections', 2);
         $this->assertDatabaseHas('sections', [
-            'short_title_ru' => 'Секция 1',
+            'slug' => 'slug1',
             'title_ru' => 'Секция 1',
-            'short_title_en' => 'Секция 1',
             'title_en' => 'Секция 1',
-            'slug' => 'sekciia-1',
         ]);
         $this->assertDatabaseHas('sections', [
-            'short_title_ru' => 'Секция 2',
+            'slug' => 'slug-2',
             'title_ru' => 'Секция 2',
-            'short_title_en' => 'Секция 2',
-            'title_en' => 'Секция 1',
-            'slug' => 'sekciia-12',
+            'title_en' => 'Секция 2',
         ]);
 
         $this->assertDatabaseCount('conference_subject', 2);

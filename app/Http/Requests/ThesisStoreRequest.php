@@ -7,7 +7,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Src\Domains\Conferences\Enums\ReportForm;
+use Src\Domains\Conferences\Models\Participation;
 use Src\Domains\Conferences\Models\Thesis;
 
 class ThesisStoreRequest extends FormRequest
@@ -88,6 +90,17 @@ class ThesisStoreRequest extends FormRequest
     {
         if ($this->route('conference')->thesis_accept_until->endOfDay()->isPast()) {
             abort(Response::HTTP_BAD_REQUEST, 'Прием тезисов на это мероприятие завершен');
+        }
+
+        if (! is_null($this->get('section_id'))) {
+            $sectionsIds = Participation::find($this->get('participation_id'))
+                ->conference->sections
+                ->pluck('id')
+                ->toArray();
+
+            if (! in_array($this->get('section_id'), $sectionsIds)) {
+                throw ValidationException::withMessages(['section_id' => 'Секция не пренадлежит конференции на которую подаются тезисы']);
+            }
         }
     }
 }

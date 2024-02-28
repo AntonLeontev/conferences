@@ -14,6 +14,11 @@ use Src\Domains\Conferences\Models\Conference;
 
 class ParticipationController extends Controller
 {
+    public function indexByConference(Conference $conference): View|Factory
+    {
+        return view('my.events.personal.participations', compact('conference'));
+    }
+
     public function create(Conference $conference): View|Factory
     {
         return view('my.events.participate', compact('conference'));
