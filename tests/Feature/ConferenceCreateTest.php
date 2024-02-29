@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Http\Controllers\ConferenceController;
 use Database\Factories\OrganizationFactory;
 use Database\Factories\UserFactory;
+use Database\Seeders\ConferenceTypeSeeder;
+use Database\Seeders\SubjectSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Src\Domains\Conferences\Enums\AbstractsFormat;
@@ -24,7 +26,8 @@ class ConferenceCreateTest extends TestCase
 
     public function test_creating_conference(): void
     {
-        $this->seed();
+        $this->seed(SubjectSeeder::class);
+        $this->seed(ConferenceTypeSeeder::class);
 
         $user = UserFactory::new()->create();
         $organization = OrganizationFactory::new()->create([
@@ -62,15 +65,13 @@ class ConferenceCreateTest extends TestCase
             'subjects' => [Subject::inRandomOrder()->first()->id],
             'sections' => [
                 [
-                    'short_title_ru' => 'Секция 1',
+                    'slug' => 'slug1',
                     'title_ru' => 'Секция 1',
-                    'short_title_en' => 'Секция 1',
                     'title_en' => 'Секция 1',
                 ],
                 [
-                    'short_title_ru' => 'Секция 2',
+                    'slug' => 'slug2',
                     'title_ru' => 'Секция 2',
-                    'short_title_en' => 'Секция 2',
                     'title_en' => 'Секция 1',
                 ],
             ],
@@ -113,18 +114,14 @@ class ConferenceCreateTest extends TestCase
 
         $this->assertDatabaseCount('sections', 2);
         $this->assertDatabaseHas('sections', [
-            'short_title_ru' => 'Секция 1',
+            'slug' => 'slug1',
             'title_ru' => 'Секция 1',
-            'short_title_en' => 'Секция 1',
             'title_en' => 'Секция 1',
-            'slug' => 'sekciia-1',
         ]);
         $this->assertDatabaseHas('sections', [
-            'short_title_ru' => 'Секция 2',
+            'slug' => 'slug2',
             'title_ru' => 'Секция 2',
-            'short_title_en' => 'Секция 2',
             'title_en' => 'Секция 1',
-            'slug' => 'sekciia-12',
         ]);
 
         $this->assertDatabaseCount('conference_subject', 1);

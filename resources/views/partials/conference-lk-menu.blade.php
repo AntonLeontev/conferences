@@ -10,5 +10,8 @@
         <li @if(Route::is('conference.participations')) class="active" @endif>
             <a href="{{ route('conference.participations', $conference->slug) }}">Список участников</a>
         </li>
+        <li @if(Route::is('sections.index')) class="active" @endif>
+            <a href="{{ route('sections.index', $conference->slug) }}">Управление секциями</a>
+        </li>
     </ul>
 </aside>

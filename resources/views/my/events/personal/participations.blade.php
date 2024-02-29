@@ -3,11 +3,6 @@
 @section('title', 'Участники конференции')
 
 @section('content')
-	@extends('layouts.conference-lk')
-
-@section('title', 'Список тезисов')
-
-@section('content')
 	@php
 		$lang = $conference->abstracts_lang->value;
 	@endphp
@@ -80,6 +75,4 @@
 			}))
 		})
 	</script>
-@endsection
-
 @endsection

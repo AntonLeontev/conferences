@@ -8,18 +8,26 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Src\Domains\Conferences\Enums\ParticipationType;
 
-class ParticipationStoreRequest extends FormRequest
+class ParticipationUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
-        return participant()->id == $this->get('participant_id');
+        $participation = user_participation($this->route('conference'));
+
+        return (bool) $participation;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
     {
         return [
-            'participant_id' => ['required', 'exists:participants,id'],
-            'conference_id' => ['required', 'exists:conferences,id'],
             'name_ru' => ['required', 'string', 'max:255', 'regex:/^[а-яА-Я \-_]+$/u'],
             'surname_ru' => ['required', 'string', 'max:255', 'regex:/^[а-яА-Я \-_]+$/u'],
             'middle_name_ru' => ['nullable', 'string', 'max:255', 'regex:/^[а-яА-Я \-_]+$/u'],
@@ -43,8 +51,8 @@ class ParticipationStoreRequest extends FormRequest
 
     protected function passedValidation()
     {
-        if ($this->route('conference')->end_date < now()) {
-            abort(Response::HTTP_BAD_REQUEST, 'Попытка зарегистрироваться на завершившееся событие');
+        if ($this->route('conference')->thesis_edit_until->isPast()) {
+            abort(Response::HTTP_BAD_REQUEST, 'Заявку уже нельзя редактировать');
         }
     }
 }

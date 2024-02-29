@@ -11,6 +11,8 @@ use Database\Factories\ParticipantFactory;
 use Database\Factories\ParticipationFactory;
 use Database\Factories\SectionFactory;
 use Database\Factories\UserFactory;
+use Database\Seeders\ConferenceTypeSeeder;
+use Database\Seeders\SubjectSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Src\Domains\Auth\Models\Organization;
@@ -40,7 +42,8 @@ class ThesisCreateTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed();
+        $this->seed(SubjectSeeder::class);
+        $this->seed(ConferenceTypeSeeder::class);
 
         $this->organizationUser = UserFactory::new()->create();
         $this->participantUser = UserFactory::new()->create();
@@ -96,7 +99,7 @@ class ThesisCreateTest extends TestCase
         $response->assertOk();
 
         $this->assertDatabaseHas('theses', [
-            'thesis_id' => "{$this->conference->slug}-{$firstSection->short_title_en}001",
+            'thesis_id' => "{$this->conference->slug}-{$firstSection->slug}001",
         ]);
 
         Notification::assertSentTo($this->participantUser, ThesisCreatedParticipantNotification::class);
@@ -108,7 +111,7 @@ class ThesisCreateTest extends TestCase
 
         $this->assertDatabaseCount('theses', 2);
         $this->assertDatabaseHas('theses', [
-            'thesis_id' => "{$this->conference->slug}-{$secondSection->short_title_en}001",
+            'thesis_id' => "{$this->conference->slug}-{$secondSection->slug}001",
         ]);
     }
 

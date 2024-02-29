@@ -195,9 +195,8 @@
 								if (Object.keys(this.form.sections).length >= 5) return
 								this.form.sections[this.ai] = {
 									title_ru: '', 
-									short_title_ru: '', 
 									title_en: '', 
-									short_title_en: '', 
+									slug: '', 
 								}
 								this.ai++
 							},
@@ -210,6 +209,14 @@
 						<template x-for="section, id in form.sections" x-key="id">
 							<div class="form-list">
 								<label class="form-list__label">Название секции</label>
+								<div :class="form.invalid(`sections.${id}.slug`) && '_error'">
+									<input class="input" autocomplete="off" type="text" name="slug"
+										placeholder="Акроним" x-model="form.sections[id].slug"
+										@change="form.validate(`sections.${id}.slug`)">
+									<template x-if="form.invalid(`sections.${id}.slug`)">
+										<div class="form__error" x-text="form.errors[`sections.${id}.slug`]"></div>
+									</template>
+								</div>
 								<div :class="form.invalid(`sections.${id}.title_ru`) && '_error'">
 									<input class="input" autocomplete="off" type="text" name="title_ru"
 										placeholder="Название секции (RU)" 
@@ -220,16 +227,6 @@
 										<div class="form__error" x-text="form.errors[`sections.${id}.title_ru`]"></div>
 									</template>
 								</div>
-								<div :class="form.invalid(`sections.${id}.short_title_ru`) && '_error'">
-									<input class="input" autocomplete="off" type="text" name="short_title_ru"
-										placeholder="Сокращенное название секции (RU)" 
-										x-model="form.sections[id].short_title_ru"
-										@change="form.validate(`sections.${id}.short_title_ru`)"
-									>
-									<template x-if="form.invalid(`sections.${id}.short_title_ru`)">
-										<div class="form__error" x-text="form.errors[`sections.${id}.short_title_ru`]"></div>
-									</template>
-								</div>
 								<div :class="form.invalid(`sections.${id}.title_en`) && '_error'">
 									<input class="input" autocomplete="off" type="text" name="title_en"
 										placeholder="Название секции (EN)" 
@@ -238,16 +235,6 @@
 									>
 									<template x-if="form.invalid(`sections.${id}.title_en`)">
 										<div class="form__error" x-text="form.errors[`sections.${id}.title_en`]"></div>
-									</template>
-								</div>
-								<div :class="form.invalid(`sections.${id}.short_title_en`) && '_error'">
-									<input class="input" autocomplete="off" type="text" name="short_title_en"
-										placeholder="Сокращенное название секции (EN)" 
-										x-model="form.sections[id].short_title_en"
-										@change="form.validate(`sections.${id}.short_title_en`)"
-									>
-									<template x-if="form.invalid(`sections.${id}.short_title_en`)">
-										<div class="form__error" x-text="form.errors[`sections.${id}.short_title_en`]"></div>
 									</template>
 								</div>
 								<button class="button button_outline" type="button" @click="remove(id)">Убрать секцию</button>

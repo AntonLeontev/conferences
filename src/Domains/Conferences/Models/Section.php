@@ -32,19 +32,19 @@ class Section extends Model
 
     protected static function booted(): void
     {
-        static::creating(function (Section $section) {
-            $slug = str($section->title_en)->slug()->value();
+        // static::creating(function (Section $section) {
+        //     $slug = str($section->title_en)->slug()->value();
 
-            $sectionsWithSlug = Section::query()
-                ->where('slug', 'like', $slug.'%')
-                ->where('conference_id', $section->conference_id)
-                ->count();
+        //     $sectionsWithSlug = Section::query()
+        //         ->where('slug', 'like', $slug.'%')
+        //         ->where('conference_id', $section->conference_id)
+        //         ->count();
 
-            if ($sectionsWithSlug >= 1) {
-                $slug .= $sectionsWithSlug + 1;
-            }
+        //     if ($sectionsWithSlug >= 1) {
+        //         $slug .= $sectionsWithSlug + 1;
+        //     }
 
-            $section->slug = $slug;
-        });
+        //     $section->slug = $slug;
+        // });
     }
 }

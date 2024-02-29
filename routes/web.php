@@ -8,11 +8,12 @@ use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ThesisController;
-use App\Http\Middleware\OnlyConferenceOwner;
-use App\Http\Middleware\OnlyThesisOwner;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Src\Domains\Conferences\Models\Conference;
+use Src\Domains\Conferences\Models\Thesis;
 
 if (app()->isLocal()) {
     Route::any('test', function () {
@@ -62,39 +63,61 @@ Route::group([
 
             Route::prefix('events')->group(function () {
                 Route::get('create', [ConferenceController::class, 'create'])->name('conference.create');
-                Route::middleware(['precognitive'])->post('create', [ConferenceController::class, 'store'])
-                    ->name('conference.store');
-                Route::middleware([OnlyConferenceOwner::class])
-                    ->get('{conference:slug}/edit', [ConferenceController::class, 'edit'])->name('conference.edit');
-                Route::middleware(['precognitive'])->post('{conference:slug}/edit', [ConferenceController::class, 'update'])
-                    ->name('conference.update');
-
-                Route::get('{conference:slug}/participate', [ParticipationController::class, 'create'])->name('participation.create');
                 Route::middleware(['precognitive'])
-                    ->post('{conference:slug}/participate', [ParticipationController::class, 'store'])
+                    ->post('create', [ConferenceController::class, 'store'])
+                    ->name('conference.store')
+                    ->can('create', Conference::class);
+                Route::get('{conference:slug}/edit', [ConferenceController::class, 'edit'])
+                    ->name('conference.edit')
+                    ->can('update', 'conference');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/edit', [ConferenceController::class, 'update'])
+                    ->name('conference.update')
+                    ->can('update', 'conference');
+
+                Route::get('{conference:slug}/participations', [ParticipationController::class, 'indexByConference'])
+                    ->name('conference.participations')
+                    ->can('viewParticipations', 'conference');
+                Route::get('{conference:slug}/participation', [ParticipationController::class, 'create'])->name('participation.create');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/participation', [ParticipationController::class, 'store'])
                     ->name('participation.store');
+                Route::get('{conference:slug}/participation/edit', [ParticipationController::class, 'edit'])->name('participation.edit');
+                Route::middleware(['precognitive'])
+                    ->post('{conference:slug}/participation/edit', [ParticipationController::class, 'update'])
+                    ->name('participation.update');
 
-                Route::middleware([OnlyConferenceOwner::class])
-                    ->get('{conference:slug}/abstracts', [ThesisController::class, 'indexByConference'])
-                    ->name('theses.index-by-conference');
-                Route::get('{conference:slug}/abstracts/create', [ThesisController::class, 'create'])->name('theses.create');
-                Route::middleware(['precognitive'])
-                    ->post('{conference:slug}/abstracts/create', [ThesisController::class, 'store'])
-                    ->name('theses.store');
-                Route::middleware([OnlyConferenceOwner::class])
-                    ->get('{conference:slug}/abstracts/{thesis}', [ThesisController::class, 'show'])
-                    ->name('theses.show');
-                Route::middleware([OnlyConferenceOwner::class])
-                    ->get('{conference:slug}/participations', [ConferenceController::class, 'participationsIndex'])
-                    ->name('conference.participations');
-                Route::middleware([OnlyThesisOwner::class])
-                    ->get('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'edit'])->name('theses.edit');
-                Route::middleware(['precognitive'])
-                    ->post('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'update'])
-                    ->name('theses.update');
-                Route::middleware([OnlyThesisOwner::class])
-                    ->delete('abstracts/{thesis}/edit', [ThesisController::class, 'destroy'])
-                    ->name('theses.destroy');
+                Route::controller(ThesisController::class)->group(function () {
+                    Route::get('{conference:slug}/abstracts', 'indexByConference')
+                        ->name('theses.index-by-conference')
+                        ->can('viewAbstracts', 'conference');
+                    Route::get('{conference:slug}/abstracts/create', 'create')
+                        ->name('theses.create')
+                        ->can('create', Thesis::class);
+                    Route::middleware(['precognitive'])
+                        ->post('{conference:slug}/abstracts/create', 'store')
+                        ->name('theses.store');
+                    Route::get('{conference:slug}/abstracts/{thesis}', [ThesisController::class, 'show'])
+                        ->name('theses.show')
+                        ->can('viewAbstracts', 'conference');
+                    Route::get('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'edit'])
+                        ->name('theses.edit')
+                        ->can('update', 'thesis');
+                    Route::middleware(['precognitive'])
+                        ->post('{conference:slug}/abstracts/{thesis}/edit', [ThesisController::class, 'update'])
+                        ->name('theses.update');
+                    Route::delete('abstracts/{thesis}/edit', [ThesisController::class, 'destroy'])
+                        ->name('theses.destroy')
+                        ->can('delete', 'thesis');
+                });
+
+                Route::controller(SectionController::class)->group(function () {
+                    Route::get('{conference:slug}/sections', 'index')
+                        ->name('sections.index');
+                    Route::middleware(['precognitive'])
+                        ->post('{conference:slug}/sections/mass-update', 'massUpdate')
+                        ->name('sections.mass-update');
+                });
             });
         });
 
@@ -115,9 +138,10 @@ Route::group([
     Route::middleware(['auth'])
         ->post('pdf/events/{conference:slug}/thesis-preview', [PdfController::class, 'thesisPreview'])
         ->name('pdf.thesis.preview');
-    Route::middleware(['auth', OnlyConferenceOwner::class])
+    Route::middleware(['auth'])
         ->get('pdf/events/{conference:slug}/theses/{thesis}', [PdfController::class, 'thesisDownload'])
-        ->name('pdf.thesis.download');
+        ->name('pdf.thesis.download')
+        ->can('viewAbstracts', 'conference');
 });
 
 Route::middleware(['precognitive'])->post('feedback', FeedbackController::class)->name('feedback');

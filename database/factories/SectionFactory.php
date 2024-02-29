@@ -17,10 +17,9 @@ class SectionFactory extends Factory
     {
         return [
             'conference_id' => Conference::inRandomOrder()->first()->id,
-            'short_title_ru' => $this->faker->jobTitle(),
             'title_ru' => $this->faker->jobTitle(),
-            'short_title_en' => $this->faker->jobTitle(),
             'title_en' => $this->faker->jobTitle(),
+            'slug' => $this->faker->word(),
         ];
     }
 }

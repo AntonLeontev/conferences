@@ -6,6 +6,7 @@ use App\Rules\ConferenceDiscount;
 use App\Rules\Phone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Src\Domains\Conferences\Enums\AbstractsFormat;
 use Src\Domains\Conferences\Enums\AbstractsLanguage;
 use Src\Domains\Conferences\Enums\ConferenceFormat;
@@ -33,12 +34,11 @@ class ConferenceUpdateRequest extends FormRequest
             'with_foreign_participation' => ['required', 'boolean'],
             'subjects' => ['required', 'array'],
             'subjects.*' => ['required', 'int', 'in:'.subjects()->pluck('id')->join(',')],
-            'sections' => ['nullable', 'array', 'max:8'],
-            'sections.*.id' => ['nullable', 'int', 'exists:sections,id'],
-            'sections.*.title_ru' => ['required', 'string', 'max:255'],
-            'sections.*.short_title_ru' => ['required', 'string', 'max:255'],
-            'sections.*.title_en' => ['required', 'string', 'max:255'],
-            'sections.*.short_title_en' => ['required', 'string', 'max:255'],
+            // 'sections' => ['nullable', 'array', 'max:8'],
+            // 'sections.*.id' => ['nullable', 'int', 'exists:sections,id'],
+            // 'sections.*.slug' => ['required', 'string', 'max:15'],
+            // 'sections.*.title_ru' => ['required', 'string', 'max:255'],
+            // 'sections.*.title_en' => ['required', 'string', 'max:255'],
             'logo' => ['nullable', 'image'],
             'website' => ['nullable', 'url', 'max:255'],
             'co-organizers' => ['nullable', 'array'],
@@ -70,6 +70,23 @@ class ConferenceUpdateRequest extends FormRequest
             'thesis_edit_until' => ['required', 'date', 'after_or_equal:thesis_accept_until'],
         ];
     }
+
+    // protected function passedValidation()
+    // {
+    // 	$sections = collect($this->get('sections'));
+
+    // 	$slugDuplicates = $sections->pluck('slug')->duplicates();
+
+    // 	if ($slugDuplicates->isNotEmpty()) {
+    // 		$messages = [];
+
+    // 		foreach ($slugDuplicates as $key => $value) {
+    // 			$messages["sections.$key.slug"] = __('validation.unique', ['attribute' => __('validation.attributes.acronim')]);
+    // 		}
+
+    // 		throw ValidationException::withMessages($messages);
+    // 	}
+    // }
 
     public function messages(): array
     {

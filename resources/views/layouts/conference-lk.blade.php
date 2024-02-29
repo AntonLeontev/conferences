@@ -31,6 +31,7 @@
         @include('partials.footer')
     </div>
 	
+	@yield('popup')
     @yield('body_scripts')
 </body>
 

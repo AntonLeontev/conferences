@@ -11,10 +11,9 @@ class CreateSection
     {
         return Section::create([
             'conference_id' => $conference->id,
+            'slug' => $sectionData['slug'],
             'title_ru' => $sectionData['title_ru'],
-            'short_title_ru' => $sectionData['short_title_ru'],
             'title_en' => $sectionData['title_en'],
-            'short_title_en' => $sectionData['short_title_en'],
         ]);
     }
 }
