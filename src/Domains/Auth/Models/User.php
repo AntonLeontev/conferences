@@ -6,9 +6,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Src\Domains\Conferences\Models\Conference;
+use Src\Domains\Conferences\Models\Section;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -24,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'email',
         'password',
+        'email_verified_at',
     ];
 
     /**
@@ -54,5 +58,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function organization(): HasOne
     {
         return $this->hasOne(Organization::class);
+    }
+
+    public function moderatedSections(): MorphToMany
+    {
+        return $this->morphedByMany(Section::class, 'moderable');
+    }
+
+    public function moderatedConferences(): MorphToMany
+    {
+        return $this->morphedByMany(Conference::class, 'moderable');
     }
 }

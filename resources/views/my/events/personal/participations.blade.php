@@ -44,9 +44,9 @@
 							<td x-text="participation.phone.clean"></td>
 							<td>
 								<template x-if="participation.orcid_id">
-									<a class="tw-flex" :href="'https://orcid.org/' + participation.orcid_id" target="_blank" rel="nofollow">
+									<a class="tw-flex tw-items-center" :href="'https://orcid.org/' + participation.orcid_id" target="_blank" rel="nofollow">
 										<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" />
-										<span x-text="participation.orcid_id"></span>
+										<span class="tw-text-nowrap" x-text="participation.orcid_id"></span>
 									</a>
 								</template>
 							</td>

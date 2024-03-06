@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Src\Domains\Auth\Models\User;
 
 class Section extends Model
 {
@@ -30,21 +32,14 @@ class Section extends Model
         return $this->hasMany(Thesis::class);
     }
 
+    public function moderators(): MorphToMany
+    {
+        return $this->morphToMany(User::class, 'moderable')
+            ->withPivot('comment')
+            ->withTimestamps();
+    }
+
     protected static function booted(): void
     {
-        // static::creating(function (Section $section) {
-        //     $slug = str($section->title_en)->slug()->value();
-
-        //     $sectionsWithSlug = Section::query()
-        //         ->where('slug', 'like', $slug.'%')
-        //         ->where('conference_id', $section->conference_id)
-        //         ->count();
-
-        //     if ($sectionsWithSlug >= 1) {
-        //         $slug .= $sectionsWithSlug + 1;
-        //     }
-
-        //     $section->slug = $slug;
-        // });
     }
 }

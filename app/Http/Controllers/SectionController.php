@@ -14,7 +14,11 @@ class SectionController extends Controller
 {
     public function index(Conference $conference): View|Factory
     {
-        return view('my.events.personal.sections', compact('conference'));
+        $sections = $conference->sections
+            ->loadExists('theses')
+            ->load('moderators');
+
+        return view('my.events.personal.sections', compact('conference', 'sections'));
     }
 
     public function massUpdate(
