@@ -136,6 +136,9 @@ Route::group([
                 Route::get('csv/events/{conference:slug}/theses', 'thesesById')
                     ->name('csv.theses.download')
                     ->can('viewAbstracts', 'conference');
+                Route::get('csv/events/{conference:slug}/participations', 'participationsById')
+                    ->name('csv.participations.download')
+                    ->can('viewParticipations', 'conference');
             });
         });
 

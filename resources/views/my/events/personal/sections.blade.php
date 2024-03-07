@@ -166,9 +166,13 @@
 										<div class="section-actions">
 											<div class="section-actions__item">
 												<template x-if="section.id">
-													<button class="section-actions__btn button button_icon" type="button">
+													<button 
+														class="section-actions__btn button button_icon" 
+														type="button" 
+														@click="addModerator('section', section.id)"
+													>
 														<img src="{{ Vite::asset('resources/img/iconsfonts/invite.svg') }}" alt="Image">
-														<span @click="addModerator('section', section.id)">Пригласить</span>
+														<span>Пригласить</span>
 													</button>
 												</template>
 											</div>
@@ -230,6 +234,7 @@
 								id: this.form.moderable_id,
 								moderators: response.data
 							})
+							this.show = false
 						})
 						.catch(error => {
 							alert('Ошибка')
