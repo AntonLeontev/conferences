@@ -7,6 +7,7 @@ use App\Http\Requests\ThesisStoreRequest;
 use App\Http\Requests\ThesisUpdateRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Src\Domains\Conferences\Actions\CreateThesis;
@@ -18,13 +19,31 @@ class ThesisController extends Controller
 {
     public function indexByConference(Conference $conference): View|Factory
     {
-        $theses = $conference->load([
-            'theses' => function ($query) {
-                $query->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors']);
-            },
-        ])->theses;
+        $allowedSections = auth()->user()
+            ->moderatedSections
+            ->where('conference_id', $conference->id)
+            ->pluck('id');
 
-        return view('my.events.personal.theses', compact('conference', 'theses'));
+        // Если пользователь модератор секции, то получит данные только по свои секциям.
+        // В остальных случаях он либо организатор, либо модератор конференции и получает все
+        $conference->load([
+            'theses' => function (HasManyThrough $query) use ($allowedSections) {
+                $query
+                    ->when($allowedSections->isNotEmpty(), function ($collection) use ($allowedSections) {
+                        return $collection->whereIn('section_id', $allowedSections->toArray());
+                    })
+                    ->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors', 'section_id']);
+            },
+            'sections' => function ($query) use ($allowedSections) {
+                $query
+                    ->when($allowedSections->isNotEmpty(), function ($collection) use ($allowedSections) {
+                        return $collection->whereIn('id', $allowedSections->toArray());
+                    })
+                    ->select(['sections.id', 'slug', 'conference_id']);
+            },
+        ]);
+
+        return view('my.events.personal.theses', compact('conference'));
     }
 
     public function show(Conference $conference, Thesis $thesis): View|Factory

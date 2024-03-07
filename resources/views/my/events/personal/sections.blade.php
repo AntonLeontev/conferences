@@ -4,44 +4,76 @@
 
 @section('content')
 	<script>
-		let sections = @json($conference->sections->loadCount('theses'));
+		let sections = @json($sections);
 		let conference = @json($conference);
 	</script>
-	<div id="sections" x-data="{
-		conference: conference,
-		form: $form('post', route('sections.mass-update', conference.slug), {
-			sections: sections,
-		}),
-		
-		save() {
-			this.form.submit()
-				.then(response => {
-					this.form.sections = response.data
-					console.log(response.data)
+	<div id="sections" 
+		@refresh-moderators.window="refreshModerators"
+		x-data="{
+			conference: conference,
+			form: $form('post', route('sections.mass-update', conference.slug), {
+				sections: sections,
+			}),
+			ai: 1,
+			
+			save() {
+				this.form.submit()
+					.then(response => {
+						this.form.sections = response.data
+					})
+					.catch(error => {
+						alert('error')
+					})
+			},
+			add() {
+				this.form.sections.push({
+					slug: 'acronim' + this.ai,
+					title_ru: 'Название на русском',
+					title_en: 'Titile in english',
+					theses_exists: false,
+					moderators: [],
 				})
-				.catch(error => {
-					alert('error')
-				})
-		},
-		add() {
-			this.form.sections.push({
-				slug: 'acronim',
-				title_ru: 'Название на русском',
-				title_en: 'Titile in english',
-				theses_count: 0,
-			})
-		},
-		remove(id) {
-			let section = this.form.sections[id]
-			this.form.sections.splice(id, 1)
+				this.ai++
+			},
+			remove(id) {
+				let section = this.form.sections[id]
+				this.form.sections.splice(id, 1)
 
-			if (section.id === undefined) {
-				return
-			}
+				if (section.id === undefined) {
+					return
+				}
 
-			this.save()
-		},
-	}">
+				this.save()
+			},
+			addModerator(type, id) {
+				this.$dispatch('popup', 'invite')
+				this.$dispatch('add-moderator', {type, id})
+			},
+			refreshModerators() {
+				if (this.$event.detail.type !== 'section') return
+				
+				let section = this.form.sections.find(el => el.id === this.$event.detail.id)
+				section.moderators = this.$event.detail.moderators
+			},
+			removeModerator(type, moderableId, moderatorId) {
+				axios
+					.delete(route('moderators.destroy', this.conference.slug), {data: 
+						{
+							moderable_type: type,
+							moderable_id: moderableId,
+							user_id: moderatorId,
+						}
+					})
+					.then(response => {
+						this.$dispatch('refresh-moderators', {
+							type: type,
+							id: moderableId,
+							moderators: response.data
+						})
+					}).catch(error => alert('error'))
+			},
+		}"
+	>
 		<nav class="edit-content__breadcrumbs breadcrumbs" data-da=".edit__wrapper, 767.98, first">
 			<ul class="breadcrumbs__list">
 				<li class="breadcrumbs__item">
@@ -61,12 +93,12 @@
 
 		<h1 class="edit-content__title">Управление секциями</h1>
 	
-		<template x-if="sections.length > 0">
+		<template x-if="form.sections.length > 0">
 			<div class="accordion">
 				<template x-for="(section, id) in form.sections" :key="id">
 					<div class="accordion-item">
-						<input :id="'accordion-trigger-' + (section.id ?? section.acronim)" class="accordion-trigger-input" type="checkbox">
-						<label class="accordion-trigger" :for="'accordion-trigger-' + (section.id ?? section.acronim)" x-text="section.slug">
+						<input :id="'accordion-trigger-' + (section.id ?? section.slug)" class="accordion-trigger-input" type="checkbox">
+						<label class="accordion-trigger" :for="'accordion-trigger-' + (section.id ?? section.slug)" x-text="section.slug">
 							Секциия_1
 						</label>
 						<div class="accordion-animation-wrapper">
@@ -109,33 +141,38 @@
 											<div class="moderators__title">
 												Модераторы
 											</div>
+											<template x-if="section.moderators.length === 0">
+												<div>Модераторы не приглашены</div>
+											</template>
 											<ol>
-												<li>
-													<div class="moderators__item">
-														<span>ФИО - Email</span>
-														<button class="_icon-close" type="button"></button>
-													</div>
-												</li>
-												<li>
-													<div class="moderators__item">
-														<span>ФИО - Email</span>
-														<button class="_icon-close" type="button"></button>
-													</div>
-												</li>
-												<li>
-													<div class="moderators__item">
-														<span>ФИО - Email</span>
-														<button class="_icon-close" type="button"></button>
-													</div>
-												</li>
+												<template x-for="(moderator, moderatorId) in section.moderators">
+													<li>
+														<div class="moderators__item">
+															<div>
+																<span x-text="moderator.email"></span>
+																<span x-show="moderator.pivot.comment"> - </span>
+																<span x-text="moderator.pivot.comment"></span>
+															</div>
+															<button 
+																class="_icon-close" 
+																type="button" 
+																@click="removeModerator('section', section.id, moderator.id)"
+															></button>
+														</div>
+													</li>
+												</template>
 											</ol>
 										</div>
 										<div class="section-actions">
 											<div class="section-actions__item">
 												<template x-if="section.id">
-													<button class="section-actions__btn button button_icon" type="button">
+													<button 
+														class="section-actions__btn button button_icon" 
+														type="button" 
+														@click="addModerator('section', section.id)"
+													>
 														<img src="{{ Vite::asset('resources/img/iconsfonts/invite.svg') }}" alt="Image">
-														<span @click="$dispatch('popup', 'invite')">Пригласить</span>
+														<span>Пригласить</span>
 													</button>
 												</template>
 											</div>
@@ -147,7 +184,7 @@
 												>
 													Сохранить
 												</button>
-												<template x-if="section.theses_count === 0">
+												<template x-if="!section.theses_exists">
 													<button 
 														class="section-actions__btn button button_primary"
 														@click="remove(id)"
@@ -166,7 +203,7 @@
 				</template>
 			</div>
 		</template>
-		<template x-if="sections.length == 0">
+		<template x-if="form.sections.length == 0">
 			<div class="">Секции не созданы</div>
 		</template>
 	
@@ -176,9 +213,42 @@
 
 @section('popup')
 	<x-popup id="invite" title="Пригласить модератора">
-		<form action="#" class="form">
+		<form class="form" id="invite-moderator"
+			x-data="{
+				form: $form('post', route('moderators.store', conference.slug), {
+					moderable_type: null,
+					moderable_id: null,
+					email: '',
+					comment: '',
+				}),
+
+				add() {
+					this.form.moderable_type = this.$event.detail.type
+					this.form.moderable_id = this.$event.detail.id
+				},
+				submit() {
+					this.form.submit()
+						.then(response => {
+							this.$dispatch('refresh-moderators', {
+								type: this.form.moderable_type,
+								id: this.form.moderable_id,
+								moderators: response.data
+							})
+							this.show = false
+						})
+						.catch(error => {
+							alert('Ошибка')
+						})
+				},
+			}"
+			@add-moderator.window="add"
+			@submit.prevent="submit"
+		>
 			<div class="form__line">
-				<input class="input" autocomplete="off" type="email" placeholder="Адрес электронной почты">
+				<input class="input" autocomplete="off" type="email" placeholder="Адрес электронной почты" x-model="form.email">
+			</div>
+			<div class="form__line">
+				<input class="input" autocomplete="off" type="text" placeholder="Комментарий" x-model="form.comment">
 			</div>
 			<div class="form__line">
 				<button class="popup__btn button" type="submit">Пригласить</button>

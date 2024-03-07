@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ConferenceController;
+use App\Http\Controllers\CsvController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipantController;
@@ -12,14 +14,14 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ThesisController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Src\Domains\Auth\Models\User;
 use Src\Domains\Conferences\Models\Conference;
 use Src\Domains\Conferences\Models\Thesis;
 
 if (app()->isLocal()) {
     Route::any('test', function () {
-        $test = ['test' => 'foo'];
-
-        dd(isset($test['foo']));
+        $m = User::find(6)->moderatedSections;
+        dd($m);
     });
 }
 
@@ -113,11 +115,30 @@ Route::group([
 
                 Route::controller(SectionController::class)->group(function () {
                     Route::get('{conference:slug}/sections', 'index')
-                        ->name('sections.index');
+                        ->name('sections.index')
+                        ->can('massSectionUpdate', 'conference');
                     Route::middleware(['precognitive'])
                         ->post('{conference:slug}/sections/mass-update', 'massUpdate')
                         ->name('sections.mass-update');
                 });
+
+                Route::controller(ModeratorController::class)->group(function () {
+                    Route::middleware(['precognitive'])
+                        ->post('{conference:slug}/moderators', 'store')
+                        ->name('moderators.store');
+                    Route::middleware([])
+                        ->delete('{conference:slug}/moderators', 'destroy')
+                        ->name('moderators.destroy');
+                });
+            });
+
+            Route::controller(CsvController::class)->group(function () {
+                Route::get('csv/events/{conference:slug}/theses', 'thesesById')
+                    ->name('csv.theses.download')
+                    ->can('viewAbstracts', 'conference');
+                Route::get('csv/events/{conference:slug}/participations', 'participationsById')
+                    ->name('csv.participations.download')
+                    ->can('viewParticipations', 'conference');
             });
         });
 

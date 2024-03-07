@@ -14,7 +14,6 @@
 		title: '{{ $title }}',
 
 		open(event) {
-			console.log(event.detail, this.$root.id)
 			if (event.detail !== this.$root.id) return
 
 			this.show = true

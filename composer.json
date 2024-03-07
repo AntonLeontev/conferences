@@ -20,6 +20,7 @@
         "laravel/telescope": "^4.17",
         "laravel/tinker": "^2.8",
         "mcamara/laravel-localization": "^1.8",
+        "spatie/simple-excel": "^3.4",
         "tightenco/ziggy": "^1.8"
     },
     "require-dev": {

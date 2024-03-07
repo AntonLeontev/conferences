@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Src\Domains\Auth\Models\Organization;
 use Src\Domains\Auth\Models\Participant;
+use Src\Domains\Auth\Models\User;
 use Src\Domains\Conferences\Enums\AbstractsFormat;
 use Src\Domains\Conferences\Enums\AbstractsLanguage;
 use Src\Domains\Conferences\Enums\ConferenceFormat;
@@ -114,6 +116,13 @@ class Conference extends Model
     public function participations(): HasMany
     {
         return $this->hasMany(Participation::class);
+    }
+
+    public function moderators(): MorphToMany
+    {
+        return $this->morphToMany(User::class, 'moderable')
+            ->withPivot('comment')
+            ->withTimestamps();
     }
 
     public function participationByUser(): ?Participation

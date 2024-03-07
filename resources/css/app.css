@@ -1,3 +1,6 @@
 @import url('./style.css');
 
+/* Не включать! Ломает отображение кнопок */
+/* @tailwind base; */
+/* @tailwind components; */
 @tailwind utilities;

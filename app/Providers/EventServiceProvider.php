@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\ThesisCreated;
 use App\Events\ThesisDeleted;
+use App\Events\ThesisUpdated;
 use App\Listeners\SendThesisCreatedNotification;
 use App\Listeners\SendThesisDeletedNotification;
+use App\Listeners\SendThesisUpdatedNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,6 +31,10 @@ class EventServiceProvider extends ServiceProvider
 
         ThesisDeleted::class => [
             SendThesisDeletedNotification::class,
+        ],
+
+        ThesisUpdated::class => [
+            SendThesisUpdatedNotification::class,
         ],
     ];
 

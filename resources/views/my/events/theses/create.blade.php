@@ -161,7 +161,7 @@
 			init() {
 				this.ai = +Object.keys(this.form.authors).pop() + 1
 
-				this.postpone(this.checkModules, this.saveSelects)
+				this.postpone()
 			},
 			postpone() {
 				setTimeout(() => {

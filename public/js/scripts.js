@@ -1355,6 +1355,8 @@ class SelectConstructor {
         let originalSelect = parent.querySelector("select");
 
         this.setOptions(selectItem, originalSelect);
+		this.selectBuild(originalSelect);
+        this.setSelectChange(originalSelect);
     }
 }
 modules_flsModules.select = new SelectConstructor({});
