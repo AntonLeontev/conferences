@@ -142,7 +142,6 @@ window.TitleEditorSettings = {
         "undo",
         "redo",
         "|",
-        "bold",
         "italic",
         "underline",
         "|",
