@@ -42,7 +42,7 @@ class InvitedAsModerator extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Приглашение быть модератором')
             ->line("Вас прегласили быть модератором на мероприятии '{$this->conference->title_ru}'.")
-            ->action('Перейти к мероприятию', route('conference.show', $this->conference->slug));
+            ->action('Перейти к мероприятию', route('conference.participations', $this->conference->slug));
     }
 
     /**

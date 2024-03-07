@@ -40,6 +40,6 @@ class CreatedAsModerator extends Notification implements ShouldQueue
             ->line('Войти на сайт можно используя следующие данные:')
             ->line('email: '.$notifiable->email)
             ->line('Пароль: '.$this->password)
-            ->action('Перейти к мероприятию', route('conference.show', $this->conference->slug));
+            ->action('Перейти к мероприятию', route('conference.participations', $this->conference->slug));
     }
 }
