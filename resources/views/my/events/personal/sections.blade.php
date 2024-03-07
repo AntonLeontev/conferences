@@ -90,7 +90,7 @@
 
 		<h1 class="edit-content__title">Управление секциями</h1>
 	
-		<template x-if="sections.length > 0">
+		<template x-if="form.sections.length > 0">
 			<div class="accordion">
 				<template x-for="(section, id) in form.sections" :key="id">
 					<div class="accordion-item">
