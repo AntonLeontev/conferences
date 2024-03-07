@@ -196,7 +196,7 @@
 				</template>
 			</div>
 		</template>
-		<template x-if="sections.length == 0">
+		<template x-if="form.sections.length == 0">
 			<div class="">Секции не созданы</div>
 		</template>
 	
