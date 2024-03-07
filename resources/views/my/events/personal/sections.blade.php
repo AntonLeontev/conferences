@@ -14,6 +14,7 @@
 			form: $form('post', route('sections.mass-update', conference.slug), {
 				sections: sections,
 			}),
+			ai: 1,
 			
 			save() {
 				this.form.submit()
@@ -26,11 +27,13 @@
 			},
 			add() {
 				this.form.sections.push({
-					slug: 'acronim',
+					slug: 'acronim' + this.ai,
 					title_ru: 'Название на русском',
 					title_en: 'Titile in english',
 					theses_exists: false,
+					moderators: [],
 				})
+				this.ai++
 			},
 			remove(id) {
 				let section = this.form.sections[id]
@@ -94,8 +97,8 @@
 			<div class="accordion">
 				<template x-for="(section, id) in form.sections" :key="id">
 					<div class="accordion-item">
-						<input :id="'accordion-trigger-' + (section.id ?? section.acronim)" class="accordion-trigger-input" type="checkbox">
-						<label class="accordion-trigger" :for="'accordion-trigger-' + (section.id ?? section.acronim)" x-text="section.slug">
+						<input :id="'accordion-trigger-' + (section.id ?? section.slug)" class="accordion-trigger-input" type="checkbox">
+						<label class="accordion-trigger" :for="'accordion-trigger-' + (section.id ?? section.slug)" x-text="section.slug">
 							Секциия_1
 						</label>
 						<div class="accordion-animation-wrapper">

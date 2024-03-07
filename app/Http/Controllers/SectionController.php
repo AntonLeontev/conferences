@@ -30,6 +30,7 @@ class SectionController extends Controller
 
         $sections = Section::query()
             ->where('conference_id', $conference->id)
+            ->with('moderators')
             ->get(['id', 'slug', 'title_ru', 'title_en']);
 
         return response()->json($sections);
