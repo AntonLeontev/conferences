@@ -35,6 +35,7 @@ class CreatedAsModerator extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->subject('Приглашение быть модератором')
             ->line("Вас прегласили быть модератором на мероприятии '{$this->conference->title_ru}'.")
             ->line('Войти на сайт можно используя следующие данные:')
             ->line('email: '.$notifiable->email)

@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\ThesisCreated;
 use App\Notifications\ThesisCreatedOrganizationNotification;
 use App\Notifications\ThesisCreatedParticipantNotification;
+use Src\Domains\Conferences\Models\Section;
 
 class SendThesisCreatedNotification
 {
@@ -21,10 +22,23 @@ class SendThesisCreatedNotification
      */
     public function handle(ThesisCreated $event): void
     {
+        $conference = $event->thesis->participation->conference;
         $partcicpantUser = $event->thesis->participation->participant->user;
-        $organizationUser = $event->thesis->participation->conference->organization->user;
+        $organizationUser = $conference->organization->user;
 
         $organizationUser->notify(new ThesisCreatedOrganizationNotification($event->thesis));
         $partcicpantUser->notify(new ThesisCreatedParticipantNotification($event->thesis));
+
+        foreach ($conference->moderators as $moderator) {
+            $moderator->notify(new ThesisCreatedOrganizationNotification($event->thesis));
+        }
+
+        if (! is_null($event->thesis->section_id)) {
+            $section = Section::find($event->thesis->section_id);
+
+            foreach ($section->moderators as $moderator) {
+                $moderator->notify(new ThesisCreatedOrganizationNotification($event->thesis));
+            }
+        }
     }
 }

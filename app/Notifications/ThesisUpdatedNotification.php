@@ -4,24 +4,19 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Src\Domains\Conferences\Models\Conference;
-use Src\Domains\Conferences\Models\Section;
+use Src\Domains\Conferences\Models\Thesis;
 
-class InvitedAsModerator extends Notification implements ShouldQueue
+class ThesisUpdatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public Conference $conference;
-
-    public function __construct(public Model $moderable)
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct(public Thesis $thesis)
     {
-        $this->conference = match (true) {
-            $moderable instanceof Conference => $moderable,
-            $moderable instanceof Section => $moderable->conference,
-        };
     }
 
     /**
@@ -40,9 +35,9 @@ class InvitedAsModerator extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Приглашение быть модератором')
-            ->line("Вас прегласили быть модератором на мероприятии '{$this->conference->title_ru}'.")
-            ->action('Перейти к мероприятию', route('conference.show', $this->conference->slug));
+            ->subject('Поданые ранее тезисы обновлены')
+            ->line("Поданные ранее тезисы '{$this->thesis->title}' были изменены автором")
+            ->action('Открыть тезисы', route('theses.show', [$this->thesis->participation->conference->slug, $this->thesis->id]));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Src\Domains\Conferences\Models;
 
 use App\Casts\ThesisTitleCast;
 use App\Events\ThesisDeleted;
+use App\Events\ThesisUpdated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,6 +41,7 @@ class Thesis extends Model
 
     protected $dispatchesEvents = [
         'deleted' => ThesisDeleted::class,
+        'updated' => ThesisUpdated::class,
     ];
 
     public function participation(): BelongsTo
