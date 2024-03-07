@@ -136,7 +136,7 @@ class CsvController extends Controller
                 $participation->surname_en,
                 $participation->middle_name_en,
                 $participation->email,
-                $participation->phone->raw(),
+                $participation->phone?->raw(),
                 trim($affiliationsRu, ', '),
                 trim($affiliationsEn, ', '),
                 $participation->orcid_id,

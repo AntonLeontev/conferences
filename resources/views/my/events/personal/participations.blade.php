@@ -56,7 +56,7 @@
 						<tr>
 							<td x-text="participation.surname_{{ $lang }} + ' ' + participation.name_{{ $lang }}"></td>
 							<td x-text="participation.email"></td>
-							<td x-text="participation.phone.clean"></td>
+							<td x-text="participation.phone.raw"></td>
 							<td>
 								<template x-if="participation.orcid_id">
 									<a class="tw-flex tw-items-center" :href="'https://orcid.org/' + participation.orcid_id" target="_blank" rel="nofollow">
