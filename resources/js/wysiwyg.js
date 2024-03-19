@@ -136,7 +136,7 @@ window.TitleEditorSettings = {
         WordCount,
         Subscript,
         Superscript,
-        Clipboard,
+        // Clipboard,
     ],
     toolbar: [
         "undo",

@@ -32,7 +32,8 @@ class ThesisController extends Controller
                     ->when($allowedSections->isNotEmpty(), function ($collection) use ($allowedSections) {
                         return $collection->whereIn('section_id', $allowedSections->toArray());
                     })
-                    ->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors', 'section_id']);
+                    ->withTrashed()
+                    ->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors', 'section_id', 'deleted_at']);
             },
             'sections' => function ($query) use ($allowedSections) {
                 $query

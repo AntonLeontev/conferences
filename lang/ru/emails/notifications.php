@@ -15,4 +15,9 @@ return [
         'subject' => 'Тезисы отозваны',
         'text' => 'Вы отозвали тезисы :thesis_id :abstract_title c мероприятия :conference_title. Чтобы вернуть тезисы просто пришлите нам новые.',
     ],
+    'thesis_deleted_organization_notification' => [
+        'subject' => 'Тезисы отозваны',
+        'text' => 'Отозваны тезисы :thesis_id, :abstract_title с мероприятия :conference_title.',
+        'action' => 'К мероприятию',
+    ],
 ];

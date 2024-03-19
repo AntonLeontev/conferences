@@ -51,6 +51,8 @@
 			}
 
 			$affiliationsList->push($affiliation);
+			if (isset($affiliation['title_'.$lang])) {
+			}
 		}
 	}
 @endphp
@@ -70,9 +72,11 @@
 			@php
 				$authorAffiliationIndexes = [];
 				foreach ($author['affiliations'] ?? [] as $affiliation) {
-					if ($affiliationsList->contains(fn($value) => $affiliation['title_'.$lang] === $value['title_'.$lang])) {
-						$index = $affiliationsList->search(fn($val) => $val['title_'.$lang] === $affiliation['title_'.$lang]);
-						$authorAffiliationIndexes[] = $index + 1;
+					if (isset($affiliation['title_'.$lang])) {
+						if ($affiliationsList->contains(fn($value) => $affiliation['title_'.$lang] === $value['title_'.$lang])) {
+							$index = $affiliationsList->search(fn($val) => $val['title_'.$lang] === $affiliation['title_'.$lang]);
+							$authorAffiliationIndexes[] = $index + 1;
+						}
 					}
 				}
 			@endphp
@@ -89,10 +93,17 @@
 	</div>
 	<ul class="affiliations-list">
 		@foreach ($affiliationsList as $key => $affiliation)
-			<li class="">
-				<sup>{{ $key + 1 }}</sup>
-				{{ $affiliation['title_'.$lang] }}@if($affiliation['no_affiliation']), {{ $affiliation['country']["name_$lang"] }}@endif
-			</li>
+			@if($affiliation['no_affiliation'] && isset($affiliation['country']["name_$lang"]))
+				<li class="">
+					<sup>{{ $key + 1 }}</sup>
+					{{ $affiliation['title_'.$lang] }}@if($affiliation['no_affiliation']), {{ $affiliation['country']["name_$lang"] }}@endif
+				</li>
+			@else
+				<li class="">
+					<sup>{{ $key + 1 }}</sup>
+					{{ $affiliation['title_'.$lang] }}
+				</li>
+			@endif
 		@endforeach
 	</ul>
 	<div class="email">{{ $contact['email'] }}</div>
