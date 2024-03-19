@@ -80,7 +80,8 @@ Route::group([
                 Route::get('{conference:slug}/participations', [ParticipationController::class, 'indexByConference'])
                     ->name('conference.participations')
                     ->can('viewParticipations', 'conference');
-                Route::get('{conference:slug}/participation', [ParticipationController::class, 'create'])->name('participation.create');
+                Route::get('{conference:slug}/participation', [ParticipationController::class, 'create'])
+                    ->name('participation.create');
                 Route::middleware(['precognitive'])
                     ->post('{conference:slug}/participation', [ParticipationController::class, 'store'])
                     ->name('participation.store');
