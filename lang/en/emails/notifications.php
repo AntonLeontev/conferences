@@ -15,4 +15,9 @@ return [
         'subject' => 'Abstracts withdrawn',
         'text' => 'This is to notify that you have withdrawn the abstract :thesis_id, :abstract_title submitted to the :conference_title. If you wish to reinstate this contribution please submit it as a new abstract.',
     ],
+    'thesis_deleted_organization_notification' => [
+        'subject' => 'Abstracts withdrawn',
+        'text' => 'This is to notify that abstract :thesis_id, :abstract_title submitted to the :conference_title was withdrawn.',
+        'action' => 'To Event',
+    ],
 ];
