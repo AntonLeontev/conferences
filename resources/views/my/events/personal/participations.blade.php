@@ -44,6 +44,7 @@
 		<template x-if="participations.length > 0">
 			<table class="table" width="100%">
 				<thead>
+					<th></th>
 					<th>Имя</th>
 					<th>Email</th>
 					<th>Телефон</th>
@@ -52,8 +53,9 @@
 					<th>Дата подачи</th>
 				</thead>
 				<tbody>
-					<template x-for="participation in participations">
+					<template x-for="participation, i in participations">
 						<tr>
+							<td x-text="i + 1"></td>
 							<td x-text="participation.surname_{{ $lang }} + ' ' + participation.name_{{ $lang }}"></td>
 							<td x-text="participation.email"></td>
 							<td x-text="participation.phone.raw"></td>
