@@ -42,7 +42,7 @@ class ParticipationUpdateRequest extends FormRequest
             'affiliations.*.title_en' => ['required', 'string', 'max:255', 'regex:~[a-zA-Z0-9\-_ ]+~u'],
             'affiliations.*.country' => ['array', 'nullable'],
             'affiliations.*.country.id' => ['sometimes', 'required', 'exists:countries,id'],
-            'orcid_id' => ['nullable', 'string', 'regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/'],
+            'orcid_id' => ['nullable', 'string', 'regex:/^\w{4}-\w{4}-\w{4}-\w{4}$/'],
             'website' => ['nullable', 'url', 'max:255'],
             'participation_type' => ['required', Rule::enum(ParticipationType::class)],
             'is_young' => ['required', 'boolean'],

@@ -137,7 +137,7 @@
                         <label class="form__label" for="c_4">ORCID ID</label>
                         <div class="form__line">
                             <input id="c_4" class="input" autocomplete="off" type="text" name="orcid_id"
-                                data-error="Ошибка" placeholder="ID" x-mask="9999-9999-9999-9999" x-model="form.orcid_id"
+                                data-error="Ошибка" placeholder="ID" x-mask="****-****-****-****" x-model="form.orcid_id"
                             @input.debounce.1000ms="form.validate('orcid_id')">
                         </div>
 						<template x-if="form.invalid('orcid_id')">
