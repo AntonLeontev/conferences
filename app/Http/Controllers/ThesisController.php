@@ -33,7 +33,7 @@ class ThesisController extends Controller
                         return $collection->whereIn('section_id', $allowedSections->toArray());
                     })
                     ->withTrashed()
-                    ->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors', 'section_id', 'deleted_at']);
+                    ->select(['theses.id', 'theses.title', 'thesis_id', 'theses.created_at', 'authors', 'section_id', 'deleted_at', 'report_form']);
             },
             'sections' => function ($query) use ($allowedSections) {
                 $query

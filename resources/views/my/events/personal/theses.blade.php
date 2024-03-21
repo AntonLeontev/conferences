@@ -64,6 +64,7 @@
 					<th>ID</th>
 					<th>Заголовок</th>
 					<th>Авторы</th>
+					<th>Вид</th>
 					<th>Дата</th>
 					<th></th>
 				</thead>
@@ -90,6 +91,7 @@
 									<div x-text="author.surname_{{ $lang }} + ' ' + author.name_{{ $lang }}"></div>
 								</template>
 							</td>
+							<td x-text="thesis.report_form"></td>
 							<td>
 								<time x-text="DateTime.fromISO(thesis.created_at).toLocaleString()">май 1, 2023</time>
 							</td>

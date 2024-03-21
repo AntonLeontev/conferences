@@ -129,7 +129,7 @@
             <select name="report_form" data-scroll="500" data-class-modif="form" data-name="report_form">
                 <option value="oral" @if('oral' === $thesis->report_form->value) selected @endif>Устная</option>
                 <option value="stand" @if('stand' === $thesis->report_form->value) selected @endif>Стендовые доклады</option>
-                <option value="mixed" @if('mixed' === $thesis->report_form->value) selected @endif>Нет предпочтения</option>
+                <option value="any" @if('any' === $thesis->report_form->value) selected @endif>Нет предпочтения</option>
             </select>
         </div>
 
