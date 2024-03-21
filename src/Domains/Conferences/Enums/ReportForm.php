@@ -10,5 +10,5 @@ enum ReportForm: string
 
     case oral = 'oral';
     case stand = 'stand';
-    case mixed = 'mixed';
+    case any = 'any';
 }

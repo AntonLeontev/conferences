@@ -137,7 +137,7 @@
             <select name="report_form" data-scroll="500" data-class-modif="form" data-name="report_form">
                 <option value="oral" selected>Устная</option>
                 <option value="stand">Стендовые доклады</option>
-                <option value="mixed">Нет предпочтения</option>
+                <option value="any">Нет предпочтения</option>
             </select>
         </div>
 
