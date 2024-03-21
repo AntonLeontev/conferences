@@ -38,8 +38,8 @@
                             <div class="thesis-single__content content-thesis">
                                 <h1 class="content-thesis__title">{!! $thesis->title !!}</h1>
 								<h2 class="tw-font-bold tw-text-[1.2rem] tw-mb-[25px]">{{ $thesis->thesis_id }}</h2>
-                                <div class="content-thesis__header header-thesis">
-                                    {{-- <img class="header-thesis__img" src="img/avatar/01.png" alt="Image"> --}}
+                                {{-- <div class="content-thesis__header header-thesis">
+                                    <img class="header-thesis__img" src="img/avatar/01.png" alt="Image">
                                     <div class="header-thesis__body">
                                         <div class="header-thesis__title">
                                             {{ $thesis->participation->fullname }}
@@ -49,7 +49,7 @@
 										@endforeach
                                         <a href="mailto:{{ $thesis->participation->email }}" class="header-thesis__category">{{ $thesis->participation->email }}</a>
                                     </div>
-                                </div>
+                                </div> --}}
 
 								@php
 									$lang = $conference->abstracts_lang->value;	
