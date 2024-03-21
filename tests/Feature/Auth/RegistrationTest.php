@@ -14,8 +14,8 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post(action([RegistrationController::class, 'registerOrganization']), [
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Password123',
+            'password_confirmation' => 'Password123',
             'full_name_ru' => 'Организация',
             'short_name_ru' => 'Организация',
             'full_name_en' => 'Organization',
@@ -48,8 +48,8 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post(action([RegistrationController::class, 'registerParticipant']), [
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Password123',
+            'password_confirmation' => 'Password123',
             'name_ru' => 'name_ru',
             'surname_ru' => 'surname_ru',
             'middle_name_ru' => 'middle_name_ru',
