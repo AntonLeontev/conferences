@@ -646,7 +646,6 @@
 									{responseType: 'blob'}
 								)
 								.then(res => {
-									console.log(res.data)
 									let blob = new Blob([res.data], {
 										type: 'application/pdf',
 									});
@@ -676,11 +675,16 @@
             </div>
         </div>
 
-		<div class="form__row">
-			<template x-if="form.hasErrors">
-				<div class="form__error">В форме есть ошибки</div>
-			</template>
-		</div>
+		<template x-if="form.hasErrors">
+			<div class="form__row">
+				<div class="form__error">В форме есть ошибки:</div>
+				<ul>
+					<template x-for="error in form.errors">
+						<li class="form__error" x-text="error"></li>
+					</template>
+				</ul>
+			</div>
+		</template>
 
     </form>
 @endsection
