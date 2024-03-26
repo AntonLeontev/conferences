@@ -36,7 +36,7 @@ class ThesisUpdatedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Поданые ранее тезисы обновлены')
-            ->line("Поданные ранее тезисы '{$this->thesis->title}' были изменены автором")
+            ->line("Поданные ранее тезисы '{$this->thesis->title}', ID: {$this->thesis->thesis_id} были изменены автором")
             ->action('Открыть тезисы', route('theses.show', [$this->thesis->participation->conference->slug, $this->thesis->id]));
     }
 
