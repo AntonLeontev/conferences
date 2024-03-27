@@ -228,6 +228,15 @@
 
 									return 'The name of your institution will be translated automatically. If the translation is incorrect,  check the box \'Аффилиация имеет ошибку в написании\' below to edit the name'
 								},
+								affiliationsIds() {
+									let result = []
+									Object.values(form.affiliations)
+										.forEach(el => {
+											if (el.id == '') return
+											result.push(el.id)
+										})
+									return result
+								},
 							}">
 								<div class="form__line" @click.outside="show = false">
 									<textarea autocomplete="off"
