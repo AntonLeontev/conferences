@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ParticipationStoreRequest;
 use App\Http\Requests\ParticipationUpdateRequest;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -11,6 +12,7 @@ use Illuminate\Http\Response;
 use Src\Domains\Conferences\Actions\CreateParticipation;
 use Src\Domains\Conferences\Actions\UpdateParticipation;
 use Src\Domains\Conferences\Models\Conference;
+use Src\Domains\Conferences\Models\Participation;
 
 class ParticipationController extends Controller
 {
@@ -29,6 +31,14 @@ class ParticipationController extends Controller
         ParticipationStoreRequest $request,
         CreateParticipation $createParticipation
     ): JsonResponse {
+        $exists = Participation::where('conference_id', $conference->id)
+            ->where('participant_id', $request->participant_id)
+            ->exists();
+
+        if ($exists) {
+            throw new Exception('Участник уже учавствует в событии');
+        }
+
         $participation = $createParticipation->handle($request);
 
         return response()->json(['redirect' => route('conference.show', $conference->slug)]);
